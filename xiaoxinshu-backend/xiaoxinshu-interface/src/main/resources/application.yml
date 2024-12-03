@@ -1,0 +1,9 @@
+server:
+  port: 8100
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: xiaoxinshu-interface
+  profiles:
+    active: dev

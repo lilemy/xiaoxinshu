@@ -2,9 +2,10 @@ package cn.lilemy.xiaoxinshu.exception;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotRoleException;
-import cn.lilemy.xiaoxinshu.common.BaseResponse;
-import cn.lilemy.xiaoxinshu.common.ResultCode;
-import cn.lilemy.xiaoxinshu.common.ResultUtils;
+import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

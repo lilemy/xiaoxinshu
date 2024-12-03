@@ -1,9 +1,9 @@
 package cn.lilemy.xiaoxinshu.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.lilemy.xiaoxinshu.mapper.NoteCategoriesMapper;
 import cn.lilemy.xiaoxinshu.model.entity.NoteCategories;
 import cn.lilemy.xiaoxinshu.service.NoteCategoriesService;
-import cn.lilemy.xiaoxinshu.mapper.NoteCategoriesMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

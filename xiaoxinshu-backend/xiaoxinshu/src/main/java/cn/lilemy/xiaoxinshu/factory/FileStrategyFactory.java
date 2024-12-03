@@ -1,7 +1,7 @@
 package cn.lilemy.xiaoxinshu.factory;
 
-import cn.lilemy.xiaoxinshu.common.ResultCode;
-import cn.lilemy.xiaoxinshu.exception.BusinessException;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshu.strategy.FileStrategy;
 import cn.lilemy.xiaoxinshu.strategy.impl.CosFileStrategy;
 import cn.lilemy.xiaoxinshu.strategy.impl.MinioFileStrategy;

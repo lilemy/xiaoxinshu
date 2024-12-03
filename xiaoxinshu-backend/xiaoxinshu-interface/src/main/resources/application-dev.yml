@@ -1,0 +1,7 @@
+spring:
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.37.130:3306/xiaoxinshu_interface
+    username: root
+    password: 123456

@@ -1,9 +1,9 @@
 package cn.lilemy.xiaoxinshu.strategy.impl;
 
-import cn.lilemy.xiaoxinshu.common.ResultCode;
 import cn.lilemy.xiaoxinshu.config.CosClientConfig;
-import cn.lilemy.xiaoxinshu.exception.BusinessException;
 import cn.lilemy.xiaoxinshu.strategy.FileStrategy;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.PutObjectRequest;
 import jakarta.annotation.Resource;

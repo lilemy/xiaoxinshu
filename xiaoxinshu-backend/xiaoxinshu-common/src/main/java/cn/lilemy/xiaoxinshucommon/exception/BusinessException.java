@@ -1,7 +1,7 @@
-package cn.lilemy.xiaoxinshu.exception;
+package cn.lilemy.xiaoxinshucommon.exception;
 
 
-import cn.lilemy.xiaoxinshu.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import lombok.Getter;
 
 import java.io.Serial;

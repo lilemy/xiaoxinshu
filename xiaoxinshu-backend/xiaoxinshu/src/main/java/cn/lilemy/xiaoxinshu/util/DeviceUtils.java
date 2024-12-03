@@ -4,8 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.Header;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
-import cn.lilemy.xiaoxinshu.common.ResultCode;
-import cn.lilemy.xiaoxinshu.exception.ThrowUtils;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**

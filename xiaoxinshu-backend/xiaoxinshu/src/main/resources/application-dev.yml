@@ -2,7 +2,7 @@ spring:
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.37.130:3306/code_challenge
+    url: jdbc:mysql://192.168.37.130:3306/xiaoxinshu
     username: root
     password: 123456
   # Redis 配置
@@ -33,7 +33,7 @@ minio:
   endpoint: http://192.168.37.130:9000
   accessKey: lilemy
   secretKey: 12345678
-  bucketName: code-challenge
+  bucketName: xiaoxinshu
 cos:
   secretId: xx
   secretKey: xx

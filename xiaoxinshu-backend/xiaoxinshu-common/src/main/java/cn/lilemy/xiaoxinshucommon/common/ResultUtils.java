@@ -1,4 +1,5 @@
-package cn.lilemy.xiaoxinshu.common;
+package cn.lilemy.xiaoxinshucommon.common;
+
 
 /**
  * 返回工具类

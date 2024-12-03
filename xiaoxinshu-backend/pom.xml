@@ -10,6 +10,8 @@
 
   <modules>
     <module>xiaoxinshu</module>
+    <module>xiaoxinshu-interface</module>
+    <module>xiaoxinshu-common</module>
   </modules>
 
   <properties>

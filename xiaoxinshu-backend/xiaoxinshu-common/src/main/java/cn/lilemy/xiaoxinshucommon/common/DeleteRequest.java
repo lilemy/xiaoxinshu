@@ -1,4 +1,4 @@
-package cn.lilemy.xiaoxinshu.common;
+package cn.lilemy.xiaoxinshucommon.common;
 
 import lombok.Data;
 

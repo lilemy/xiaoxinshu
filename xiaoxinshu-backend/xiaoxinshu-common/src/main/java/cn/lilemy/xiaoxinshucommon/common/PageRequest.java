@@ -1,6 +1,6 @@
-package cn.lilemy.xiaoxinshu.common;
+package cn.lilemy.xiaoxinshucommon.common;
 
-import cn.lilemy.xiaoxinshu.constant.CommonConstant;
+import cn.lilemy.xiaoxinshucommon.constant.CommonConstant;
 import lombok.Data;
 
 /**

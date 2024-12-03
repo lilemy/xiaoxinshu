@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.model.dto.questionbank;
 
-import cn.lilemy.xiaoxinshu.common.PageRequest;
+import cn.lilemy.xiaoxinshucommon.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

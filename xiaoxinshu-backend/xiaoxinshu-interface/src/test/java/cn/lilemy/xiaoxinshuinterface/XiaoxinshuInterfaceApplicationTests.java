@@ -1,10 +1,10 @@
-package cn.lilemy.xiaoxinshu;
+package cn.lilemy.xiaoxinshuinterface;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CodeChallengeApplicationTests {
+class XiaoxinshuInterfaceApplicationTests {
 
     @Test
     void contextLoads() {

@@ -1,13 +1,13 @@
 package cn.lilemy.xiaoxinshu.service.impl;
 
 import cn.hutool.core.io.FileUtil;
-import cn.lilemy.xiaoxinshu.common.ResultCode;
-import cn.lilemy.xiaoxinshu.exception.BusinessException;
-import cn.lilemy.xiaoxinshu.exception.ThrowUtils;
 import cn.lilemy.xiaoxinshu.model.dto.file.UploadFileRequest;
 import cn.lilemy.xiaoxinshu.model.enums.FileUploadBizEnum;
 import cn.lilemy.xiaoxinshu.service.FileService;
 import cn.lilemy.xiaoxinshu.strategy.FileStrategy;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
+import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;

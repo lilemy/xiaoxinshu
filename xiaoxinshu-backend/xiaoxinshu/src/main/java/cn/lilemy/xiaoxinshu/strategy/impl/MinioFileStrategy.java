@@ -1,9 +1,9 @@
 package cn.lilemy.xiaoxinshu.strategy.impl;
 
-import cn.lilemy.xiaoxinshu.common.ResultCode;
 import cn.lilemy.xiaoxinshu.config.MinioClientConfig;
-import cn.lilemy.xiaoxinshu.exception.BusinessException;
 import cn.lilemy.xiaoxinshu.strategy.FileStrategy;
+import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import jakarta.annotation.Resource;
