@@ -1,7 +1,7 @@
 server:
-  port: 8100
+  port: 9204
   servlet:
-    context-path: /api
+    context-path: /interface
 spring:
   application:
     name: xiaoxinshu-interface

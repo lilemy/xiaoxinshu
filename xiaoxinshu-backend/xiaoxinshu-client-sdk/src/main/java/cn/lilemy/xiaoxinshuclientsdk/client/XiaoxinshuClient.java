@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Slf4j
 public class XiaoxinshuClient {
-    private static final String GATEWAY_HOST = "http://localhost:8100";
+    private static final String GATEWAY_HOST = "http://localhost:9911";
 
     private final String accessKey;
 
@@ -22,7 +22,7 @@ public class XiaoxinshuClient {
 
     public String getRandomImage() {
         HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/image/random")
-                .addHeaders(getHeaderMap())
+                .addHeaders(getHeaderMap("all"))
                 .execute();
         log.info(String.valueOf(httpResponse.getStatus()));
         return httpResponse.body();
@@ -30,7 +30,7 @@ public class XiaoxinshuClient {
 
     public String getRandomImage(String type) {
         HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/image/random?type=" + type)
-                .addHeaders(getHeaderMap())
+                .addHeaders(getHeaderMap(type))
                 .execute();
         log.info(String.valueOf(httpResponse.getStatus()));
         return httpResponse.body();
@@ -48,15 +48,6 @@ public class XiaoxinshuClient {
         hashMap.put("body", body);
         hashMap.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
         hashMap.put("sign", SignUtils.getSign(body, secretKey));
-        return hashMap;
-    }
-
-    private Map<String, String> getHeaderMap() {
-        Map<String, String> hashMap = new HashMap<>();
-        hashMap.put("accessKey", accessKey);
-        hashMap.put("nonce", RandomUtil.randomNumbers(4));
-        hashMap.put("timestamp", String.valueOf(System.currentTimeMillis() / 1000));
-        hashMap.put("sign", SignUtils.getSign(accessKey, secretKey));
         return hashMap;
     }
 

@@ -1,0 +1,7 @@
+server:
+  port: 9911
+spring:
+  application:
+    name: xiaoxinshu-gateway
+  profiles:
+    active: dev

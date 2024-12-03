@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: api_route
+          uri: http://localhost:9204
+          predicates:
+            - Path=/interface/**
+        - id: backend_route
+          uri: http://localhost:9126
+          predicates:
+            - Path=/api/**
