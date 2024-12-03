@@ -39,3 +39,7 @@ cos:
   secretKey: xx
   region: xx
   bucket: xx
+xiaoxinshu:
+  client:
+    access-key: d179dc0c911ac389c0cdf970471d842d
+    secret-key: 773320702127c324956cac01bb82e783

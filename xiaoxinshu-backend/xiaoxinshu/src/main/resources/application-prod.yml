@@ -44,3 +44,7 @@ cos:
   secretKey: xx
   region: xx
   bucket: xx
+xiaoxinshu:
+  client:
+    access-key: xx
+    secret-key: xx

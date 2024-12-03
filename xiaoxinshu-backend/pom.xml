@@ -11,6 +11,7 @@
   <modules>
     <module>xiaoxinshu</module>
     <module>xiaoxinshu-interface</module>
+    <module>xiaoxinshu-client-sdk</module>
     <module>xiaoxinshu-common</module>
   </modules>
 
