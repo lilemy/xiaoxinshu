@@ -89,8 +89,8 @@ public class QuestionBankQuestionController {
 
     @Operation(summary = "根据 id 获取题库题目关联（封装类）")
     @GetMapping("/get/vo")
-    public BaseResponse<QuestionBankQuestionVO> getQuestionBankQuestionVOById(long id) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+    public BaseResponse<QuestionBankQuestionVO> getQuestionBankQuestionVOById(Long id) {
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         // 查询数据库
         QuestionBankQuestion questionBankQuestion = questionBankQuestionService.getById(id);
         ThrowUtils.throwIf(questionBankQuestion == null, ResultCode.NOT_FOUND_ERROR);

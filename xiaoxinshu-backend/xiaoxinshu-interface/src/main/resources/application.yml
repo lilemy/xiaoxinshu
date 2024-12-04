@@ -7,7 +7,10 @@ spring:
     name: xiaoxinshu-interface
   profiles:
     active: dev
-xiaoxinshu:
-  client:
-    access-key: d179dc0c911ac389c0cdf970471d842d
-    secret-key: 773320702127c324956cac01bb82e783
+logging:
+  level:
+    com.lilemy: info
+  pattern:
+    dateformat: HH:mm:ss:SSS
+  file:
+    path: "logs/${spring.application.name}"

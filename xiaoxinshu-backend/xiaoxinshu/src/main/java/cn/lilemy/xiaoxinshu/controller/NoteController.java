@@ -90,7 +90,7 @@ public class NoteController {
     @Operation(summary = "根据id获取笔记封装")
     @GetMapping("/get/vo")
     public BaseResponse<NoteVO> getNoteVOById(Long id) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         // 查询数据库
         Note note = noteService.getById(id);
         ThrowUtils.throwIf(note == null, ResultCode.NOT_FOUND_ERROR);
@@ -107,7 +107,7 @@ public class NoteController {
     @Operation(summary = "根据 id 获取个人笔记")
     @GetMapping("/get/my/vo")
     public BaseResponse<NotePersonalVO> getNotePersonalVOById(Long id) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         NotePersonalVO notePersonalVO = noteService.getNotePersonalById(id);
         return ResultUtils.success(notePersonalVO);
     }

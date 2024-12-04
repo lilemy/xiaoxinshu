@@ -54,7 +54,7 @@ public class CategoriesController {
     @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Boolean> deleteCategories(@RequestBody DeleteRequest deleteRequest) {
         Long categoriesId = deleteRequest.getId();
-        ThrowUtils.throwIf(categoriesId <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(categoriesId == null || categoriesId <= 0, ResultCode.PARAMS_ERROR);
         boolean result = categoriesService.deleteCategories(categoriesId);
         return ResultUtils.success(result);
     }

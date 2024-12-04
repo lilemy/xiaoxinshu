@@ -97,7 +97,7 @@ public class QuestionController {
     @GetMapping("/get/vo")
     @CrawlerDetection()
     public BaseResponse<QuestionVO> getQuestionVOById(Long id) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         // 查询数据库
         Question question = questionService.getById(id);
         ThrowUtils.throwIf(question == null, ResultCode.NOT_FOUND_ERROR);

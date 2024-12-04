@@ -74,7 +74,7 @@ public class QuestionBankController {
     @Operation(summary = "根据id获取题库脱敏信息")
     @GetMapping("/get/vo")
     public BaseResponse<QuestionBankVO> getQuestionBankVOById(Long id, Boolean isNeedQueryQuestionList) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         // 生成 key
 //        String key = "bank_detail_" + id;
         // 如果是热 key

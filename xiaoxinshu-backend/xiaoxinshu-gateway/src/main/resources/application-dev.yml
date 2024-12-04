@@ -10,3 +10,13 @@ spring:
           uri: http://localhost:9126
           predicates:
             - Path=/api/**
+knife4j:
+  gateway:
+    enabled: true
+    routes:
+      - name: 后端服务
+        # 真实子服务访问url地址-提供OpenAPI的文档
+        url: /api/v3/api-docs?group=default
+        service-name: xiaoxinshu
+        # 路由前缀
+        context-path: /api

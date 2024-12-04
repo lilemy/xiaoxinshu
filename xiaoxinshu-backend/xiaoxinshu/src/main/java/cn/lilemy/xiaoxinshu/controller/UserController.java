@@ -139,7 +139,7 @@ public class UserController {
     @GetMapping("/get")
     public BaseResponse<User> getUserById(Long id) {
         ThrowUtils.throwIf(!userService.isAdmin(), ResultCode.NO_AUTH_ERROR);
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         User user = userService.getById(id);
         ThrowUtils.throwIf(user == null, ResultCode.NOT_FOUND_ERROR);
         return ResultUtils.success(user);
@@ -148,7 +148,7 @@ public class UserController {
     @Operation(summary = "根据 id 获取脱敏用户信息")
     @GetMapping("/get/vo")
     public BaseResponse<UserVO> getUserVOById(Long id) {
-        ThrowUtils.throwIf(id <= 0, ResultCode.PARAMS_ERROR);
+        ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         User user = userService.getById(id);
         return ResultUtils.success(userService.getUserVO(user));
     }

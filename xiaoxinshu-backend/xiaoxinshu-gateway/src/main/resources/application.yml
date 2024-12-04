@@ -5,3 +5,10 @@ spring:
     name: xiaoxinshu-gateway
   profiles:
     active: dev
+logging:
+  level:
+    com.lilemy: info
+  pattern:
+    dateformat: HH:mm:ss:SSS
+  file:
+    path: "logs/${spring.application.name}"
