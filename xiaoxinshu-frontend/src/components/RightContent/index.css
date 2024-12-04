@@ -1,0 +1,7 @@
+#search-input {
+  /* 隐藏 Input.Search 组件的按钮 */
+
+  .ant-input-search-button {
+    display: none;
+  }
+}
