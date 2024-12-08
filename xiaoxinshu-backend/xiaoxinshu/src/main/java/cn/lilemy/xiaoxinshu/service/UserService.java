@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.lilemy.xiaoxinshu.model.dto.user.UserEditRequest;
 import cn.lilemy.xiaoxinshu.model.dto.user.UserQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.vo.LoginUserVO;
 import cn.lilemy.xiaoxinshu.model.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;

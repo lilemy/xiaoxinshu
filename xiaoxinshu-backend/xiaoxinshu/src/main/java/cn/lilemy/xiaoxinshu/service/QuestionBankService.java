@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.lilemy.xiaoxinshu.model.dto.questionbank.QuestionBankAddRequest;
 import cn.lilemy.xiaoxinshu.model.dto.questionbank.QuestionBankQueryRequest;
 import cn.lilemy.xiaoxinshu.model.dto.questionbank.QuestionBankUpdateRequest;
-import cn.lilemy.xiaoxinshu.model.entity.QuestionBank;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBank;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.lilemy.xiaoxinshu.model.vo.QuestionBankVO;
 

@@ -4,8 +4,7 @@ import cn.lilemy.xiaoxinshu.model.dto.question.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import cn.lilemy.xiaoxinshu.model.dto.question.*;
-import cn.lilemy.xiaoxinshu.model.entity.Question;
+import cn.lilemy.xiaoxinshucommon.model.entity.Question;
 import cn.lilemy.xiaoxinshu.model.vo.QuestionPersonalVO;
 import cn.lilemy.xiaoxinshu.model.vo.QuestionVO;
 

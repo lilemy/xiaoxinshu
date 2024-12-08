@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.mapper;
 
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

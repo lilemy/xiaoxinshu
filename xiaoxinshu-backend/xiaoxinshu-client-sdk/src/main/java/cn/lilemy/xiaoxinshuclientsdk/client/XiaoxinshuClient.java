@@ -14,14 +14,14 @@ import java.util.Map;
  */
 @Slf4j
 public class XiaoxinshuClient {
-    private static final String GATEWAY_HOST = "http://localhost:9911";
+    private static final String GATEWAY_HOST = "http://localhost:9911/api";
 
     private final String accessKey;
 
     private final String secretKey;
 
     public String getRandomImage() {
-        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/image/random")
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/interface/image/random")
                 .addHeaders(getHeaderMap("all"))
                 .execute();
         log.info(String.valueOf(httpResponse.getStatus()));
@@ -29,7 +29,7 @@ public class XiaoxinshuClient {
     }
 
     public String getRandomImage(String type) {
-        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/api/image/random?type=" + type)
+        HttpResponse httpResponse = HttpRequest.get(GATEWAY_HOST + "/interface/image/random?type=" + type)
                 .addHeaders(getHeaderMap(type))
                 .execute();
         log.info(String.valueOf(httpResponse.getStatus()));

@@ -29,7 +29,7 @@ public class FileServiceImpl implements FileService {
         // 文件大小
         long fileSize = multipartFile.getSize();
         // 文件后缀
-        String suffix = FileUtil.getPrefix(multipartFile.getOriginalFilename());
+        String suffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
         final long ONE_M = 10 * 1024 * 1024L;
         if (FileUploadBizEnum.USER_AVATAR.equals(fileUploadBizEnum)) {
             if (fileSize > ONE_M) {

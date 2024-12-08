@@ -1,7 +1,7 @@
 package cn.lilemy.xiaoxinshu.aop;
 
 import cn.lilemy.xiaoxinshu.annotation.AuthCheck;
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.enums.UserRoleEnum;
 import cn.lilemy.xiaoxinshu.service.UserService;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;

@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.model.vo;
 
-import cn.lilemy.xiaoxinshu.model.entity.QuestionBank;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBank;
 import lombok.Data;
 
 import java.io.Serial;

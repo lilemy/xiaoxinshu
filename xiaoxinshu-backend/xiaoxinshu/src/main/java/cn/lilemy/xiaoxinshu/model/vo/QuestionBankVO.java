@@ -1,7 +1,7 @@
 package cn.lilemy.xiaoxinshu.model.vo;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import cn.lilemy.xiaoxinshu.model.entity.QuestionBank;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBank;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

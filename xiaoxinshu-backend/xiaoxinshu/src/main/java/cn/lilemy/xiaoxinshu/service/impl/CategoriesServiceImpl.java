@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.mapper.CategoriesMapper;
 import cn.lilemy.xiaoxinshu.model.dto.categories.CategoriesQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.Categories;
+import cn.lilemy.xiaoxinshucommon.model.entity.Categories;
 import cn.lilemy.xiaoxinshu.model.vo.CategoriesVO;
 import cn.lilemy.xiaoxinshu.service.CategoriesService;
 import cn.lilemy.xiaoxinshu.service.UserService;

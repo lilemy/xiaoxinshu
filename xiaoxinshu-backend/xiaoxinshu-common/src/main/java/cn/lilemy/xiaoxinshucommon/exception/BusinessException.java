@@ -5,12 +5,13 @@ import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import lombok.Getter;
 
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 自定义异常
  */
 @Getter
-public class BusinessException extends RuntimeException {
+public class BusinessException extends RuntimeException implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5915032392946288013L;

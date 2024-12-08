@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.service;
 
-import cn.lilemy.xiaoxinshu.model.entity.NoteFavour;
+import cn.lilemy.xiaoxinshucommon.model.entity.NoteFavour;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

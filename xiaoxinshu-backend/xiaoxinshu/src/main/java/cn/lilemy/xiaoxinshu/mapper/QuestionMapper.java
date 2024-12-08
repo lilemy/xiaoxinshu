@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.mapper;
 
-import cn.lilemy.xiaoxinshu.model.entity.Question;
+import cn.lilemy.xiaoxinshucommon.model.entity.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;
 

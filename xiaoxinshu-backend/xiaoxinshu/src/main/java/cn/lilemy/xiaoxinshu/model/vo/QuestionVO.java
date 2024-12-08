@@ -1,7 +1,7 @@
 package cn.lilemy.xiaoxinshu.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import cn.lilemy.xiaoxinshu.model.entity.Question;
+import cn.lilemy.xiaoxinshucommon.model.entity.Question;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

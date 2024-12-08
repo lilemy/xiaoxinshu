@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.lilemy.xiaoxinshu.model.dto.categories.CategoriesQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.Categories;
+import cn.lilemy.xiaoxinshucommon.model.entity.Categories;
 import cn.lilemy.xiaoxinshu.model.vo.CategoriesVO;
 
 /**

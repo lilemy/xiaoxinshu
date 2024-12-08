@@ -2,7 +2,7 @@ package cn.lilemy.xiaoxinshu.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

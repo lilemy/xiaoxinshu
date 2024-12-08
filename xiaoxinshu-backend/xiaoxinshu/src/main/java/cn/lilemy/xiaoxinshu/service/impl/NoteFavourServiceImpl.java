@@ -1,7 +1,7 @@
 package cn.lilemy.xiaoxinshu.service.impl;
 
 import cn.lilemy.xiaoxinshu.mapper.NoteFavourMapper;
-import cn.lilemy.xiaoxinshu.model.entity.NoteFavour;
+import cn.lilemy.xiaoxinshucommon.model.entity.NoteFavour;
 import cn.lilemy.xiaoxinshu.service.NoteFavourService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.lilemy.xiaoxinshu.model.dto.questionbankquestion.QuestionBankQuestionBatchRequest;
 import cn.lilemy.xiaoxinshu.model.dto.questionbankquestion.QuestionBankQuestionQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.QuestionBankQuestion;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBankQuestion;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.lilemy.xiaoxinshu.model.vo.QuestionBankQuestionVO;
 import org.springframework.transaction.annotation.Transactional;

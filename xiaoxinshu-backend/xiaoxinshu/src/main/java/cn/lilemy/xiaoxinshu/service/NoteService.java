@@ -4,8 +4,7 @@ import cn.lilemy.xiaoxinshu.model.dto.note.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import cn.lilemy.xiaoxinshu.model.dto.note.*;
-import cn.lilemy.xiaoxinshu.model.entity.Note;
+import cn.lilemy.xiaoxinshucommon.model.entity.Note;
 import cn.lilemy.xiaoxinshu.model.vo.NotePersonalVO;
 import cn.lilemy.xiaoxinshu.model.vo.NoteVO;
 

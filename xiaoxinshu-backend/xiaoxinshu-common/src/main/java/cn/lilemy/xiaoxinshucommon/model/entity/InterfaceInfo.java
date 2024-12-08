@@ -1,4 +1,4 @@
-package cn.lilemy.xiaoxinshu.model.entity;
+package cn.lilemy.xiaoxinshucommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 

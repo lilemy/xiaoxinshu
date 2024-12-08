@@ -5,18 +5,18 @@ spring:
         - id: api_route
           uri: http://localhost:9204
           predicates:
-            - Path=/interface/**
+            - Path=/api/interface/**
         - id: backend_route
           uri: http://localhost:9126
           predicates:
-            - Path=/api/**
+            - Path=/api/backend/**
 knife4j:
   gateway:
     enabled: true
     routes:
       - name: 后端服务
         # 真实子服务访问url地址-提供OpenAPI的文档
-        url: /api/v3/api-docs?group=default
+        url: /api/backend/v3/api-docs?group=default
         service-name: xiaoxinshu
         # 路由前缀
-        context-path: /api
+        context-path: /api/backend

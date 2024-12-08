@@ -13,10 +13,10 @@ spring:
       port: 6379
       timeout: 5000
   # elasticsearch 配置
-  elasticsearch:
-    uris: http://192.168.37.130:9200
-    username: elastic
-    password: 123456
+#  elasticsearch:
+#    uris: http://192.168.37.130:9200
+#    username: elastic
+#    password: 123456
 # mybatis-plus配置
 mybatis-plus:
   configuration:
@@ -43,3 +43,13 @@ xiaoxinshu:
   client:
     access-key: d179dc0c911ac389c0cdf970471d842d
     secret-key: 773320702127c324956cac01bb82e783
+dubbo:
+  registry:
+    address: nacos://192.168.37.130:8848
+  protocol:
+    port: 22223
+  application:
+    qos-port: 22224
+  provider:
+    exception:
+      enable: true

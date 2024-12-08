@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.service;
 
-import cn.lilemy.xiaoxinshu.model.entity.NoteThumb;
+import cn.lilemy.xiaoxinshucommon.model.entity.NoteThumb;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

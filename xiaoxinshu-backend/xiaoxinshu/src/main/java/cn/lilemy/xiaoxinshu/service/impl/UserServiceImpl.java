@@ -9,7 +9,7 @@ import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.mapper.UserMapper;
 import cn.lilemy.xiaoxinshu.model.dto.user.UserEditRequest;
 import cn.lilemy.xiaoxinshu.model.dto.user.UserQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.vo.LoginUserVO;
 import cn.lilemy.xiaoxinshu.model.vo.UserVO;
 import cn.lilemy.xiaoxinshu.service.UserService;

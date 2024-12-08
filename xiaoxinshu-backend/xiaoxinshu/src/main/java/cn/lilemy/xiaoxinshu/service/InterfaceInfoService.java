@@ -1,9 +1,10 @@
 package cn.lilemy.xiaoxinshu.service;
 
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoAddRequest;
+import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.InterfaceInfo;
+import cn.lilemy.xiaoxinshucommon.model.entity.InterfaceInfo;
 import cn.lilemy.xiaoxinshu.model.vo.InterfaceInfoVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -78,4 +79,12 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
      * @return 是否下线成功
      */
     Boolean offlineInterface(Long id);
+
+    /**
+     * 在线调用接口
+     *
+     * @param invokeRequest 调用接口请求体
+     * @return 接口返回信息
+     */
+    Object invokeInterface(InterfaceInfoInvokeRequest invokeRequest);
 }

@@ -1,6 +1,6 @@
 package cn.lilemy.xiaoxinshu.model.vo;
 
-import cn.lilemy.xiaoxinshu.model.entity.Categories;
+import cn.lilemy.xiaoxinshucommon.model.entity.Categories;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 

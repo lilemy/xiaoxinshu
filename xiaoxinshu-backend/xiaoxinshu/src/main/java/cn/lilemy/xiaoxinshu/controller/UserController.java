@@ -4,7 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.user.*;
-import cn.lilemy.xiaoxinshu.model.entity.User;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.vo.LoginUserVO;
 import cn.lilemy.xiaoxinshu.model.vo.UserVO;
 import cn.lilemy.xiaoxinshu.service.UserService;
@@ -29,8 +29,8 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Tag(name = "UserController")
 @RequestMapping("/user")
+@Tag(name = "UserController")
 public class UserController {
 
     @Resource

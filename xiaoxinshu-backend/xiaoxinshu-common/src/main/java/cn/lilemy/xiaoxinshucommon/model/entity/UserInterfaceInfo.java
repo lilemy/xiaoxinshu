@@ -1,4 +1,4 @@
-package cn.lilemy.xiaoxinshu.model.entity;
+package cn.lilemy.xiaoxinshucommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -8,47 +8,42 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 题库
- * @TableName question_bank
+ * 用户调用接口关系
+ * @TableName user_interface_info
  */
-@TableName(value ="question_bank")
+@TableName(value ="user_interface_info")
 @Data
-public class QuestionBank implements Serializable {
+public class UserInterfaceInfo implements Serializable {
     /**
-     * id
+     * 主键
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
-     * 标题
-     */
-    private String title;
-
-    /**
-     * 描述
-     */
-    private String description;
-
-    /**
-     * 图片
-     */
-    private String picture;
-
-    /**
-     * 优先级
-     */
-    private Integer priority;
-
-    /**
-     * 创建用户 id
+     * 调用用户 id
      */
     private Long userId;
 
     /**
-     * 编辑时间
+     * 接口 id
      */
-    private Date editTime;
+    private Long interfaceInfoId;
+
+    /**
+     * 总调用次数
+     */
+    private Integer totalNum;
+
+    /**
+     * 剩余调用次数
+     */
+    private Integer leftNum;
+
+    /**
+     * 0-正常，1-禁用
+     */
+    private Integer status;
 
     /**
      * 创建时间
@@ -61,7 +56,7 @@ public class QuestionBank implements Serializable {
     private Date updateTime;
 
     /**
-     * 是否删除
+     * 是否删除(0-未删, 1-已删)
      */
     @TableLogic
     private Integer isDelete;

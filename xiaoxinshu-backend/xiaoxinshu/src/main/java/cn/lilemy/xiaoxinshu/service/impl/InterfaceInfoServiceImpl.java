@@ -5,15 +5,20 @@ import cn.hutool.core.util.StrUtil;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.mapper.InterfaceInfoMapper;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoAddRequest;
+import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
-import cn.lilemy.xiaoxinshu.model.entity.InterfaceInfo;
+import cn.lilemy.xiaoxinshucommon.model.entity.InterfaceInfo;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
+import cn.lilemy.xiaoxinshu.model.enums.InterfaceEnum;
 import cn.lilemy.xiaoxinshu.model.enums.InterfaceInfoStatusEnum;
 import cn.lilemy.xiaoxinshu.model.vo.InterfaceInfoVO;
 import cn.lilemy.xiaoxinshu.service.InterfaceInfoService;
+import cn.lilemy.xiaoxinshu.service.UserService;
 import cn.lilemy.xiaoxinshu.util.SqlUtils;
 import cn.lilemy.xiaoxinshuclientsdk.client.XiaoxinshuClient;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;
+import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,6 +41,9 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private XiaoxinshuClient xiaoxinshuClient;
+
+    @Resource
+    private UserService userService;
 
     @Override
     public void validInterfaceInfo(InterfaceInfo interfaceInfo, boolean add) {
@@ -67,6 +75,9 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         BeanUtils.copyProperties(addRequest, interfaceInfo);
         // 数据校验
         this.validInterfaceInfo(interfaceInfo, true);
+        // 添加默认值
+        User loginUser = userService.getLoginUser();
+        interfaceInfo.setUserId(loginUser.getId());
         // 写入数据库
         boolean result = this.save(interfaceInfo);
         ThrowUtils.throwIf(!result, ResultCode.OPERATION_ERROR);
@@ -179,6 +190,31 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         interfaceInfo.setId(id);
         interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
         return this.updateById(interfaceInfo);
+    }
+
+    @Override
+    public Object invokeInterface(InterfaceInfoInvokeRequest invokeRequest) {
+        // 1. 校验接口是否存在
+        Long id = invokeRequest.getId();
+        InterfaceInfo oldInterfaceInfo = this.getById(id);
+        User loginUser = userService.getLoginUser();
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        XiaoxinshuClient loginUserClient = new XiaoxinshuClient(accessKey, secretKey);
+        ThrowUtils.throwIf(oldInterfaceInfo == null, ResultCode.NOT_FOUND_ERROR);
+        // 2. 只有已经上线的接口才能调用
+        ThrowUtils.throwIf(oldInterfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue(), ResultCode.NO_AUTH_ERROR, "该接口已关闭");
+        // 3. 调用接口
+        if (oldInterfaceInfo.getPath().equals(InterfaceEnum.IMAGE_RANDOM.getValue())) {
+            String params = invokeRequest.getUserRequestParams();
+            if (StringUtils.isNotBlank(params)) {
+                return loginUserClient.getRandomImage(params);
+            } else {
+                return loginUserClient.getRandomImage();
+            }
+        } else {
+            throw new BusinessException(ResultCode.NOT_FOUND_ERROR, "暂无该接口");
+        }
     }
 }
 

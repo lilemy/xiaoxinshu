@@ -1,4 +1,4 @@
-package cn.lilemy.xiaoxinshu.model.entity;
+package cn.lilemy.xiaoxinshucommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -11,12 +11,12 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 笔记收藏
- * @TableName note_favour
+ * 笔记点赞
+ * @TableName note_thumb
  */
-@TableName(value ="note_favour")
+@TableName(value ="note_thumb")
 @Data
-public class NoteFavour implements Serializable {
+public class NoteThumb implements Serializable {
     /**
      * id
      */

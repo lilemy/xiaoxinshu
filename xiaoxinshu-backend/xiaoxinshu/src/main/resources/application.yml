@@ -9,7 +9,7 @@
 server:
   port: 9126
   servlet:
-    context-path: /api
+    context-path: /api/backend
 logging:
   level:
     com.lilemy: info

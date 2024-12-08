@@ -1,4 +1,4 @@
-package cn.lilemy.xiaoxinshu.model.entity;
+package cn.lilemy.xiaoxinshucommon.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
@@ -8,12 +8,12 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * 题目
- * @TableName question
+ * 笔记
+ * @TableName note
  */
-@TableName(value ="question")
+@TableName(value ="note")
 @Data
-public class Question implements Serializable {
+public class Note implements Serializable {
     /**
      * id
      */
@@ -36,14 +36,24 @@ public class Question implements Serializable {
     private String tags;
 
     /**
-     * 推荐答案
+     * 图片
      */
-    private String answer;
+    private String picture;
 
     /**
-     * 创建用户 id
+     * 点赞数
      */
-    private Long userId;
+    private Integer thumbNum;
+
+    /**
+     * 收藏数
+     */
+    private Integer favourNum;
+
+    /**
+     * 浏览量
+     */
+    private Integer viewNum;
 
     /**
      * 状态：0-待审核, 1-通过, 2-拒绝
@@ -66,24 +76,19 @@ public class Question implements Serializable {
     private Date reviewTime;
 
     /**
-     * 浏览量
+     * 创建用户 id
      */
-    private Integer viewNum;
+    private Long userId;
 
     /**
-     * 点赞数
+     * 可见范围(0-公开, 1-仅对自己可见)
      */
-    private Integer thumbNum;
+    private Integer visible;
 
     /**
-     * 收藏数
+     * 是否置顶(0-未置顶 1-置顶)
      */
-    private Integer favourNum;
-
-    /**
-     * 优先级
-     */
-    private Integer priority;
+    private Integer isTop;
 
     /**
      * 编辑时间

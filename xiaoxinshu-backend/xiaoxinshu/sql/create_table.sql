@@ -163,7 +163,7 @@ create table if not exists interface_info
     `name`            varchar(256)                       not null comment '名称',
     `description`     varchar(256)                       null comment '描述',
     `url`             varchar(512)                       not null comment '接口地址',
-    `actual_url`       varchar(512)                       not null comment '实际接口地址',
+    `actual_url`      varchar(512)                       not null comment '实际接口地址',
     `path`            varchar(512)                       not null comment '接口路径',
     `request_params`  text                               not null comment '请求参数',
     `request_header`  text                               null comment '请求头',

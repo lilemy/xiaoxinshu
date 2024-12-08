@@ -3,7 +3,6 @@ package cn.lilemy.xiaoxinshu.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.*;
-import cn.lilemy.xiaoxinshu.model.entity.InterfaceInfo;
 import cn.lilemy.xiaoxinshu.model.vo.InterfaceInfoVO;
 import cn.lilemy.xiaoxinshu.service.InterfaceInfoService;
 import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
@@ -11,6 +10,7 @@ import cn.lilemy.xiaoxinshucommon.common.DeleteRequest;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
+import cn.lilemy.xiaoxinshucommon.model.entity.InterfaceInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
@@ -99,8 +99,7 @@ public class InterfaceInfoController {
     }
 
     @Operation(summary = "分页获取接口信息封装")
-    @PostMapping("/list/vo ")
-    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    @PostMapping("/list/vo")
     public BaseResponse<Page<InterfaceInfoVO>> listInterfaceInfoVOByPage(@RequestBody InterfaceInfoQueryRequest queryRequest) {
         ThrowUtils.throwIf(queryRequest == null, ResultCode.PARAMS_ERROR);
         long current = queryRequest.getCurrent();
@@ -128,11 +127,19 @@ public class InterfaceInfoController {
     @Operation(summary = "下线接口")
     @PostMapping("/offline")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> onlineInterface(@RequestBody InterfaceOfflineRequest interfaceOfflineRequest) {
+    public BaseResponse<Boolean> offlineInterface(@RequestBody InterfaceOfflineRequest interfaceOfflineRequest) {
         Long id = interfaceOfflineRequest.getId();
         ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR, "接口不存在");
         Boolean result = interfaceInfoService.offlineInterface(id);
         return ResultUtils.success(result);
     }
     // endregion
+
+    @Operation(summary = "在线调用接口")
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest invokeRequest){
+        ThrowUtils.throwIf(invokeRequest == null || invokeRequest.getId() <= 0,ResultCode.PARAMS_ERROR);
+        Object result = interfaceInfoService.invokeInterface(invokeRequest);
+        return ResultUtils.success(result);
+    }
 }
