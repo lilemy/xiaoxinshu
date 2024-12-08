@@ -63,11 +63,22 @@ export default [
     component: './Note/NoteCreate',
     hideInMenu: true,
   },
-
   {
     path: '/note/personal/:noteId',
     name: '个人笔记详情',
     component: './Note/NotePersonal',
+    hideInMenu: true,
+  },
+  {
+    path: 'interfaces',
+    name: '接口',
+    component: './Interface',
+    icon: 'api',
+  },
+  {
+    path: '/interface/:interfaceInfoId',
+    name: '接口信息详情',
+    component: './Interface/InterfaceDetail',
     hideInMenu: true,
   },
   {
@@ -109,6 +120,11 @@ export default [
         path: '/admin/categories',
         name: '笔记分类管理',
         component: './Admin/Categories',
+      },
+      {
+        path: '/admin/interfaceInfo',
+        name: '接口信息管理',
+        component: './Admin/InterfaceInfo',
       },
     ],
   },

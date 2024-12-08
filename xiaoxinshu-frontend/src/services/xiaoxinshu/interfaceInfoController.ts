@@ -62,6 +62,21 @@ export async function getInterfaceInfoVo(
   });
 }
 
+/** 在线调用接口 POST /interfaceInfo/invoke */
+export async function invokeInterfaceInfo(
+  body: API.InterfaceInfoInvokeRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseObject>('/interfaceInfo/invoke', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 分页获取接口信息 POST /interfaceInfo/list */
 export async function listInterfaceInfoByPage(
   body: API.InterfaceInfoQueryRequest,
@@ -93,7 +108,7 @@ export async function listInterfaceInfoVoByPage(
 }
 
 /** 下线接口 POST /interfaceInfo/offline */
-export async function onlineInterface1(
+export async function offlineInterface(
   body: API.InterfaceOfflineRequest,
   options?: { [key: string]: any },
 ) {

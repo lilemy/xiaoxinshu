@@ -1,6 +1,8 @@
+import InterfaceInfoList from '@/components/InterfaceInfoList';
 import NoteList from '@/components/NoteList';
 import QuestionBankList from '@/components/QuestionBankList';
 import QuestionList from '@/components/QuestionList';
+import { listInterfaceInfoVoByPage } from '@/services/xiaoxinshu/interfaceInfoController';
 import { listNoteVoByPage } from '@/services/xiaoxinshu/noteController';
 import { listQuestionBankVoByPage } from '@/services/xiaoxinshu/questionBankController';
 import { listQuestionVoByPage } from '@/services/xiaoxinshu/questionController';
@@ -20,10 +22,23 @@ const Welcome: React.FC = () => {
   const [questionList, setQuestionList] = useState<API.QuestionVO[]>([]);
   // 笔记列表
   const [noteList, setNoteList] = useState<API.NoteVO[]>([]);
+  // 接口信息列表
+  const [interfaceInfoList, setInterfaceInfoList] = useState<API.InterfaceInfoVO[]>([]);
   const [loading, setLoading] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
+    // 获取接口
+    try {
+      const res = await listInterfaceInfoVoByPage({
+        pageSize: 5,
+        sortField: 'createTime',
+        sortOrder: 'descend',
+      });
+      setInterfaceInfoList(res.data?.records ?? []);
+    } catch (e: any) {
+      message.error('获取接口信息列表失败，' + e.message);
+    }
     // 获取笔记
     try {
       const res = await listNoteVoByPage({
@@ -65,6 +80,12 @@ const Welcome: React.FC = () => {
   }, []);
   return (
     <Card loading={loading} className="max-width-content">
+      <Flex justify="space-between" align="center">
+        <Title level={3}>开放接口</Title>
+        <Link to={'/interfaces'}>查看更多</Link>
+      </Flex>
+      <InterfaceInfoList interfaceInfoList={interfaceInfoList} />
+      <Divider />
       <Flex justify="space-between" align="center">
         <Title level={3}>最新笔记</Title>
         <Link to={'/notes'}>查看更多</Link>

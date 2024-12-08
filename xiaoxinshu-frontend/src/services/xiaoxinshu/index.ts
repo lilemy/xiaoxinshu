@@ -10,7 +10,9 @@ import * as questionBankController from './questionBankController';
 import * as questionBankQuestionController from './questionBankQuestionController';
 import * as questionController from './questionController';
 import * as userController from './userController';
+import * as userInterfaceInfoController from './userInterfaceInfoController';
 export default {
+  userInterfaceInfoController,
   userController,
   questionBankQuestionController,
   questionBankController,

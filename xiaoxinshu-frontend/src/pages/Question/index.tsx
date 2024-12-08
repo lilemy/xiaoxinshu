@@ -2,8 +2,7 @@ import TagList from '@/components/TagList';
 import { listQuestionVoByPage } from '@/services/xiaoxinshu/questionController';
 import { Link } from '@@/exports';
 import { ActionType, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, Card, Col, Row } from 'antd';
-import Title from 'antd/es/typography/Title';
+import { Button, Card } from 'antd';
 import React, { useRef } from 'react';
 
 const Question: React.FC = () => {
@@ -34,45 +33,43 @@ const Question: React.FC = () => {
   ];
   return (
     <div className="max-width-content" style={{ width: '100%' }}>
-      <Card style={{ marginBottom: 15 }}>
-        <Row>
-          <Col flex="auto">
-            <Title level={3}>题目大全</Title>
-          </Col>
-          <Col>
-            <Link to="/question/create">
-              <Button type="primary" size={'large'}>
-                新建题目
-              </Button>
-            </Link>
-          </Col>
-        </Row>
+      <Card
+        title="题目大全"
+        extra={
+          <Link to="/question/create">
+            <Button type="primary" size="middle">
+              新建题目
+            </Button>
+          </Link>
+        }
+      >
+        <ProTable<API.QuestionVO, API.PageQuestionVO>
+          actionRef={actionRef}
+          rowKey="id"
+          search={{
+            labelWidth: 'auto',
+            style: { margin: '0', paddingTop: '0', paddingBottom: '5px' },
+          }}
+          options={false}
+          size={'large'}
+          request={async (params, sort, filter) => {
+            const sortField = Object.keys(sort)?.[0];
+            const sortOrder = sort?.[sortField] ?? undefined;
+            const { data, code } = await listQuestionVoByPage({
+              ...params,
+              sortField,
+              sortOrder,
+              ...filter,
+            } as API.QuestionQueryRequest);
+            return {
+              success: code === 0,
+              data: data?.records || [],
+              total: Number(data?.total) || 0,
+            };
+          }}
+          columns={columns}
+        />
       </Card>
-      <ProTable<API.QuestionVO, API.PageQuestionVO>
-        actionRef={actionRef}
-        rowKey="id"
-        search={{
-          labelWidth: 'auto',
-        }}
-        options={false}
-        size={'large'}
-        request={async (params, sort, filter) => {
-          const sortField = Object.keys(sort)?.[0];
-          const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listQuestionVoByPage({
-            ...params,
-            sortField,
-            sortOrder,
-            ...filter,
-          } as API.QuestionQueryRequest);
-          return {
-            success: code === 0,
-            data: data?.records || [],
-            total: Number(data?.total) || 0,
-          };
-        }}
-        columns={columns}
-      />
     </div>
   );
 };

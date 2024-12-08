@@ -1,12 +1,12 @@
 /**
  * 后端本地地址
  */
-export const BACKEND_HOST_DEV = 'http://localhost:9911/api';
+export const BACKEND_HOST_DEV = 'http://localhost:9911/api/backend';
 
 /**
  * 后端线上地址
  */
-export const BACKEND_HOST_PROD = 'https://api.lilemy.cn/api';
+export const BACKEND_HOST_PROD = 'https://api.lilemy.cn/api/backend';
 
 /**
  * 前端本体地址

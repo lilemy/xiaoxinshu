@@ -53,6 +53,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseObject = {
+    code?: number;
+    data?: Record<string, any>;
+    message?: string;
+  };
+
   type BaseResponsePageCategoriesVO = {
     code?: number;
     data?: PageCategoriesVO;
@@ -285,6 +291,11 @@ declare namespace API {
     requestHeader?: string;
     responseHeader?: string;
     method?: string;
+  };
+
+  type InterfaceInfoInvokeRequest = {
+    id?: number;
+    userRequestParams?: string;
   };
 
   type InterfaceInfoQueryRequest = {
@@ -946,6 +957,17 @@ declare namespace API {
     userProfile?: string;
     phone?: string;
     email?: string;
+  };
+
+  type UserInterfaceInfoAddRequest = {
+    userId?: number;
+    interfaceInfoId?: number;
+    leftNum?: number;
+  };
+
+  type UserInterfaceInfoUpdateRequest = {
+    id?: number;
+    leftNum?: number;
   };
 
   type UserLoginRequest = {
