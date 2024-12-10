@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.user.*;
+import cn.lilemy.xiaoxinshu.model.vo.UserByAccessKey;
 import cn.lilemy.xiaoxinshu.model.vo.UserByUserAccount;
 import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.vo.LoginUserVO;
@@ -220,6 +221,20 @@ public class UserController {
         return ResultUtils.success(userSignInRecord);
     }
 
+    // endregion
+
+    // region 用户 API 密钥
+    @Operation(summary = "获取登录用户密钥")
+    @PostMapping("/get/login/accessKey")
+    public BaseResponse<UserByAccessKey> getLoginUserByAccessKey() {
+        User loginUser = userService.getLoginUser();
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        UserByAccessKey userByAccessKey = new UserByAccessKey();
+        userByAccessKey.setAccessKey(accessKey);
+        userByAccessKey.setSecretKey(secretKey);
+        return ResultUtils.success(userByAccessKey);
+    }
     // endregion
 
 }
