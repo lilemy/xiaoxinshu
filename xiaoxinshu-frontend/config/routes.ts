@@ -94,6 +94,12 @@ export default [
     hideInMenu: true,
   },
   {
+    path: 'account/accessKey',
+    name: '接口密钥',
+    component: './Account/AccessKey',
+    hideInMenu: true,
+  },
+  {
     path: '/admin',
     name: '管理页',
     icon: 'crown',
@@ -122,9 +128,14 @@ export default [
         component: './Admin/Categories',
       },
       {
-        path: '/admin/interfaceInfo',
+        path: '/admin/interfaceInfos',
         name: '接口信息管理',
         component: './Admin/InterfaceInfo',
+      },
+      {
+        path: '/admin/userInterfaceInfos',
+        name: '用户接口关系管理',
+        component: './Admin/UserInterfaceInfo',
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { userLogout } from '@/services/xiaoxinshu/userController';
 import { Link } from '@@/exports';
-import { EditOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { EditOutlined, LogoutOutlined, SafetyOutlined, UserOutlined } from '@ant-design/icons';
 import { history, useModel } from '@umijs/max';
 import { Avatar, Button, Space } from 'antd';
 import type { MenuInfo } from 'rc-menu/lib/interface';
@@ -70,6 +70,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = () => {
       key: 'setting',
       icon: <EditOutlined />,
       label: '个人设置',
+    },
+    {
+      key: 'accessKey',
+      icon: <SafetyOutlined />,
+      label: '接口密钥',
     },
     {
       key: 'logout',

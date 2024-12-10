@@ -22,6 +22,12 @@ const Footer: React.FC = () => {
         }}
         links={[
           {
+            key: 'xiaoxinshu-icp',
+            title: '渝ICP备2024030252号-1',
+            href: 'https://beian.miit.gov.cn/',
+            blankTarget: true,
+          },
+          {
             key: 'xiaoxinshu-gongan',
             title: (
               <>
@@ -30,12 +36,6 @@ const Footer: React.FC = () => {
               </>
             ),
             href: 'https://beian.mps.gov.cn/#/query/webSearch?code=50010602504893',
-            blankTarget: true,
-          },
-          {
-            key: 'xiaoxinshu-icp',
-            title: '渝ICP备2024030252号-1',
-            href: 'https://beian.miit.gov.cn/',
             blankTarget: true,
           },
         ]}

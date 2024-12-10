@@ -3,6 +3,7 @@ import PersonalNoteList from '@/pages/Account/Center/components/PersonalNoteList
 import PersonalQuestionList from '@/pages/Account/Center/components/PersonalQuestionList';
 import { listMyQuestionVoByPage } from '@/services/xiaoxinshu/questionController';
 import { getLoginUser } from '@/services/xiaoxinshu/userController';
+import { MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import { GridContent } from '@ant-design/pro-layout';
 import { Card, Col, Image, message, Row } from 'antd';
 import Meta from 'antd/es/card/Meta';
@@ -22,7 +23,6 @@ const Center: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   // 菜单栏
   const [activeTabKey, setActiveTabKey] = useState<string>('record');
-
   // 获取当前用户
   const loginUser = async () => {
     setLoading(true);
@@ -91,6 +91,32 @@ const Center: React.FC = () => {
                   </>
                 }
               />
+              <div style={{ textAlign: 'left',marginLeft: '24px' }}>
+                {loginUserVO?.phone ? (
+                  <p>
+                    <PhoneOutlined
+                      style={{
+                        marginRight: 8,
+                      }}
+                    />
+                    {loginUserVO?.phone}
+                  </p>
+                ) : (
+                  <></>
+                )}
+                {loginUserVO?.email ? (
+                  <p>
+                    <MailOutlined
+                      style={{
+                        marginRight: 8,
+                      }}
+                    />
+                    {loginUserVO?.email}
+                  </p>
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
           </Card>
         </Col>

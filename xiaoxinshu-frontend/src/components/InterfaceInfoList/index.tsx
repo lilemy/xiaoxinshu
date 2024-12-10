@@ -24,7 +24,7 @@ const InterfaceInfoList = (props: Props) => {
               return <Link to={`/interface/${data.id}`}>{data.name}</Link>;
             },
           },
-          content: {
+          subTitle: {
             dataIndex: 'description',
           },
           extra: {

@@ -23,9 +23,21 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListInterfaceInfoByName = {
+    code?: number;
+    data?: InterfaceInfoByName[];
+    message?: string;
+  };
+
   type BaseResponseListQuestionBankListVO = {
     code?: number;
     data?: QuestionBankListVO[];
+    message?: string;
+  };
+
+  type BaseResponseListUserByUserAccount = {
+    code?: number;
+    data?: UserByUserAccount[];
     message?: string;
   };
 
@@ -137,6 +149,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePageUserInterfaceInfo = {
+    code?: number;
+    data?: PageUserInterfaceInfo;
+    message?: string;
+  };
+
   type BaseResponsePageUserVO = {
     code?: number;
     data?: PageUserVO;
@@ -176,6 +194,12 @@ declare namespace API {
   type BaseResponseUser = {
     code?: number;
     data?: User;
+    message?: string;
+  };
+
+  type BaseResponseUserByAccessKey = {
+    code?: number;
+    data?: UserByAccessKey;
     message?: string;
   };
 
@@ -291,6 +315,12 @@ declare namespace API {
     requestHeader?: string;
     responseHeader?: string;
     method?: string;
+  };
+
+  type InterfaceInfoByName = {
+    id?: number;
+    name?: string;
+    description?: string;
   };
 
   type InterfaceInfoInvokeRequest = {
@@ -685,6 +715,20 @@ declare namespace API {
     pages?: number;
   };
 
+  type PageUserInterfaceInfo = {
+    records?: UserInterfaceInfo[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PageUserInterfaceInfo;
+    searchCount?: PageUserInterfaceInfo;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
   type PageUserVO = {
     records?: UserVO[];
     total?: number;
@@ -950,6 +994,16 @@ declare namespace API {
     username?: string;
   };
 
+  type UserByAccessKey = {
+    accessKey?: string;
+    secretKey?: string;
+  };
+
+  type UserByUserAccount = {
+    id?: number;
+    userAccount?: string;
+  };
+
   type UserEditRequest = {
     id?: number;
     username?: string;
@@ -959,10 +1013,33 @@ declare namespace API {
     email?: string;
   };
 
+  type UserInterfaceInfo = {
+    id?: number;
+    userId?: number;
+    interfaceInfoId?: number;
+    totalNum?: number;
+    leftNum?: number;
+    status?: number;
+    createTime?: string;
+    updateTime?: string;
+    isDelete?: number;
+  };
+
   type UserInterfaceInfoAddRequest = {
     userId?: number;
     interfaceInfoId?: number;
     leftNum?: number;
+  };
+
+  type UserInterfaceInfoQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number;
+    userId?: number;
+    interfaceInfoId?: number;
+    status?: number;
   };
 
   type UserInterfaceInfoUpdateRequest = {

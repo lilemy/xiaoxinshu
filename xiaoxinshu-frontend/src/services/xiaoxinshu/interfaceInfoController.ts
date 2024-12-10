@@ -47,6 +47,14 @@ export async function getInterfaceInfo(
   });
 }
 
+/** 获取接口名字列表 GET /interfaceInfo/get/list */
+export async function listInterfaceInfoByName(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListInterfaceInfoByName>('/interfaceInfo/get/list', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 根据 id 查询接口信息封装 GET /interfaceInfo/get/vo */
 export async function getInterfaceInfoVo(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

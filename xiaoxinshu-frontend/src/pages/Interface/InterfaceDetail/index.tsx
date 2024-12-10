@@ -1,3 +1,4 @@
+import { CLIENT_SDK_URL } from '@/constants';
 import {
   getInterfaceInfoVo,
   invokeInterfaceInfo,
@@ -64,7 +65,15 @@ const InterfaceDetail: React.FC = () => {
     <div className="max-width-content">
       <Card loading={loading}>
         {interfaceInfo ? (
-          <ProDescriptions title={interfaceInfo.name} column={1}>
+          <ProDescriptions
+            title={interfaceInfo.name}
+            extra={
+              <a target="_blank" href={CLIENT_SDK_URL} rel="noreferrer">
+                下载 SDK
+              </a>
+            }
+            column={1}
+          >
             <ProDescriptions.Item
               label="接口状态"
               valueEnum={{
@@ -89,10 +98,10 @@ const InterfaceDetail: React.FC = () => {
             <ProDescriptions.Item label="请求参数" valueType="jsonCode">
               {interfaceInfo.requestParams}
             </ProDescriptions.Item>
-            <ProDescriptions.Item label="请求头">
+            <ProDescriptions.Item label="请求头" valueType="jsonCode">
               {interfaceInfo.requestHeader}
             </ProDescriptions.Item>
-            <ProDescriptions.Item label="响应头">
+            <ProDescriptions.Item label="响应头" valueType="jsonCode">
               {interfaceInfo.responseHeader}
             </ProDescriptions.Item>
             <ProDescriptions.Item label="创建时间" valueType="dateTime">
@@ -137,7 +146,7 @@ const InterfaceDetail: React.FC = () => {
         )}
         {invokeResData && interfaceInfo?.responseHeader?.includes('image') ? (
           <Card title="图片预览">
-            <Image src={invokeResData}/>
+            <Image src={invokeResData} />
           </Card>
         ) : (
           <></>

@@ -61,10 +61,26 @@ export async function getUserById(
   });
 }
 
+/** 获取用户账号列表 GET /user/get/list */
+export async function listUserByUserAccount(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListUserByUserAccount>('/user/get/list', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** 获取当前登录用户 GET /user/get/login */
 export async function getLoginUser(options?: { [key: string]: any }) {
   return request<API.BaseResponseLoginUserVO>('/user/get/login', {
     method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** 获取登录用户密钥 POST /user/get/login/accessKey */
+export async function getLoginUserByAccessKey(options?: { [key: string]: any }) {
+  return request<API.BaseResponseUserByAccessKey>('/user/get/login/accessKey', {
+    method: 'POST',
     ...(options || {}),
   });
 }

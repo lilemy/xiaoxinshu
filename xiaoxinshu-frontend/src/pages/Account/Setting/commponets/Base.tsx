@@ -103,6 +103,8 @@ const BaseView: React.FC = () => {
         >
           <ProFormText width="lg" name="username" label="昵称" />
           <ProFormTextArea name="userProfile" label="个人简介" placeholder="个人简介" />
+          <ProFormText name="phone" label="手机号" />
+          <ProFormText name="email" label="邮箱" />
         </ProForm>
       </div>
       <div className={styles.right}>
