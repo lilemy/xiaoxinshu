@@ -3,6 +3,7 @@ package cn.lilemy.xiaoxinshu.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.interfaceinfo.*;
+import cn.lilemy.xiaoxinshu.model.vo.InterfaceInfoByName;
 import cn.lilemy.xiaoxinshu.model.vo.InterfaceInfoVO;
 import cn.lilemy.xiaoxinshu.service.InterfaceInfoService;
 import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
@@ -17,7 +18,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 接口信息接口
@@ -111,6 +115,20 @@ public class InterfaceInfoController {
         return ResultUtils.success(interfaceInfoService.getInterfaceInfoVOPage(interfaceInfoPage));
     }
 
+    @Operation(summary = "获取接口名字列表")
+    @GetMapping("/get/list")
+    public BaseResponse<List<InterfaceInfoByName>> listInterfaceInfoByName() {
+        QueryWrapper<InterfaceInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "name", "description");
+        List<InterfaceInfo> interfaceInfoList = interfaceInfoService.list(queryWrapper);
+        List<InterfaceInfoByName> list = interfaceInfoList.stream().map(interfaceInfo -> {
+            InterfaceInfoByName interfaceInfoByName = new InterfaceInfoByName();
+            BeanUtils.copyProperties(interfaceInfo, interfaceInfoByName);
+            return interfaceInfoByName;
+        }).toList();
+        return ResultUtils.success(list);
+    }
+
     // endregion
 
     // region 上线下线接口
@@ -137,8 +155,8 @@ public class InterfaceInfoController {
 
     @Operation(summary = "在线调用接口")
     @PostMapping("/invoke")
-    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest invokeRequest){
-        ThrowUtils.throwIf(invokeRequest == null || invokeRequest.getId() <= 0,ResultCode.PARAMS_ERROR);
+    public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest invokeRequest) {
+        ThrowUtils.throwIf(invokeRequest == null || invokeRequest.getId() <= 0, ResultCode.PARAMS_ERROR);
         Object result = interfaceInfoService.invokeInterface(invokeRequest);
         return ResultUtils.success(result);
     }

@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.user.*;
+import cn.lilemy.xiaoxinshu.model.vo.UserByUserAccount;
 import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import cn.lilemy.xiaoxinshu.model.vo.LoginUserVO;
 import cn.lilemy.xiaoxinshu.model.vo.UserVO;
@@ -14,6 +15,7 @@ import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
 import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -137,6 +139,7 @@ public class UserController {
 
     @Operation(summary = "根据 id 获取用户（仅管理员）")
     @GetMapping("/get")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<User> getUserById(Long id) {
         ThrowUtils.throwIf(!userService.isAdmin(), ResultCode.NO_AUTH_ERROR);
         ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
@@ -155,6 +158,7 @@ public class UserController {
 
     @Operation(summary = "分页获取用户列表")
     @PostMapping("/list")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
     public BaseResponse<Page<User>> listUserByPage(@RequestBody UserQueryRequest userQueryRequest) {
         ThrowUtils.throwIf(!userService.isAdmin(), ResultCode.NO_AUTH_ERROR);
         long current = userQueryRequest.getCurrent();
@@ -178,6 +182,20 @@ public class UserController {
         List<UserVO> userVO = userService.getUserVO(userPage.getRecords());
         userVOPage.setRecords(userVO);
         return ResultUtils.success(userVOPage);
+    }
+
+    @Operation(summary = "获取用户账号列表")
+    @GetMapping("/get/list")
+    public BaseResponse<List<UserByUserAccount>> listUserByUserAccount() {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select("id", "user_account");
+        List<User> userList = userService.list(queryWrapper);
+        List<UserByUserAccount> list = userList.stream().map(user -> {
+            UserByUserAccount userByUserAccount = new UserByUserAccount();
+            BeanUtils.copyProperties(user, userByUserAccount);
+            return userByUserAccount;
+        }).toList();
+        return ResultUtils.success(list);
     }
 
     // endregion

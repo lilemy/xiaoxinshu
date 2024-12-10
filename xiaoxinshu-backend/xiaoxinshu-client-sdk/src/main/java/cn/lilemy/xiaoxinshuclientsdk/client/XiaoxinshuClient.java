@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Slf4j
 public class XiaoxinshuClient {
-    private static final String GATEWAY_HOST = "http://localhost:9911/api";
+    private static final String GATEWAY_HOST = "http://localhost:8080/api";
 
     private final String accessKey;
 
