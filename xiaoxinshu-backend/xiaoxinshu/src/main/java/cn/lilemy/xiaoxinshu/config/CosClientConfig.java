@@ -19,6 +19,11 @@ import org.springframework.context.annotation.Configuration;
 public class CosClientConfig {
 
     /**
+     * host
+     */
+    private String host;
+
+    /**
      * secretId
      */
     private String secretId;

@@ -189,3 +189,35 @@ create table if not exists user_interface_info
     `update_time`       datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     `is_delete`         tinyint  default 0                 not null comment '是否删除(0-未删, 1-已删)'
 ) comment '用户调用接口关系';
+
+-- 图片表
+create table if not exists picture
+(
+    id             bigint auto_increment comment 'id' primary key,
+    url            varchar(256)                       not null comment '图片 url',
+    name           varchar(128)                       not null comment '图片名称',
+    introduction   varchar(256)                       null comment '简介',
+    category       varchar(64)                        null comment '分类',
+    tags           varchar(256)                       null comment '标签（JSON 数组）',
+    pic_size       bigint                             null comment '图片体积',
+    pic_width      int                                null comment '图片宽度',
+    pic_height     int                                null comment '图片高度',
+    pic_scale      double                             null comment '图片宽高比例',
+    pic_format     varchar(32)                        null comment '图片格式',
+    user_id        bigint                             not null comment '创建用户 id',
+    review_status  int      default 0                 not null comment '审核状态：0-待审核; 1-通过; 2-拒绝',
+    review_message varchar(128)                       null comment '审核信息',
+    reviewer_id    bigint                             null comment '审核人 ID',
+    review_time    datetime                           null comment '审核时间',
+    create_time    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    edit_time      datetime default CURRENT_TIMESTAMP not null comment '编辑时间',
+    update_time    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    is_delete      tinyint  default 0                 not null comment '是否删除',
+    INDEX idx_name (name),                 -- 提升基于图片名称的查询性能
+    INDEX idx_introduction (introduction), -- 用于模糊搜索图片简介
+    INDEX idx_category (category),         -- 提升基于分类的查询性能
+    INDEX idx_tags (tags),                 -- 提升基于标签的查询性能
+    INDEX idx_user_id (user_id),           -- 提升基于用户 ID 的查询性能
+    INDEX idx_review_status (review_status)
+) comment '图片' collate = utf8mb4_unicode_ci;
+

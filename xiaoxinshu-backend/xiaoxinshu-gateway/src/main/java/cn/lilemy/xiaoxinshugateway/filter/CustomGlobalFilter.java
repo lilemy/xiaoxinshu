@@ -6,7 +6,6 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
@@ -43,7 +42,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         String sourceAddress = Objects.requireNonNull(request.getLocalAddress()).getHostString();
         log.info("请求来源地址：{}", sourceAddress);
         log.info("请求来源地址：{}", request.getRemoteAddress());
-        ServerHttpResponse response = exchange.getResponse();
         // 2. 访问控制 - 黑白名单
         // 3. 用户鉴权（判断 ak、sk 是否合法）
         HttpHeaders headers = request.getHeaders();

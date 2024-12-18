@@ -53,8 +53,9 @@ public class InvokeInterceptor {
         String timestamp = request.getHeader("timestamp");
         String sign = request.getHeader("sign");
         String body = request.getHeader("body");
+        log.info("调用用户 -> requestUrl：{}，method：{}，accessKey：{}，nonce：{}，timestamp：{}，sign：{}，body：{}", requestURI, method, accessKey, nonce, timestamp, sign, body);
         // 用户鉴权（判断 ak、sk 是否合法）
-        User invokeUser = null;
+        User invokeUser;
         try {
             invokeUser = innerUserService.getInvokeUser(accessKey);
         } catch (Exception e) {

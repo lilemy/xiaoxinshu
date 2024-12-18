@@ -24,17 +24,8 @@ mybatis-plus:
 sa-token:
   token-name: tokendev
   is-log: true
-# 策略模式
-storage:
-  # 文件上传
-  file:
-    type: minio # 对象存储类型
-minio:
-  endpoint: http://192.168.37.130:9000
-  accessKey: lilemy
-  secretKey: 12345678
-  bucketName: xiaoxinshu
 cos:
+  host: xx
   secretId: xx
   secretKey: xx
   region: xx
@@ -50,6 +41,3 @@ dubbo:
     port: 22223
   application:
     qos-port: 22224
-  provider:
-    exception:
-      enable: true
