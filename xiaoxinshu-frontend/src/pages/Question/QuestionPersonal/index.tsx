@@ -52,7 +52,7 @@ const QuestionPersonalPage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, [isEdit]);
 
   const questionBankList = question.questionBankList?.map((value) => value.id);
@@ -68,7 +68,7 @@ const QuestionPersonalPage: React.FC = () => {
     setLoading(false);
   };
   useEffect(() => {
-    getBankList().then(() => '');
+    getBankList().then();
   }, []);
   const bankListForm = bankList.map((bankList) => ({
     value: bankList.id,

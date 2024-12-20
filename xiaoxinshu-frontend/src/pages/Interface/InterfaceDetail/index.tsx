@@ -35,7 +35,7 @@ const InterfaceDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
 
   const invokeInterface = async () => {

@@ -27,7 +27,7 @@ const NoteDetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
 
   return (

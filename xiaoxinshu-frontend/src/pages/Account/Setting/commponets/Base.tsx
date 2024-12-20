@@ -21,7 +21,7 @@ const BaseView: React.FC = () => {
         setUserMessageChange(!userMessageChange);
       }
     } catch (e: any) {
-      message.error('更新信息失败', e.message);
+      message.error('更新信息失败'+ e.message);
     }
   };
   const getLoginUserMes = async () => {
@@ -77,7 +77,7 @@ const BaseView: React.FC = () => {
     </>
   );
   useEffect(() => {
-    getLoginUserMes().then(() => '');
+    getLoginUserMes().then();
   }, [userMessageChange]);
   useEffect(() => {
     formRef.current?.resetFields();

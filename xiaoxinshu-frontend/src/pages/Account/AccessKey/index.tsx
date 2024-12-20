@@ -12,7 +12,7 @@ const AccessKeyPage: React.FC = () => {
       const res = await getLoginUserByAccessKey();
       setUserInfo(res.data ?? {});
     } catch (e: any) {
-      message.error('获取当前用户密钥失败，', e.message);
+      message.error('获取当前用户密钥失败，'+ e.message);
     }
     setLoading(false);
   };

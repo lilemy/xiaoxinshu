@@ -81,14 +81,14 @@ const NotePage: React.FC = () => {
   ];
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
 
   useEffect(() => {
     if (activeTabKey === 'default') {
-      loadDefaultNote().then(() => '');
+      loadDefaultNote().then();
     } else {
-      loadNoteByCategoriesId(activeTabKey).then(() => '');
+      loadNoteByCategoriesId(activeTabKey).then();
     }
   }, [activeTabKey, current]);
 

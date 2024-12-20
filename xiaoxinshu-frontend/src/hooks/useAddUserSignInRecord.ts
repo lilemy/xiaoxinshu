@@ -19,7 +19,7 @@ const useAddUserSignInRecord = () => {
   };
 
   useEffect(() => {
-    doFetch();
+    doFetch().then();
   }, []);
 
   return { loading };

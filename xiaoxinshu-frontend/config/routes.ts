@@ -70,6 +70,30 @@ export default [
     hideInMenu: true,
   },
   {
+    path: 'pictures',
+    name: '图片',
+    icon: 'picture',
+    component: './Picture',
+  },
+  {
+    path: 'picture/create',
+    name: '上传图片',
+    component: './Picture/PictureCreate',
+    hideInMenu: true,
+  },
+  {
+    path: 'picture/edit/:pictureId',
+    name: '修改图片信息',
+    component: './Picture/PictureCreate',
+    hideInMenu: true,
+  },
+  {
+    path: 'picture/:pictureId',
+    name: '图片详情',
+    component: './Picture/PictureDetail',
+    hideInMenu: true,
+  },
+  {
     path: 'interfaces',
     name: '接口',
     component: './Interface',
@@ -114,6 +138,11 @@ export default [
         name: '题目审核',
         component: './Admin/Review/Question',
         hideInMenu: true,
+      },
+      {
+        path: '/admin/picture',
+        name: '图片管理',
+        component: './Admin/Picture',
       },
       { path: '/admin/note', name: '笔记管理', component: './Admin/Note' },
       {

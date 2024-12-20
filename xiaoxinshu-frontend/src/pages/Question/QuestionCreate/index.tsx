@@ -25,7 +25,7 @@ const QuestionCreate: React.FC = () => {
     setLoading(false);
   };
   useEffect(() => {
-    loadQuestionBankList().then(() => '');
+    loadQuestionBankList().then();
   }, []);
   const questionBankListForm = questionBankList.map((questionBank) => ({
     value: questionBank.id,

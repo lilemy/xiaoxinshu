@@ -1,24 +1,20 @@
-import MdEditor from '@/components/Markdown/MdEditor';
 import TagList from '@/components/TagList';
-import CreateForm from '@/pages/Admin/Note/components/CreateForm';
-import UpdateForm from '@/pages/Admin/Note/components/UpdateForm';
-import { deleteNote, listNoteByPage } from '@/services/xiaoxinshu/noteController';
-import { Link } from '@@/exports';
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { deletePicture, listPictureByPage } from '@/services/xiaoxinshu/pictureController';
+import { PlusOutlined } from '@ant-design/icons';
 import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
 import { Button, message, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 
-const NoteTableList: React.FC = () => {
+const PictureTableList: React.FC = () => {
   // 是否显示新建窗口
   const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 是否显示更新窗口
   const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.Note>();
+  const [currentRow, setCurrentRow] = useState<API.Picture>();
 
   /**
-   * @zh-CN 删除题目
+   * @zh-CN 删除图片
    *
    * @param note
    */
@@ -26,7 +22,7 @@ const NoteTableList: React.FC = () => {
     const hide = message.loading('正在删除');
     if (!note) return true;
     try {
-      await deleteNote({
+      await deletePicture({
         id: note.id,
       });
       hide();
@@ -40,7 +36,7 @@ const NoteTableList: React.FC = () => {
     }
   };
 
-  const columns: ProColumns<API.Note>[] = [
+  const columns: ProColumns<API.Picture>[] = [
     {
       title: 'id',
       dataIndex: 'id',
@@ -49,20 +45,24 @@ const NoteTableList: React.FC = () => {
       width: 160,
     },
     {
-      title: '标题',
-      dataIndex: 'title',
+      title: '图片',
+      dataIndex: 'url',
+      valueType: 'image',
+    },
+    {
+      title: '图片名称',
+      dataIndex: 'name',
       valueType: 'text',
     },
     {
       title: '内容',
-      dataIndex: 'content',
+      dataIndex: 'introduction',
       valueType: 'text',
-      hideInSearch: true,
-      width: 640,
-      renderFormItem: (_, { value }) => {
-        // value 和 onchange 会通过 form 自动注入
-        return <MdEditor {...value} />;
-      },
+    },
+    {
+      title: '分类',
+      dataIndex: 'category',
+      valueType: 'text',
     },
     {
       title: '标签',
@@ -77,9 +77,76 @@ const NoteTableList: React.FC = () => {
       },
     },
     {
+      title: '图片大小',
+      sorter: true,
+      dataIndex: 'picSize',
+      valueType: 'text',
+    },
+    {
+      title: '图片宽度',
+      sorter: true,
+      dataIndex: 'picWidth',
+      valueType: 'text',
+    },
+    {
+      title: '图片高度',
+      sorter: true,
+      dataIndex: 'picHeight',
+      valueType: 'text',
+    },
+    {
+      title: '图片宽高比例',
+      sorter: true,
+      dataIndex: 'picScale',
+      valueType: 'text',
+    },
+    {
+      title: '图片格式',
+      dataIndex: 'picFormat',
+      valueType: 'text',
+    },
+    {
       title: '创建用户',
       dataIndex: 'userId',
       valueType: 'text',
+      hideInForm: true,
+    },
+    {
+      title: '审核状态',
+      dataIndex: 'reviewStatus',
+      valueEnum: {
+        0: {
+          text: '未审核',
+          status: 'Default',
+        },
+        1: {
+          text: '审核通过',
+          status: 'Success',
+        },
+        2: {
+          text: '审核未通过',
+          status: 'Error',
+        },
+      },
+    },
+    {
+      title: '审核信息',
+      dataIndex: 'reviewMessage',
+      valueType: 'text',
+      hideInForm: true,
+    },
+    {
+      title: '审核用户',
+      dataIndex: 'reviewerId',
+      valueType: 'text',
+      hideInForm: true,
+    },
+    {
+      title: '审核时间',
+      sorter: true,
+      dataIndex: 'reviewTime',
+      valueType: 'dateTime',
+      hideInSearch: true,
       hideInForm: true,
     },
     {
@@ -130,14 +197,13 @@ const NoteTableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.Note, API.PageNote>
-        headerTitle={'笔记信息'}
+      <ProTable<API.Picture, API.PagePicture>
+        headerTitle={'图片信息'}
         actionRef={actionRef}
         rowKey="id"
         search={{
           labelWidth: 120,
         }}
-        scroll={{ x: 1200 }}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -148,22 +214,16 @@ const NoteTableList: React.FC = () => {
           >
             <PlusOutlined /> 新建
           </Button>,
-          <Link key="review" to="/admin/review/notes">
-            <Button type="primary">
-              <EditOutlined /> 审核
-            </Button>
-          </Link>,
         ]}
         request={async (params, sort, filter) => {
           const sortField = Object.keys(sort)?.[0];
           const sortOrder = sort?.[sortField] ?? undefined;
-          const { data, code } = await listNoteByPage({
-            needContent: true,
+          const { data, code } = await listPictureByPage({
             ...params,
             sortField,
             sortOrder,
             ...filter,
-          } as API.NoteQueryRequest);
+          } as API.PictureQueryRequest);
           return {
             success: code === 0,
             data: data?.records || [],
@@ -172,31 +232,8 @@ const NoteTableList: React.FC = () => {
         }}
         columns={columns}
       />
-      <CreateForm
-        modalVisible={createModalVisible}
-        columns={columns}
-        onSubmit={() => {
-          setCreateModalVisible(false);
-          actionRef.current?.reload();
-        }}
-        onCancel={() => {
-          setCreateModalVisible(false);
-        }}
-      />
-      <UpdateForm
-        modalVisible={updateModalVisible}
-        columns={columns}
-        oldData={currentRow}
-        onSubmit={() => {
-          setUpdateModalVisible(false);
-          actionRef.current?.reload();
-        }}
-        onCancel={() => {
-          setUpdateModalVisible(false);
-        }}
-      />
     </PageContainer>
   );
 };
 
-export default NoteTableList;
+export default PictureTableList;

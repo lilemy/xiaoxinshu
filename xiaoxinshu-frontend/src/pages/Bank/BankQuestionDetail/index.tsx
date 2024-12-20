@@ -63,11 +63,11 @@ const BankQuestionDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    loadBank().then(() => '');
+    loadBank().then();
   }, [questionBankId]);
 
   useEffect(() => {
-    loadQuestion().then(() => '');
+    loadQuestion().then();
   }, [questionId]);
 
   return (

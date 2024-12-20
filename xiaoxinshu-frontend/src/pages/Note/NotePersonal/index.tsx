@@ -68,7 +68,7 @@ const NotePersonalPage: React.FC = () => {
     setLoading(false);
   };
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
   const categoriesIdList = note.categoriesVOList?.map((value) => value.id);
   const categoriesListForm = categoriesList.map((categories) => ({

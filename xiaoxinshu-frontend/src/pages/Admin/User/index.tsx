@@ -58,6 +58,16 @@ const UserTableList: React.FC = () => {
       valueType: 'text',
     },
     {
+      title: '手机号码',
+      dataIndex: 'phone',
+      valueType: 'text',
+    },
+    {
+      title: '邮箱',
+      dataIndex: 'email',
+      valueType: 'text',
+    },
+    {
       title: '头像',
       dataIndex: 'userAvatar',
       valueType: 'image',

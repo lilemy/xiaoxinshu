@@ -30,7 +30,7 @@ const QuestionDetail: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
 
   return (

@@ -107,6 +107,18 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponsePagePicture = {
+    code?: number;
+    data?: PagePicture;
+    message?: string;
+  };
+
+  type BaseResponsePagePictureVO = {
+    code?: number;
+    data?: PagePictureVO;
+    message?: string;
+  };
+
   type BaseResponsePageQuestion = {
     code?: number;
     data?: PageQuestion;
@@ -158,6 +170,24 @@ declare namespace API {
   type BaseResponsePageUserVO = {
     code?: number;
     data?: PageUserVO;
+    message?: string;
+  };
+
+  type BaseResponsePicture = {
+    code?: number;
+    data?: Picture;
+    message?: string;
+  };
+
+  type BaseResponsePictureTagCategory = {
+    code?: number;
+    data?: PictureTagCategory;
+    message?: string;
+  };
+
+  type BaseResponsePictureVO = {
+    code?: number;
+    data?: PictureVO;
     message?: string;
   };
 
@@ -255,6 +285,14 @@ declare namespace API {
   };
 
   type getNoteVOByIdParams = {
+    id: number;
+  };
+
+  type getPictureByIdParams = {
+    id: number;
+  };
+
+  type getPictureVOByIdParams = {
     id: number;
   };
 
@@ -617,6 +655,34 @@ declare namespace API {
     pages?: number;
   };
 
+  type PagePicture = {
+    records?: Picture[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PagePicture;
+    searchCount?: PagePicture;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
+  type PagePictureVO = {
+    records?: PictureVO[];
+    total?: number;
+    size?: number;
+    current?: number;
+    orders?: OrderItem[];
+    optimizeCountSql?: PagePictureVO;
+    searchCount?: PagePictureVO;
+    optimizeJoinOfCountSql?: boolean;
+    maxLimit?: number;
+    countId?: string;
+    pages?: number;
+  };
+
   type PageQuestion = {
     records?: Question[];
     total?: number;
@@ -741,6 +807,92 @@ declare namespace API {
     maxLimit?: number;
     countId?: string;
     pages?: number;
+  };
+
+  type Picture = {
+    id?: number;
+    url?: string;
+    name?: string;
+    introduction?: string;
+    category?: string;
+    tags?: string;
+    picSize?: number;
+    picWidth?: number;
+    picHeight?: number;
+    picScale?: number;
+    picFormat?: string;
+    userId?: number;
+    reviewStatus?: number;
+    reviewMessage?: string;
+    reviewerId?: number;
+    reviewTime?: string;
+    createTime?: string;
+    editTime?: string;
+    updateTime?: string;
+    isDelete?: number;
+  };
+
+  type PictureEditRequest = {
+    id?: number;
+    name?: string;
+    introduction?: string;
+    category?: string;
+    tags?: string[];
+  };
+
+  type PictureQueryRequest = {
+    current?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
+    id?: number;
+    name?: string;
+    introduction?: string;
+    category?: string;
+    tags?: string[];
+    picSize?: number;
+    picWidth?: number;
+    picHeight?: number;
+    picScale?: number;
+    picFormat?: string;
+    searchText?: string;
+    userId?: number;
+  };
+
+  type PictureTagCategory = {
+    tagList?: string[];
+    categoryList?: string[];
+  };
+
+  type PictureUpdateRequest = {
+    id?: number;
+    name?: string;
+    introduction?: string;
+    category?: string;
+    tags?: string[];
+  };
+
+  type PictureUploadRequest = {
+    id?: number;
+  };
+
+  type PictureVO = {
+    id?: number;
+    url?: string;
+    name?: string;
+    introduction?: string;
+    tags?: string[];
+    category?: string;
+    picSize?: number;
+    picWidth?: number;
+    picHeight?: number;
+    picScale?: number;
+    picFormat?: string;
+    userId?: number;
+    createTime?: string;
+    editTime?: string;
+    updateTime?: string;
+    user?: UserVO;
   };
 
   type Question = {
@@ -966,6 +1118,10 @@ declare namespace API {
   type UploadFileRequest = {
     biz?: string;
     bizId?: number;
+  };
+
+  type uploadPictureParams = {
+    pictureUploadRequest: PictureUploadRequest;
   };
 
   type User = {

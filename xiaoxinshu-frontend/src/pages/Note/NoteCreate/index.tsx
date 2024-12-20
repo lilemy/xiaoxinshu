@@ -34,7 +34,7 @@ const NoteCreate: React.FC = () => {
     setLoading(false);
   };
   useEffect(() => {
-    loadCategoriesList().then(() => '');
+    loadCategoriesList().then();
   }, []);
   const categoriesListForm = categoriesList.map((categoriesVO) => ({
     value: categoriesVO.id,

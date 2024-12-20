@@ -45,7 +45,7 @@ const Center: React.FC = () => {
       });
       setUserQuestionList(res.data?.records ?? []);
     } catch (e: any) {
-      message.error('获取题目失败，', e.message);
+      message.error('获取题目失败，'+ e.message);
     }
   };
 
@@ -64,10 +64,10 @@ const Center: React.FC = () => {
   };
 
   useEffect(() => {
-    loginUser().then(() => '');
+    loginUser().then();
   }, []);
   useEffect(() => {
-    userQuestion().then(() => '');
+    userQuestion().then();
   }, []);
 
   return (

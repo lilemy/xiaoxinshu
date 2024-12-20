@@ -41,7 +41,7 @@ const UpdateBankModal: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (questionId) {
-      getCurrentQuestionBankIdList().then(() => '');
+      getCurrentQuestionBankIdList().then();
     }
   }, [questionId]);
 
@@ -62,7 +62,7 @@ const UpdateBankModal: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    getQuestionBankList().then(() => '');
+    getQuestionBankList().then();
   }, []);
 
   return (

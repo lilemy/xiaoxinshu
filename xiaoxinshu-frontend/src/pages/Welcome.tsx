@@ -76,7 +76,7 @@ const Welcome: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
   return (
     <Card loading={loading} className="max-width-content">

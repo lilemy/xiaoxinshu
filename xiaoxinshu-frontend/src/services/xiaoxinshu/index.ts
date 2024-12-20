@@ -6,6 +6,7 @@ import * as categoriesController from './categoriesController';
 import * as fileController from './fileController';
 import * as interfaceInfoController from './interfaceInfoController';
 import * as noteController from './noteController';
+import * as pictureController from './pictureController';
 import * as questionBankController from './questionBankController';
 import * as questionBankQuestionController from './questionBankQuestionController';
 import * as questionController from './questionController';
@@ -17,6 +18,7 @@ export default {
   questionBankQuestionController,
   questionBankController,
   questionController,
+  pictureController,
   noteController,
   interfaceInfoController,
   fileController,

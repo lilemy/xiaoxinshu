@@ -27,7 +27,7 @@ const Bank: React.FC = () => {
   };
 
   useEffect(() => {
-    loadData().then(() => '');
+    loadData().then();
   }, []);
 
   return (
