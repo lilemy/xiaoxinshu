@@ -1,15 +1,22 @@
 import TagList from '@/components/TagList';
+import ReviewForm from '@/pages/Admin/Picture/components/ReviewForm';
 import { deletePicture, listPictureByPage } from '@/services/xiaoxinshu/pictureController';
+import { formatSize } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
-import { ActionType, PageContainer, ProColumns, ProTable } from '@ant-design/pro-components';
-import { Button, message, Space, Typography } from 'antd';
+import {
+  ActionType,
+  PageContainer,
+  ProColumns,
+  ProDescriptions,
+  ProTable,
+} from '@ant-design/pro-components';
+import { history } from '@umijs/max';
+import { Button, message, Popconfirm, Space, Typography } from 'antd';
 import React, { useRef, useState } from 'react';
 
 const PictureTableList: React.FC = () => {
-  // 是否显示新建窗口
-  const [createModalVisible, setCreateModalVisible] = useState<boolean>(false);
   // 是否显示更新窗口
-  const [updateModalVisible, setUpdateModalVisible] = useState<boolean>(false);
+  const [reviewModalVisible, setReviewModalVisible] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Picture>();
 
@@ -42,7 +49,6 @@ const PictureTableList: React.FC = () => {
       dataIndex: 'id',
       valueType: 'text',
       hideInForm: true,
-      width: 160,
     },
     {
       title: '图片',
@@ -77,42 +83,27 @@ const PictureTableList: React.FC = () => {
       },
     },
     {
-      title: '图片大小',
-      sorter: true,
+      title: '图片信息',
+      valueType: 'text',
       dataIndex: 'picSize',
-      valueType: 'text',
-    },
-    {
-      title: '图片宽度',
-      sorter: true,
-      dataIndex: 'picWidth',
-      valueType: 'text',
-    },
-    {
-      title: '图片高度',
-      sorter: true,
-      dataIndex: 'picHeight',
-      valueType: 'text',
-    },
-    {
-      title: '图片宽高比例',
-      sorter: true,
-      dataIndex: 'picScale',
-      valueType: 'text',
-    },
-    {
-      title: '图片格式',
-      dataIndex: 'picFormat',
-      valueType: 'text',
-    },
-    {
-      title: '创建用户',
-      dataIndex: 'userId',
-      valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
+      sorter: true,
+      render: (_, record) => {
+        return (
+          <ProDescriptions size="small" column={1}>
+            <ProDescriptions.Item label="大小">{formatSize(record.picSize)}</ProDescriptions.Item>
+            <ProDescriptions.Item label="宽度">{record.picWidth}</ProDescriptions.Item>
+            <ProDescriptions.Item label="高度">{record.picHeight}</ProDescriptions.Item>
+            <ProDescriptions.Item label="宽高比">{record.picScale}</ProDescriptions.Item>
+            <ProDescriptions.Item label="格式">{record.picFormat}</ProDescriptions.Item>
+          </ProDescriptions>
+        );
+      },
+      width: 150,
     },
     {
-      title: '审核状态',
+      title: '审核信息',
       dataIndex: 'reviewStatus',
       valueEnum: {
         0: {
@@ -128,16 +119,37 @@ const PictureTableList: React.FC = () => {
           status: 'Error',
         },
       },
+      render: (_, record) => {
+        return (
+          <ProDescriptions size="small" column={1}>
+            <ProDescriptions.Item
+              label="状态"
+              valueEnum={{
+                0: {
+                  text: '未审核',
+                  status: 'Default',
+                },
+                1: {
+                  text: '审核通过',
+                  status: 'Success',
+                },
+                2: {
+                  text: '审核未通过',
+                  status: 'Error',
+                },
+              }}
+            >
+              {record.reviewStatus}
+            </ProDescriptions.Item>
+            <ProDescriptions.Item label="信息">{record.reviewMessage}</ProDescriptions.Item>
+            <ProDescriptions.Item label="用户">{record.reviewerId}</ProDescriptions.Item>
+          </ProDescriptions>
+        );
+      },
     },
     {
-      title: '审核信息',
-      dataIndex: 'reviewMessage',
-      valueType: 'text',
-      hideInForm: true,
-    },
-    {
-      title: '审核用户',
-      dataIndex: 'reviewerId',
+      title: '创建用户',
+      dataIndex: 'userId',
       valueType: 'text',
       hideInForm: true,
     },
@@ -182,19 +194,25 @@ const PictureTableList: React.FC = () => {
           <Typography.Link
             onClick={() => {
               setCurrentRow(record);
-              setUpdateModalVisible(true);
+              setReviewModalVisible(true);
+            }}
+          >
+            审核
+          </Typography.Link>
+          <Typography.Link
+            onClick={() => {
+              history.push(`/picture/edit/${record.id}`);
             }}
           >
             修改
           </Typography.Link>
-          <Typography.Link type="danger" onClick={() => handleDelete(record)}>
-            删除
-          </Typography.Link>
+          <Popconfirm title="是否删除这张图片" onConfirm={() => handleDelete(record)}>
+            <Typography.Link type="danger">删除</Typography.Link>
+          </Popconfirm>
         </Space>
       ),
     },
   ];
-
   return (
     <PageContainer>
       <ProTable<API.Picture, API.PagePicture>
@@ -204,12 +222,13 @@ const PictureTableList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        defaultSize="small"
         toolBarRender={() => [
           <Button
             type="primary"
             key="add"
             onClick={() => {
-              setCreateModalVisible(true);
+              history.push('/picture/create');
             }}
           >
             <PlusOutlined /> 新建
@@ -230,7 +249,22 @@ const PictureTableList: React.FC = () => {
             total: Number(data?.total) || 0,
           };
         }}
+        pagination={{
+          pageSize: 10, // 每页显示 10 条数据
+        }}
         columns={columns}
+      />
+      <ReviewForm
+        modalVisible={reviewModalVisible}
+        oldData={currentRow}
+        columns={columns}
+        onSubmit={() => {
+          setReviewModalVisible(false);
+          actionRef.current?.reload();
+        }}
+        onCancel={() => {
+          setReviewModalVisible(false);
+        }}
       />
     </PageContainer>
   );

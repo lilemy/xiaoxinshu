@@ -30,7 +30,7 @@ const ReviewModal: React.FC<Props> = (props) => {
       onSubmit?.();
       formRef.current?.resetFields();
     } catch (e: any) {
-      message.error('审核失败：', e);
+      message.error('审核失败：' + e.message);
     }
   };
   return (

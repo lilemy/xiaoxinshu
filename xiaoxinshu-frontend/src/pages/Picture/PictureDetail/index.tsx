@@ -1,8 +1,8 @@
 import TagList from '@/components/TagList';
 import { deletePicture, getPictureVoById } from '@/services/xiaoxinshu/pictureController';
-import { formatSize } from '@/utils';
+import { downloadImage, formatSize } from '@/utils';
 import { useParams } from '@@/exports';
-import { DeleteOutlined, EditOutlined, ExportOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DownloadOutlined, EditOutlined, ExportOutlined } from '@ant-design/icons';
 import { ProDescriptions } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
 import { Avatar, Button, Card, Col, Image, message, Popconfirm, Row, Space } from 'antd';
@@ -50,6 +50,10 @@ const PictureDetailPage: React.FC = () => {
     }
     setLoading(false);
   };
+  // 处理下载
+  const doDownload = () => {
+    downloadImage(image?.url);
+  };
   return (
     <div className="max-width-content">
       <Row gutter={[16, 16]}>
@@ -82,19 +86,23 @@ const PictureDetailPage: React.FC = () => {
             <br />
             <Space wrap>
               {canEdit && (
-                <Button type="primary" onClick={() => history.push(`/picture/edit/${pictureId}`)}>
+                <Button onClick={() => history.push(`/picture/edit/${pictureId}`)}>
                   <EditOutlined />
                   图片编辑
                 </Button>
               )}
               {canEdit && (
                 <Popconfirm title="是否删除这张图片" onConfirm={removePicture}>
-                  <Button type="primary" danger>
+                  <Button danger>
                     <DeleteOutlined />
                     图片删除
                   </Button>
                 </Popconfirm>
               )}
+              <Button type="primary" onClick={doDownload}>
+                <DownloadOutlined />
+                图片下载
+              </Button>
               <Button>
                 <ExportOutlined />
                 图片分享

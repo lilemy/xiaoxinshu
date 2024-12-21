@@ -857,6 +857,15 @@ declare namespace API {
     picFormat?: string;
     searchText?: string;
     userId?: number;
+    reviewStatus?: number;
+    reviewMessage?: string;
+    reviewerId?: number;
+  };
+
+  type PictureReviewRequest = {
+    id?: number;
+    reviewStatus?: number;
+    reviewMessage?: string;
   };
 
   type PictureTagCategory = {

@@ -4,7 +4,7 @@ import {
   listPictureVoByPage,
 } from '@/services/xiaoxinshu/pictureController';
 import { Link } from '@@/exports';
-import { Avatar, Button, Card, Flex, Image, message, Pagination, Tabs, Tag } from 'antd';
+import { Avatar, Button, Card, Empty, Flex, Image, message, Pagination, Tabs, Tag } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import Search from 'antd/es/input/Search';
 import React, { useEffect, useState } from 'react';
@@ -144,6 +144,7 @@ const PicturePage: React.FC = () => {
           ))}
         </Flex>
         <br />
+        {pictureList.length===0 && <Empty />}
         <Masonry
           breakpointCols={{
             default: 3, // 默认3列

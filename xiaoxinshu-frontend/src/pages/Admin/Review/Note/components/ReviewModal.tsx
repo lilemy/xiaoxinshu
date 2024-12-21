@@ -1,10 +1,10 @@
 import MdViewer from '@/components/Markdown/MdViewer';
+import { reviewNote } from '@/services/xiaoxinshu/noteController';
 import { ProDescriptions, ProFormSelect, ProFormTextArea } from '@ant-design/pro-components';
 import { ProForm, ProFormInstance } from '@ant-design/pro-form/lib';
 import { message, Modal } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useRef } from 'react';
-import { reviewNote } from '@/services/xiaoxinshu/noteController';
 
 interface Props {
   oldData?: API.Note;
@@ -30,7 +30,7 @@ const ReviewModal: React.FC<Props> = (props) => {
       onSubmit?.();
       formRef.current?.resetFields();
     } catch (e: any) {
-      message.error('审核失败：', e);
+      message.error('审核失败：' + e.message);
     }
   };
   return (
