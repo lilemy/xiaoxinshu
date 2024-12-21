@@ -1,11 +1,9 @@
 package cn.lilemy.xiaoxinshu.service;
 
-import cn.lilemy.xiaoxinshu.model.dto.picture.PictureEditRequest;
-import cn.lilemy.xiaoxinshu.model.dto.picture.PictureQueryRequest;
-import cn.lilemy.xiaoxinshu.model.dto.picture.PictureUpdateRequest;
-import cn.lilemy.xiaoxinshu.model.dto.picture.PictureUploadRequest;
+import cn.lilemy.xiaoxinshu.model.dto.picture.*;
 import cn.lilemy.xiaoxinshu.model.vo.PictureVO;
 import cn.lilemy.xiaoxinshucommon.model.entity.Picture;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -66,6 +64,14 @@ public interface PictureService extends IService<Picture> {
     QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
 
     /**
+     * 图片分页查询（包含审核信息）
+     *
+     * @param pictureQueryRequest 分页查询请求体
+     * @return 分页查询请求
+     */
+    QueryWrapper<Picture> getQueryWrapperAndReview(PictureQueryRequest pictureQueryRequest);
+
+    /**
      * 获取单个图片封装
      *
      * @param picture 图片信息
@@ -81,4 +87,12 @@ public interface PictureService extends IService<Picture> {
      */
     Page<PictureVO> getPictureVOPage(Page<Picture> picturePage);
 
+    /**
+     * 图片审核
+     *
+     * @param pictureReviewRequest 管理员审核图片请求
+     */
+    void doPictureReview(PictureReviewRequest pictureReviewRequest);
+
+    void fillReviewParams(Picture picture, User loginUser);
 }

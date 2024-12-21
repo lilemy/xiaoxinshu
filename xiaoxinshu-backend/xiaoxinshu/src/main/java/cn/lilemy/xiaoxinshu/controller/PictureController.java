@@ -3,6 +3,7 @@ package cn.lilemy.xiaoxinshu.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.picture.*;
+import cn.lilemy.xiaoxinshu.model.enums.ReviewStatusEnum;
 import cn.lilemy.xiaoxinshu.model.vo.PictureVO;
 import cn.lilemy.xiaoxinshu.service.PictureService;
 import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
@@ -11,6 +12,7 @@ import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import cn.lilemy.xiaoxinshucommon.model.entity.Picture;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,7 +41,7 @@ public class PictureController {
     @Operation(summary = "上传图片")
     @PostMapping("/upload")
     public BaseResponse<PictureVO> uploadPicture(
-            @RequestPart("file") MultipartFile multipartFile,
+            @RequestParam("file") MultipartFile multipartFile,
             PictureUploadRequest pictureUploadRequest) {
         PictureVO pictureVO = pictureService.uploadPicture(multipartFile, pictureUploadRequest);
         return ResultUtils.success(pictureVO);
@@ -89,6 +91,8 @@ public class PictureController {
         // 查询数据库
         Picture picture = pictureService.getById(id);
         ThrowUtils.throwIf(picture == null, ResultCode.NOT_FOUND_ERROR);
+        // 未通过审核图片不允许用户查看
+        ThrowUtils.throwIf(!picture.getReviewStatus().equals(ReviewStatusEnum.PASS.getValue()), ResultCode.NO_AUTH_ERROR);
         // 获取封装类
         return ResultUtils.success(pictureService.getPictureVO(picture));
     }
@@ -101,7 +105,7 @@ public class PictureController {
         int pageSize = pictureQueryRequest.getPageSize();
         // 查询数据库
         Page<Picture> picturePage = pictureService.page(new Page<>(current, pageSize),
-                pictureService.getQueryWrapper(pictureQueryRequest));
+                pictureService.getQueryWrapperAndReview(pictureQueryRequest));
         return ResultUtils.success(picturePage);
     }
 
@@ -112,9 +116,11 @@ public class PictureController {
         int pageSize = pictureQueryRequest.getPageSize();
         // 限制爬虫
         ThrowUtils.throwIf(pageSize > 20, ResultCode.PARAMS_ERROR);
+        QueryWrapper<Picture> queryWrapper = pictureService.getQueryWrapper(pictureQueryRequest);
+        // 只能查看已过审的图片
+        queryWrapper.eq("review_status", ReviewStatusEnum.PASS.getValue());
         // 查询数据库
-        Page<Picture> picturePage = pictureService.page(new Page<>(current, pageSize),
-                pictureService.getQueryWrapper(pictureQueryRequest));
+        Page<Picture> picturePage = pictureService.page(new Page<>(current, pageSize), queryWrapper);
         // 获取封装类
         return ResultUtils.success(pictureService.getPictureVOPage(picturePage));
     }
@@ -126,10 +132,19 @@ public class PictureController {
     public BaseResponse<PictureTagCategory> listPictureTagCategory() {
         PictureTagCategory pictureTagCategory = new PictureTagCategory();
         List<String> tagList = Arrays.asList("原神", "崩坏·星穹铁道", "绝区零", "无限暖暖", "我的世界", "高清", "艺术", "校园", "背景", "简历", "创意");
-        List<String> categoryList = Arrays.asList("壁纸", "二次元", "表情包", "素材", "明星");
+        List<String> categoryList = Arrays.asList("壁纸", "二次元", "表情包", "素材", "明星", "其他");
         pictureTagCategory.setTagList(tagList);
         pictureTagCategory.setCategoryList(categoryList);
         return ResultUtils.success(pictureTagCategory);
+    }
+
+    @Operation(summary = "审核图片")
+    @PostMapping("/review")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> doPictureReview(@RequestBody PictureReviewRequest pictureReviewRequest) {
+        ThrowUtils.throwIf(pictureReviewRequest == null, ResultCode.PARAMS_ERROR);
+        pictureService.doPictureReview(pictureReviewRequest);
+        return ResultUtils.success(true);
     }
 
 }
