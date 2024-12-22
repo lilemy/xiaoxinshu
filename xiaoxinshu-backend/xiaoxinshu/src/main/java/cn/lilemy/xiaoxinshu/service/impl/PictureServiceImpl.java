@@ -1,36 +1,37 @@
 package cn.lilemy.xiaoxinshu.service.impl;
 
-import java.util.List;
-
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
-import cn.lilemy.xiaoxinshu.manager.FileManager;
+import cn.lilemy.xiaoxinshu.manager.upload.FilePictureUpload;
+import cn.lilemy.xiaoxinshu.manager.upload.PictureUploadTemplate;
+import cn.lilemy.xiaoxinshu.manager.upload.UrlPictureUpload;
+import cn.lilemy.xiaoxinshu.mapper.PictureMapper;
 import cn.lilemy.xiaoxinshu.model.dto.file.UploadPictureResult;
 import cn.lilemy.xiaoxinshu.model.dto.picture.*;
 import cn.lilemy.xiaoxinshu.model.enums.ReviewStatusEnum;
 import cn.lilemy.xiaoxinshu.model.vo.PictureVO;
 import cn.lilemy.xiaoxinshu.model.vo.UserVO;
+import cn.lilemy.xiaoxinshu.service.PictureService;
 import cn.lilemy.xiaoxinshu.service.UserService;
 import cn.lilemy.xiaoxinshu.util.SqlUtils;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
+import cn.lilemy.xiaoxinshucommon.model.entity.Picture;
 import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import cn.lilemy.xiaoxinshucommon.model.entity.Picture;
-import cn.lilemy.xiaoxinshu.service.PictureService;
-import cn.lilemy.xiaoxinshu.mapper.PictureMapper;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,7 +48,10 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
     private UserService userService;
 
     @Resource
-    private FileManager fileManager;
+    private FilePictureUpload filePictureUpload;
+
+    @Resource
+    private UrlPictureUpload urlPictureUpload;
 
     @Override
     public void validPicture(Picture picture) {
@@ -68,7 +72,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
 
     @Override
-    public PictureVO uploadPicture(MultipartFile multipartFile, PictureUploadRequest pictureUploadRequest) {
+    public PictureVO uploadPicture(Object inputSource, PictureUploadRequest pictureUploadRequest) {
+        ThrowUtils.throwIf(inputSource == null, ResultCode.PARAMS_ERROR, "图片为空");
         User loginUser = userService.getLoginUser();
         ThrowUtils.throwIf(loginUser == null, ResultCode.NO_AUTH_ERROR);
         // 用于判断是新增还是更新图片  
@@ -88,7 +93,12 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 上传图片，得到信息  
         // 按照用户 id 划分目录  
         String uploadPathPrefix = String.format("public/%s", loginUser.getId());
-        UploadPictureResult uploadPictureResult = fileManager.uploadPicture(multipartFile, uploadPathPrefix);
+        // 根据 inputSource 类型区分上传方式
+        PictureUploadTemplate pictureUploadTemplate = filePictureUpload;
+        if (inputSource instanceof String) {
+            pictureUploadTemplate = urlPictureUpload;
+        }
+        UploadPictureResult uploadPictureResult = pictureUploadTemplate.uploadPicture(inputSource, uploadPathPrefix);
         // 构造要入库的图片信息
         Picture picture = new Picture();
         picture.setUrl(uploadPictureResult.getUrl());
@@ -292,6 +302,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
     public void doPictureReview(PictureReviewRequest pictureReviewRequest) {
         Long id = pictureReviewRequest.getId();
         Integer reviewStatus = pictureReviewRequest.getReviewStatus();
+        String reviewMessage = pictureReviewRequest.getReviewMessage();
         ReviewStatusEnum reviewStatusEnum = ReviewStatusEnum.getEnumByValue(reviewStatus);
         ThrowUtils.throwIf(id == null || reviewStatusEnum == null || ReviewStatusEnum.REVIEWING.equals(reviewStatusEnum), ResultCode.PARAMS_ERROR);
         // 判断是否存在
@@ -300,10 +311,22 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 已经是该状态
         ThrowUtils.throwIf(oldPicture.getReviewStatus().equals(reviewStatus), ResultCode.PARAMS_ERROR, "请勿重复提交审核");
         // 更新审核状态
+        // 如果审核信息为空，则添加默认信息
+        if (StringUtils.isBlank(reviewMessage)) {
+            // 如果审核通过
+            if (reviewStatus == ReviewStatusEnum.PASS.getValue()) {
+                reviewMessage = ReviewStatusEnum.PASS.getText();
+            }
+            // 如果审核不通过
+            if (reviewStatus == ReviewStatusEnum.REJECT.getValue()) {
+                reviewMessage = ReviewStatusEnum.REJECT.getText();
+            }
+        }
         User loginUser = userService.getLoginUser();
         Picture updatePicture = new Picture();
         BeanUtils.copyProperties(pictureReviewRequest, updatePicture);
         updatePicture.setReviewerId(loginUser.getId());
+        updatePicture.setReviewMessage(reviewMessage);
         updatePicture.setReviewTime(new Date());
         boolean result = this.updateById(updatePicture);
         ThrowUtils.throwIf(!result, ResultCode.OPERATION_ERROR);
