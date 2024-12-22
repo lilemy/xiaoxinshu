@@ -47,6 +47,14 @@ public class PictureController {
         return ResultUtils.success(pictureVO);
     }
 
+    @Operation(summary = "上传图片根据 URL")
+    @PostMapping("/upload/url")
+    public BaseResponse<PictureVO> uploadPictureByUrl(@RequestBody PictureUploadRequest pictureUploadRequest) {
+        String fileUrl = pictureUploadRequest.getFileUrl();
+        PictureVO pictureVO = pictureService.uploadPicture(fileUrl, pictureUploadRequest);
+        return ResultUtils.success(pictureVO);
+    }
+
     @Operation(summary = "删除图片")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deletePicture(@RequestBody DeleteRequest deleteRequest) {

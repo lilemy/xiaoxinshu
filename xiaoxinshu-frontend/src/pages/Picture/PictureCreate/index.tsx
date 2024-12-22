@@ -3,19 +3,25 @@ import {
   getPictureVoById,
   listPictureTagCategory,
   uploadPicture,
+  uploadPictureByUrl,
 } from '@/services/xiaoxinshu/pictureController';
 import { history, useParams } from '@@/exports';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { ProForm, ProFormInstance } from '@ant-design/pro-form/lib';
-import { Card, GetProp, message, Upload, UploadProps } from 'antd';
+import { Card, GetProp, message, Tabs, Upload, UploadProps } from 'antd';
+import Search from 'antd/es/input/Search';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const beforeUpload = (file: FileType) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+  const isJpgOrPng =
+    file.type === 'image/jpeg' ||
+    file.type === 'image/png' ||
+    file.type === 'image/jpg' ||
+    file.type === 'image/webp';
   if (!isJpgOrPng) {
     message.error('不支持上传该格式图片，推荐 jpg 或 png').then(() => {
       return;
@@ -52,7 +58,21 @@ const PictureCreatePage: React.FC = () => {
       message.success('图片上传成功');
       formRef.current?.resetFields();
     } catch (e: any) {
-      message.error('图片上传失败：', e.message);
+      message.error('图片上传失败：' + e.message);
+    }
+    setLoading(false);
+  };
+  // 上传图片
+  const handleUploadByUrl = async (fileUrl: string) => {
+    setLoading(true);
+    try {
+      const res = await uploadPictureByUrl({ id: imageId, fileUrl: fileUrl });
+      setImage(res.data);
+      setImageId(res.data?.id);
+      message.success('图片上传成功');
+      formRef.current?.resetFields();
+    } catch (e: any) {
+      message.error('图片上传失败：' + e.message);
     }
     setLoading(false);
   };
@@ -69,7 +89,7 @@ const PictureCreatePage: React.FC = () => {
       setImageId(res.data?.id);
       formRef.current?.resetFields();
     } catch (e: any) {
-      message.error('获取图片信息失败：', e.message);
+      message.error('获取图片信息失败：' + e.message);
     }
     setLoading(false);
   };
@@ -82,7 +102,7 @@ const PictureCreatePage: React.FC = () => {
       setCategory(res.data?.categoryList ?? []);
       formRef.current?.resetFields();
     } catch (e: any) {
-      message.error('获取图片分类标签信息失败：', e.message);
+      message.error('获取图片分类标签信息失败：' + e.message);
     }
     setLoading(false);
   };
@@ -116,9 +136,11 @@ const PictureCreatePage: React.FC = () => {
     }
     setLoading(false);
   };
-  return (
-    <div className="max-width-content">
-      <Card title={image ? '更新图片' : '创建图片'}>
+  const tabItems = [
+    {
+      key: 'file',
+      label: '文件上传',
+      children: (
         <div className="picture-upload">
           <Upload
             listType="picture-card"
@@ -127,7 +149,7 @@ const PictureCreatePage: React.FC = () => {
             customRequest={handleUpload}
           >
             {image?.url ? (
-              <img src={image.url} alt="avatar" />
+              <img src={image.url} alt="picture" />
             ) : (
               <button style={{ border: 0, background: 'none' }} type="button">
                 {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -136,7 +158,32 @@ const PictureCreatePage: React.FC = () => {
             )}
           </Upload>
         </div>
-        {image ? (
+      ),
+    },
+    {
+      key: 'url',
+      label: 'URL 上传',
+      children: (
+        <div className="picture-upload-url">
+          <Search
+            size="large"
+            type="primary"
+            loading={loading}
+            onSearch={handleUploadByUrl}
+            placeholder="请输入图片 URL"
+            enterButton="提交"
+            style={{ width: '100%', marginTop: 20 }}
+          />
+          <div className="img-div">{image?.url && <img src={image.url} alt="picture" />}</div>
+        </div>
+      ),
+    },
+  ];
+  return (
+    <div className="max-width-content">
+      <Card title={image ? '更新图片' : '创建图片'}>
+        <Tabs items={tabItems}/>
+        {image && (
           <ProForm
             size="large"
             style={{ width: '95%', margin: '20px auto 5px' }}
@@ -183,8 +230,6 @@ const PictureCreatePage: React.FC = () => {
               }}
             />
           </ProForm>
-        ) : (
-          <></>
         )}
       </Card>
     </div>

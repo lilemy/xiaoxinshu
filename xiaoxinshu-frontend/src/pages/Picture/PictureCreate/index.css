@@ -9,3 +9,18 @@
   max-width: 100%;
   max-height: 480px;
 }
+
+.picture-upload-url {
+  width: 80%;
+  margin: 0 auto 20px;
+}
+
+.picture-upload-url img {
+  margin-top: 20px;
+  max-width: 100%;
+  max-height: 480px;
+}
+
+.picture-upload-url .img-div {
+  text-align: center;
+}

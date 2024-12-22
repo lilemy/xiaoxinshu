@@ -883,6 +883,7 @@ declare namespace API {
 
   type PictureUploadRequest = {
     id?: number;
+    fileUrl?: string;
   };
 
   type PictureVO = {
