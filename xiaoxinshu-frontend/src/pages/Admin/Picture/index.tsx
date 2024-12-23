@@ -231,7 +231,17 @@ const PictureTableList: React.FC = () => {
               history.push('/picture/create');
             }}
           >
-            <PlusOutlined /> 新建
+            <PlusOutlined /> 创建图片
+          </Button>,
+          <Button
+            key="batchAdd"
+            type="primary"
+            ghost
+            onClick={() => {
+              history.push('/admin/picture/batchAdd');
+            }}
+          >
+            <PlusOutlined /> 批量创建图片
           </Button>,
         ]}
         request={async (params, sort, filter) => {

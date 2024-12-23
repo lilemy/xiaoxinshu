@@ -144,6 +144,12 @@ export default [
         name: '图片管理',
         component: './Admin/Picture',
       },
+      {
+        path: '/admin/picture/batchAdd',
+        name: '批量添加图片',
+        component: './Admin/Picture/PictureBatchAdd',
+        hideInMenu: true,
+      },
       { path: '/admin/note', name: '笔记管理', component: './Admin/Note' },
       {
         path: '/admin/review/notes',

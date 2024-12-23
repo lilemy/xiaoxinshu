@@ -5,6 +5,12 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseInteger = {
+    code?: number;
+    data?: number;
+    message?: string;
+  };
+
   type BaseResponseInterfaceInfo = {
     code?: number;
     data?: InterfaceInfo;
@@ -881,9 +887,16 @@ declare namespace API {
     tags?: string[];
   };
 
+  type PictureUploadByBatchRequest = {
+    searchText?: string;
+    count?: number;
+    namePrefix?: string;
+  };
+
   type PictureUploadRequest = {
     id?: number;
     fileUrl?: string;
+    picName?: string;
   };
 
   type PictureVO = {

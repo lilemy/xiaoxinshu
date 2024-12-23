@@ -146,6 +146,21 @@ export async function uploadPicture(
   });
 }
 
+/** 批量上传图片（仅管理员） POST /pic/upload/batch */
+export async function uploadPictureByBatch(
+  body: API.PictureUploadByBatchRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseInteger>('/pic/upload/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** 上传图片根据 URL POST /pic/upload/url */
 export async function uploadPictureByUrl(
   body: API.PictureUploadRequest,

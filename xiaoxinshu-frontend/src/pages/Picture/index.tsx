@@ -1,3 +1,4 @@
+import FloatButtonList from '@/components/FloatButtonList';
 import TagList from '@/components/TagList';
 import {
   listPictureTagCategory,
@@ -144,7 +145,7 @@ const PicturePage: React.FC = () => {
           ))}
         </Flex>
         <br />
-        {pictureList.length===0 && <Empty />}
+        {pictureList.length === 0 && <Empty />}
         <Masonry
           breakpointCols={{
             default: 3, // 默认3列
@@ -170,6 +171,7 @@ const PicturePage: React.FC = () => {
           onChange={setCurrentPage}
         />
       </Card>
+      <FloatButtonList />
     </div>
   );
 };
