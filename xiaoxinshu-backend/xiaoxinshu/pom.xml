@@ -142,6 +142,12 @@
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>4.5.0</version>
         </dependency>
+        <!-- HTML 解析：https://jsoup.org/ -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId> jsoup</artifactId>
+            <version>1.15.3</version>
+        </dependency>
     </dependencies>
 
     <build>

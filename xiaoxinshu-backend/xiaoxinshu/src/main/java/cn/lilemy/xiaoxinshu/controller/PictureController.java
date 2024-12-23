@@ -55,6 +55,15 @@ public class PictureController {
         return ResultUtils.success(pictureVO);
     }
 
+    @Operation(summary = "批量上传图片（仅管理员）")
+    @PostMapping("/upload/batch")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Integer> uploadPictureByBatch(@RequestBody PictureUploadByBatchRequest pictureUploadByBatchRequest) {
+        ThrowUtils.throwIf(pictureUploadByBatchRequest == null, ResultCode.PARAMS_ERROR);
+        Integer uploadCount = pictureService.uploadPictureByBatch(pictureUploadByBatchRequest);
+        return ResultUtils.success(uploadCount);
+    }
+
     @Operation(summary = "删除图片")
     @PostMapping("/delete")
     public BaseResponse<Boolean> deletePicture(@RequestBody DeleteRequest deleteRequest) {

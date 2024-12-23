@@ -7,7 +7,6 @@ import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author qq233
@@ -30,6 +29,14 @@ public interface PictureService extends IService<Picture> {
      * @return 图片封装信息
      */
     PictureVO uploadPicture(Object inputSource, PictureUploadRequest pictureUploadRequest);
+
+    /**
+     * 批量抓取和创建图片
+     *
+     * @param pictureUploadByBatchRequest 批量上传图片请求
+     * @return 成功创建的图片数
+     */
+    Integer uploadPictureByBatch(PictureUploadByBatchRequest pictureUploadByBatchRequest);
 
     /**
      * 删除图片
@@ -94,5 +101,11 @@ public interface PictureService extends IService<Picture> {
      */
     void doPictureReview(PictureReviewRequest pictureReviewRequest);
 
+    /**
+     * 填写审核信息
+     *
+     * @param picture   审核图片
+     * @param loginUser 登录用户
+     */
     void fillReviewParams(Picture picture, User loginUser);
 }
