@@ -1,21 +1,17 @@
 package cn.lilemy.xiaoxinshu.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
+import cn.lilemy.xiaoxinshu.constant.RedisConstant;
 import cn.lilemy.xiaoxinshu.mapper.NoteMapper;
 import cn.lilemy.xiaoxinshu.model.dto.note.*;
-import cn.lilemy.xiaoxinshucommon.model.entity.Categories;
-import cn.lilemy.xiaoxinshucommon.model.entity.Note;
-import cn.lilemy.xiaoxinshucommon.model.entity.NoteCategories;
-import cn.lilemy.xiaoxinshucommon.model.entity.User;
+import cn.lilemy.xiaoxinshu.model.vo.*;
+import cn.lilemy.xiaoxinshucommon.model.entity.*;
 import cn.lilemy.xiaoxinshu.model.enums.ReviewStatusEnum;
 import cn.lilemy.xiaoxinshu.model.enums.VisibleStatusEnum;
-import cn.lilemy.xiaoxinshu.model.vo.CategoriesVO;
-import cn.lilemy.xiaoxinshu.model.vo.NotePersonalVO;
-import cn.lilemy.xiaoxinshu.model.vo.NoteVO;
-import cn.lilemy.xiaoxinshu.model.vo.UserVO;
 import cn.lilemy.xiaoxinshu.service.CategoriesService;
 import cn.lilemy.xiaoxinshu.service.NoteCategoriesService;
 import cn.lilemy.xiaoxinshu.service.NoteService;
@@ -30,14 +26,19 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +57,16 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
 
     @Resource
     private NoteCategoriesService noteCategoriesService;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    private final Cache<String, String> NOTE_LOCAL_CACHE =
+            Caffeine.newBuilder().initialCapacity(1024)
+                    .maximumSize(10000L)
+                    // 缓存 5 分钟移除
+                    .expireAfterWrite(5L, TimeUnit.MINUTES)
+                    .build();
 
     @Override
     public void validQuestion(Note note, boolean add) {
@@ -449,5 +460,43 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
         boolean result = this.updateById(note);
         ThrowUtils.throwIf(!result, ResultCode.OPERATION_ERROR);
         return true;
+    }
+
+    @Override
+    public Page<NoteVO> listNoteByPageByCache(NoteQueryRequest noteQueryRequest) {
+        int current = noteQueryRequest.getCurrent();
+        int pageSize = noteQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(pageSize > 20, ResultCode.PARAMS_ERROR);
+        // 普通用户默认只能查看已审核的数据
+        noteQueryRequest.setReviewStatus(ReviewStatusEnum.PASS.getValue());
+        // 构建缓存 key
+        String cacheKey = RedisConstant.getListVoByPageRedisKey(noteQueryRequest, RedisConstant.NOTE_LIST_NOTE_VO_BY_PAGE_REDIS_KEY_PREFIX);
+        // 1.查询本地缓存（caffeine）
+        String cachedValue = NOTE_LOCAL_CACHE.getIfPresent(cacheKey);
+        if (cachedValue != null) {
+            // 如果缓存命中，返回结果
+            return JSONUtil.toBean(cachedValue, Page.class);
+        }
+        // 2.查询分布式缓存（Redis）
+        ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
+        cachedValue = valueOps.get(cacheKey);
+        if (cachedValue != null) {
+            // 如果命中Redis，存入本地缓存并返回结果
+            NOTE_LOCAL_CACHE.put(cacheKey, cachedValue);
+            return JSONUtil.toBean(cachedValue, Page.class);
+        }
+        // 3.查询数据库，并获取封装类
+        Page<Note> notePage = this.page(new Page<>(current, pageSize), this.getQueryWrapper(noteQueryRequest));
+        Page<NoteVO> noteVOPage = this.getNoteVOPage(notePage);
+        // 4.更新缓存
+        String cacheValue = JSONUtil.toJsonStr(noteVOPage);
+        // 更新本地缓存
+        NOTE_LOCAL_CACHE.put(cacheKey, cacheValue);
+        // 更新 Redis 缓存，设置 5 - 10 分钟随机过期，防止雪崩
+        int cacheExpireTime = 300 + RandomUtil.randomInt(0, 300);
+        valueOps.set(cacheKey, cacheValue, cacheExpireTime, TimeUnit.SECONDS);
+        // 返回结果
+        return noteVOPage;
     }
 }

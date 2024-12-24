@@ -2,9 +2,11 @@ package cn.lilemy.xiaoxinshu.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import cn.lilemy.xiaoxinshu.constant.CommonConstant;
+import cn.lilemy.xiaoxinshu.constant.RedisConstant;
 import cn.lilemy.xiaoxinshu.manager.upload.FilePictureUpload;
 import cn.lilemy.xiaoxinshu.manager.upload.PictureUploadTemplate;
 import cn.lilemy.xiaoxinshu.manager.upload.UrlPictureUpload;
@@ -25,6 +27,8 @@ import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +37,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -59,6 +66,16 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     @Resource
     private UrlPictureUpload urlPictureUpload;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    private final Cache<String, String> PICTURE_LOCAL_CACHE =
+            Caffeine.newBuilder().initialCapacity(1024)
+                    .maximumSize(10000L)
+                    // 缓存 5 分钟移除
+                    .expireAfterWrite(5L, TimeUnit.MINUTES)
+                    .build();
 
     @Override
     public void validPicture(Picture picture) {
@@ -411,6 +428,44 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             // 非管理员，创建或编辑都要改为待审核
             picture.setReviewStatus(ReviewStatusEnum.REVIEWING.getValue());
         }
+    }
+
+    @Override
+    public Page<PictureVO> listPictureVOByPageByCache(PictureQueryRequest pictureQueryRequest) {
+        int current = pictureQueryRequest.getCurrent();
+        int pageSize = pictureQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(pageSize > 20, ResultCode.PARAMS_ERROR);
+        // 普通用户默认只能查看已审核的数据
+        pictureQueryRequest.setReviewStatus(ReviewStatusEnum.PASS.getValue());
+        // 构建缓存 key
+        String cacheKey = RedisConstant.getListVoByPageRedisKey(pictureQueryRequest, RedisConstant.PICTURE_LIST_PICTURE_VO_BY_PAGE_REDIS_KEY_PREFIX);
+        // 1.查询本地缓存（caffeine）
+        String cachedValue = PICTURE_LOCAL_CACHE.getIfPresent(cacheKey);
+        if (cachedValue != null) {
+            // 如果缓存命中，返回结果
+            return JSONUtil.toBean(cachedValue, Page.class);
+        }
+        // 2.查询分布式缓存（Redis）
+        ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
+        cachedValue = valueOps.get(cacheKey);
+        if (cachedValue != null) {
+            // 如果命中Redis，存入本地缓存并返回结果
+            PICTURE_LOCAL_CACHE.put(cacheKey, cachedValue);
+            return JSONUtil.toBean(cachedValue, Page.class);
+        }
+        // 3.查询数据库，并获取封装类
+        Page<Picture> picturePage = this.page(new Page<>(current, pageSize), this.getQueryWrapper(pictureQueryRequest));
+        Page<PictureVO> pictureVOPage = this.getPictureVOPage(picturePage);
+        // 4.更新缓存
+        String cacheValue = JSONUtil.toJsonStr(pictureVOPage);
+        // 更新本地缓存
+        PICTURE_LOCAL_CACHE.put(cacheKey, cacheValue);
+        // 更新 Redis 缓存，设置 5 - 10 分钟随机过期，防止雪崩
+        int cacheExpireTime = 300 + RandomUtil.randomInt(0, 300);
+        valueOps.set(cacheKey, cacheValue, cacheExpireTime, TimeUnit.SECONDS);
+        // 返回结果
+        return pictureVOPage;
     }
 
 }

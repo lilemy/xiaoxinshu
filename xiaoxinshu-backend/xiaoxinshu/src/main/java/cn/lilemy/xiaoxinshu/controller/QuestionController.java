@@ -154,16 +154,10 @@ public class QuestionController {
     @Operation(summary = "分页获取题目列表（封装类）")
     @PostMapping("/list/vo")
     public BaseResponse<Page<QuestionVO>> listQuestionVOByPage(@RequestBody QuestionQueryRequest questionQueryRequest) {
-        ThrowUtils.throwIf(questionQueryRequest == null, ResultCode.PARAMS_ERROR);
-        long current = questionQueryRequest.getCurrent();
-        long size = questionQueryRequest.getPageSize();
-        // 限制爬虫
-        ThrowUtils.throwIf(size > 20, ResultCode.PARAMS_ERROR);
         // 查询数据库
-        Page<Question> questionPage = questionService.page(new Page<>(current, size),
-                questionService.getReviewQueryWrapper(questionQueryRequest));
+        Page<QuestionVO> questionVOPage = questionService.listQuestionByPageByCache(questionQueryRequest);
         // 获取封装类
-        return ResultUtils.success(questionService.getQuestionVOPage(questionPage));
+        return ResultUtils.success(questionVOPage);
     }
 
     @Operation(summary = "分页获取当前登录用户创建的题目列表")

@@ -74,6 +74,12 @@
             <artifactId>redisson</artifactId>
             <version>3.36.0</version>
         </dependency>
+        <!-- 本地缓存 Caffeine -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.1.8</version>
+        </dependency>
         <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -145,7 +151,7 @@
         <!-- HTML 解析：https://jsoup.org/ -->
         <dependency>
             <groupId>org.jsoup</groupId>
-            <artifactId> jsoup</artifactId>
+            <artifactId>jsoup</artifactId>
             <version>1.15.3</version>
         </dependency>
     </dependencies>

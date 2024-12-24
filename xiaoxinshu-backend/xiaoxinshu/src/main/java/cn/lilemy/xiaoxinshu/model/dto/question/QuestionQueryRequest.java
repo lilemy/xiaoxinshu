@@ -14,6 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class QuestionQueryRequest extends PageRequest implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 587078505771863325L;
 
@@ -66,4 +67,19 @@ public class QuestionQueryRequest extends PageRequest implements Serializable {
      * 是否要展示内容
      */
     private boolean needAnswer;
+
+    /**
+     * 审核状态：0-待审核; 1-通过; 2-拒绝
+     */
+    private Integer reviewStatus;
+
+    /**
+     * 审核信息
+     */
+    private String reviewMessage;
+
+    /**
+     * 审核人 ID
+     */
+    private Long reviewerId;
 }

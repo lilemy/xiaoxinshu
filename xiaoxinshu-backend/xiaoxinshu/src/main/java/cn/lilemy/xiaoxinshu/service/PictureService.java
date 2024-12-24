@@ -108,4 +108,12 @@ public interface PictureService extends IService<Picture> {
      * @param loginUser 登录用户
      */
     void fillReviewParams(Picture picture, User loginUser);
+
+    /**
+     * 分页获取图片封装信息（Redis Caffeine分级缓存）
+     *
+     * @param pictureQueryRequest 分页查询请求体
+     * @return 图片封装信息分页
+     */
+    Page<PictureVO> listPictureVOByPageByCache(PictureQueryRequest pictureQueryRequest);
 }

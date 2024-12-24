@@ -12,7 +12,6 @@ import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import cn.lilemy.xiaoxinshucommon.model.entity.Picture;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -129,17 +128,10 @@ public class PictureController {
     @Operation(summary = "分页获取图片封装列表")
     @PostMapping("/list/vo")
     public BaseResponse<Page<PictureVO>> listPictureVOByPage(@RequestBody PictureQueryRequest pictureQueryRequest) {
-        int current = pictureQueryRequest.getCurrent();
-        int pageSize = pictureQueryRequest.getPageSize();
-        // 限制爬虫
-        ThrowUtils.throwIf(pageSize > 20, ResultCode.PARAMS_ERROR);
-        QueryWrapper<Picture> queryWrapper = pictureService.getQueryWrapper(pictureQueryRequest);
-        // 只能查看已过审的图片
-        queryWrapper.eq("review_status", ReviewStatusEnum.PASS.getValue());
         // 查询数据库
-        Page<Picture> picturePage = pictureService.page(new Page<>(current, pageSize), queryWrapper);
+        Page<PictureVO> pictureVOPage = pictureService.listPictureVOByPageByCache(pictureQueryRequest);
         // 获取封装类
-        return ResultUtils.success(pictureService.getPictureVOPage(picturePage));
+        return ResultUtils.success(pictureVOPage);
     }
 
     // endregion

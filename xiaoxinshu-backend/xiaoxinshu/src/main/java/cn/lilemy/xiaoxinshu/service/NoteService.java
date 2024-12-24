@@ -118,4 +118,11 @@ public interface NoteService extends IService<Note> {
      */
     boolean reviewNote(NoteReviewRequest noteReviewRequest);
 
+    /**
+     * 分页获取笔记封装信息（Redis Caffeine分级缓存）
+     *
+     * @param noteQueryRequest 分页查询请求体
+     * @return 笔记封装信息分页
+     */
+    Page<NoteVO> listNoteByPageByCache(NoteQueryRequest noteQueryRequest);
 }

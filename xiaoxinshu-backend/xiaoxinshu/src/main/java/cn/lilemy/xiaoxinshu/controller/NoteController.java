@@ -143,16 +143,10 @@ public class NoteController {
     @Operation(summary = "分页获取笔记列表（封装类）")
     @PostMapping("/list/vo")
     public BaseResponse<Page<NoteVO>> listNoteVOByPage(@RequestBody NoteQueryRequest noteQueryRequest) {
-        ThrowUtils.throwIf(noteQueryRequest == null, ResultCode.PARAMS_ERROR);
-        long current = noteQueryRequest.getCurrent();
-        long size = noteQueryRequest.getPageSize();
-        // 限制爬虫
-        ThrowUtils.throwIf(size > 20, ResultCode.PARAMS_ERROR);
         // 查询数据库
-        Page<Note> notePage = noteService.page(new Page<>(current, size),
-                noteService.getReviewQueryWrapper(noteQueryRequest));
+        Page<NoteVO> noteVOPage = noteService.listNoteByPageByCache(noteQueryRequest);
         // 获取封装类
-        return ResultUtils.success(noteService.getNoteVOPage(notePage));
+        return ResultUtils.success(noteVOPage);
     }
 
     @Operation(summary = "根据分类 id 分页获取笔记列表（封装类）")

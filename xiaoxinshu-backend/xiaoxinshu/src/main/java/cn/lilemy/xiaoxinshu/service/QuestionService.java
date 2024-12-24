@@ -145,4 +145,11 @@ public interface QuestionService extends IService<Question> {
      */
     boolean batchDeleteQuestions(List<Long> questionIdList);
 
+    /**
+     * 分页获取题目封装信息（Redis Caffeine分级缓存）
+     *
+     * @param questionQueryRequest 分页查询请求体
+     * @return 题目封装信息分页
+     */
+    Page<QuestionVO> listQuestionByPageByCache(QuestionQueryRequest questionQueryRequest);
 }
