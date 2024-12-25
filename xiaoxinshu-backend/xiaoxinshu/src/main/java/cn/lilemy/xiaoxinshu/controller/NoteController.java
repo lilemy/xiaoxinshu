@@ -91,15 +91,7 @@ public class NoteController {
     @GetMapping("/get/vo")
     public BaseResponse<NoteVO> getNoteVOById(Long id) {
         ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
-        // 查询数据库
-        Note note = noteService.getById(id);
-        ThrowUtils.throwIf(note == null, ResultCode.NOT_FOUND_ERROR);
-        // 判断笔记是否公开
-        Integer visible = note.getVisible();
-        ThrowUtils.throwIf(visible == null || visible != VisibleStatusEnum.OPEN.getValue(), ResultCode.NO_AUTH_ERROR);
-        Integer reviewStatus = note.getReviewStatus();
-        // 判断笔记是否通过审核
-        ThrowUtils.throwIf(reviewStatus != ReviewStatusEnum.PASS.getValue(), ResultCode.NO_AUTH_ERROR);
+        Note note = noteService.getNoteById(id);
         // 获取封装类
         return ResultUtils.success(noteService.getNoteVO(note));
     }

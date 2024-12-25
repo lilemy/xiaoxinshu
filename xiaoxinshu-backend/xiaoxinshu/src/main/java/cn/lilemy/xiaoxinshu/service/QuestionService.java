@@ -89,6 +89,14 @@ public interface QuestionService extends IService<Question> {
     QuestionVO getQuestionVO(Question question);
 
     /**
+     * 根据 id 获取题目信息
+     *
+     * @param id 题目 id
+     * @return 题目信息
+     */
+    Question getQuestionById(Long id);
+
+    /**
      * 根据 id 获取个人题目封装
      *
      * @param id 题目 id

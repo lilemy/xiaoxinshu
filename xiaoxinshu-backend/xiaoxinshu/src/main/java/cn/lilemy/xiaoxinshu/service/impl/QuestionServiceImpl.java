@@ -8,9 +8,11 @@ import cn.lilemy.xiaoxinshu.constant.CommonConstant;
 import cn.lilemy.xiaoxinshu.constant.RedisConstant;
 import cn.lilemy.xiaoxinshu.mapper.QuestionMapper;
 import cn.lilemy.xiaoxinshu.model.dto.question.*;
-import cn.lilemy.xiaoxinshu.model.vo.*;
-import cn.lilemy.xiaoxinshucommon.model.entity.*;
 import cn.lilemy.xiaoxinshu.model.enums.ReviewStatusEnum;
+import cn.lilemy.xiaoxinshu.model.vo.QuestionBankListVO;
+import cn.lilemy.xiaoxinshu.model.vo.QuestionPersonalVO;
+import cn.lilemy.xiaoxinshu.model.vo.QuestionVO;
+import cn.lilemy.xiaoxinshu.model.vo.UserVO;
 import cn.lilemy.xiaoxinshu.service.QuestionBankQuestionService;
 import cn.lilemy.xiaoxinshu.service.QuestionBankService;
 import cn.lilemy.xiaoxinshu.service.QuestionService;
@@ -19,6 +21,10 @@ import cn.lilemy.xiaoxinshu.util.SqlUtils;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
+import cn.lilemy.xiaoxinshucommon.model.entity.Question;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBank;
+import cn.lilemy.xiaoxinshucommon.model.entity.QuestionBankQuestion;
+import cn.lilemy.xiaoxinshucommon.model.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -333,6 +339,30 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         UserVO userVO = userService.getUserVO(userId);
         questionVO.setUser(userVO);
         return questionVO;
+    }
+
+    @Override
+    public Question getQuestionById(Long id) {
+        // 查询数据库
+        Question question = this.getById(id);
+        ThrowUtils.throwIf(question == null, ResultCode.NOT_FOUND_ERROR);
+        Integer reviewStatus = question.getReviewStatus();
+        Long userId = question.getUserId();
+        // 如果题目未通过审核，则只能创建用户查看
+        if (reviewStatus != ReviewStatusEnum.PASS.getValue()) {
+            User loginUser = userService.getLoginUser();
+            Long loginUserId = loginUser.getId();
+            if (!userId.equals(loginUserId) && !userService.isAdmin()) {
+                throw new BusinessException(ResultCode.NO_AUTH_ERROR);
+            }
+        }
+        // 查看题目后，添加浏览量
+        // 创建对应的 Redis Key
+        String redisKey = String.format("%s:%s", RedisConstant.QUESTION_VIEW_NUM_REDIS_KEY_PREFIX, id);
+        ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
+        // 增加浏览量
+        valueOps.increment(redisKey);
+        return question;
     }
 
     @Override

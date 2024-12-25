@@ -51,4 +51,15 @@ public interface RedisConstant {
         String hashKey = DigestUtils.md5DigestAsHex(queryCondition.getBytes());
         return String.format("%s:%s", prefix, hashKey);
     }
+
+    /**
+     * 题目浏览量缓存的 Redis Key 前缀
+     */
+    String QUESTION_VIEW_NUM_REDIS_KEY_PREFIX = "question:viewNum";
+
+    /**
+     * 笔记浏览量缓存的 Redis Key 前缀
+     */
+    String NOTE_VIEW_NUM_REDIS_KEY_PREFIX = "note:viewNum";
+
 }

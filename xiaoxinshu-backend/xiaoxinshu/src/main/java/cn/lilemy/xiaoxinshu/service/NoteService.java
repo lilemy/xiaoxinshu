@@ -1,6 +1,7 @@
 package cn.lilemy.xiaoxinshu.service;
 
 import cn.lilemy.xiaoxinshu.model.dto.note.*;
+import cn.lilemy.xiaoxinshucommon.model.entity.Question;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -61,6 +62,14 @@ public interface NoteService extends IService<Note> {
      * @return 笔记信息封装
      */
     NoteVO getNoteVO(Note note);
+
+    /**
+     * 根据 id 获取笔记信息
+     *
+     * @param id 笔记 id
+     * @return 笔记信息
+     */
+    Note getNoteById(Long id);
 
     /**
      * 根据 id 获取个人笔记

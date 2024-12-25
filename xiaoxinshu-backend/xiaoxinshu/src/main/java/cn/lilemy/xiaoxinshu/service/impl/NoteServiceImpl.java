@@ -245,6 +245,26 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note>
     }
 
     @Override
+    public Note getNoteById(Long id) {
+        // 查询数据库
+        Note note = this.getById(id);
+        ThrowUtils.throwIf(note == null, ResultCode.NOT_FOUND_ERROR);
+        // 判断笔记是否公开
+        Integer visible = note.getVisible();
+        ThrowUtils.throwIf(visible == null || visible != VisibleStatusEnum.OPEN.getValue(), ResultCode.NO_AUTH_ERROR);
+        Integer reviewStatus = note.getReviewStatus();
+        // 判断笔记是否通过审核
+        ThrowUtils.throwIf(reviewStatus != ReviewStatusEnum.PASS.getValue(), ResultCode.NO_AUTH_ERROR);
+        // 查看笔记后，添加浏览量
+        // 创建对应的 Redis Key
+        String redisKey = String.format("%s:%s", RedisConstant.NOTE_VIEW_NUM_REDIS_KEY_PREFIX, id);
+        ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
+        // 增加浏览量
+        valueOps.increment(redisKey);
+        return note;
+    }
+
+    @Override
     public NotePersonalVO getNotePersonalById(Long id) {
         // 查询数据库
         Note note = this.getById(id);

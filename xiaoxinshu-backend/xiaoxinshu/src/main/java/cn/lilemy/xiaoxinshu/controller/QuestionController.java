@@ -15,7 +15,6 @@ import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
 import cn.lilemy.xiaoxinshucommon.common.DeleteRequest;
 import cn.lilemy.xiaoxinshucommon.common.ResultCode;
 import cn.lilemy.xiaoxinshucommon.common.ResultUtils;
-import cn.lilemy.xiaoxinshucommon.exception.BusinessException;
 import cn.lilemy.xiaoxinshucommon.exception.ThrowUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -98,19 +97,7 @@ public class QuestionController {
     @CrawlerDetection()
     public BaseResponse<QuestionVO> getQuestionVOById(Long id) {
         ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
-        // 查询数据库
-        Question question = questionService.getById(id);
-        ThrowUtils.throwIf(question == null, ResultCode.NOT_FOUND_ERROR);
-        Integer reviewStatus = question.getReviewStatus();
-        Long userId = question.getUserId();
-        // 如果题目未通过审核，则只能创建用户查看
-        if (reviewStatus != ReviewStatusEnum.PASS.getValue()) {
-            User loginUser = userService.getLoginUser();
-            Long loginUserId = loginUser.getId();
-            if (!userId.equals(loginUserId) && !userService.isAdmin()) {
-                throw new BusinessException(ResultCode.NO_AUTH_ERROR);
-            }
-        }
+        Question question = questionService.getQuestionById(id);
         // 获取封装类
         return ResultUtils.success(questionService.getQuestionVO(question));
     }
