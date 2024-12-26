@@ -39,6 +39,21 @@ public class QuestionVO implements Serializable {
     private String answer;
 
     /**
+     * 点赞数
+     */
+    private Integer thumbNum;
+
+    /**
+     * 收藏数
+     */
+    private Integer favourNum;
+
+    /**
+     * 浏览量
+     */
+    private Integer viewNum;
+
+    /**
      * 创建用户 id
      */
     private Long userId;

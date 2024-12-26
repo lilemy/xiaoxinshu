@@ -5,30 +5,32 @@
 <mapper namespace="cn.lilemy.xiaoxinshu.mapper.PictureMapper">
 
     <resultMap id="BaseResultMap" type="cn.lilemy.xiaoxinshucommon.model.entity.Picture">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="url" column="url" jdbcType="VARCHAR"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="category" column="category" jdbcType="VARCHAR"/>
-            <result property="tags" column="tags" jdbcType="VARCHAR"/>
-            <result property="picSize" column="pic_size" jdbcType="BIGINT"/>
-            <result property="picWidth" column="pic_width" jdbcType="INTEGER"/>
-            <result property="picHeight" column="pic_height" jdbcType="INTEGER"/>
-            <result property="picScale" column="pic_scale" jdbcType="DOUBLE"/>
-            <result property="picFormat" column="pic_format" jdbcType="VARCHAR"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="reviewStatus" column="review_status" jdbcType="INTEGER"/>
-            <result property="reviewMessage" column="review_message" jdbcType="VARCHAR"/>
-            <result property="reviewerId" column="reviewer_id" jdbcType="BIGINT"/>
-            <result property="reviewTime" column="review_time" jdbcType="TIMESTAMP"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="editTime" column="edit_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="originalUrl" column="original_url" jdbcType="VARCHAR"/>
+        <result property="thumbnailUrl" column="thumbnail_url" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="category" column="category" jdbcType="VARCHAR"/>
+        <result property="tags" column="tags" jdbcType="VARCHAR"/>
+        <result property="picSize" column="pic_size" jdbcType="BIGINT"/>
+        <result property="picWidth" column="pic_width" jdbcType="INTEGER"/>
+        <result property="picHeight" column="pic_height" jdbcType="INTEGER"/>
+        <result property="picScale" column="pic_scale" jdbcType="DOUBLE"/>
+        <result property="picFormat" column="pic_format" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="reviewStatus" column="review_status" jdbcType="INTEGER"/>
+        <result property="reviewMessage" column="review_message" jdbcType="VARCHAR"/>
+        <result property="reviewerId" column="reviewer_id" jdbcType="BIGINT"/>
+        <result property="reviewTime" column="review_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="editTime" column="edit_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,url,name,
+        id,url,original_url,thumbnail_url,name,
         introduction,category,tags,
         pic_size,pic_width,pic_height,
         pic_scale,pic_format,user_id,
