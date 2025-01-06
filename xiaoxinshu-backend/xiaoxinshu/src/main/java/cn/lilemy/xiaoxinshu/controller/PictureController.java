@@ -3,7 +3,6 @@ package cn.lilemy.xiaoxinshu.controller;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.lilemy.xiaoxinshu.constant.UserConstant;
 import cn.lilemy.xiaoxinshu.model.dto.picture.*;
-import cn.lilemy.xiaoxinshu.model.enums.ReviewStatusEnum;
 import cn.lilemy.xiaoxinshu.model.vo.PictureVO;
 import cn.lilemy.xiaoxinshu.service.PictureService;
 import cn.lilemy.xiaoxinshucommon.common.BaseResponse;
@@ -105,10 +104,7 @@ public class PictureController {
     public BaseResponse<PictureVO> getPictureVOById(Long id) {
         ThrowUtils.throwIf(id == null || id <= 0, ResultCode.PARAMS_ERROR);
         // 查询数据库
-        Picture picture = pictureService.getById(id);
-        ThrowUtils.throwIf(picture == null, ResultCode.NOT_FOUND_ERROR);
-        // 未通过审核图片不允许用户查看
-        ThrowUtils.throwIf(!picture.getReviewStatus().equals(ReviewStatusEnum.PASS.getValue()), ResultCode.NO_AUTH_ERROR);
+        Picture picture = pictureService.getPictureById(id);
         // 获取封装类
         return ResultUtils.success(pictureService.getPictureVO(picture));
     }

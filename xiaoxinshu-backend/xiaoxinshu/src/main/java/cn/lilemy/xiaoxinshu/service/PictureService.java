@@ -63,6 +63,14 @@ public interface PictureService extends IService<Picture> {
     Boolean editPicture(PictureEditRequest pictureEditRequest);
 
     /**
+     * 根据 id 获取图片信息
+     *
+     * @param id 图片 id
+     * @return 图片信息
+     */
+    Picture getPictureById(Long id);
+
+    /**
      * 图片分页查询
      *
      * @param pictureQueryRequest 分页查询请求体
@@ -116,4 +124,20 @@ public interface PictureService extends IService<Picture> {
      * @return 图片封装信息分页
      */
     Page<PictureVO> listPictureVOByPageByCache(PictureQueryRequest pictureQueryRequest);
+
+    /**
+     * 图片清理
+     *
+     * @param picture 要清理的图片对象
+     */
+    void clearPictureFile(Picture picture);
+
+    /**
+     * 校验登录用户操作图片权限
+     *
+     * @param loginUser 登录用户
+     * @param picture   校验图片
+     */
+    void checkPictureAuth(User loginUser, Picture picture);
+
 }

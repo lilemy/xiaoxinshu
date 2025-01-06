@@ -31,7 +31,7 @@ public class IncSyncNoteViewNum {
     /**
      * 定时任务：同步 Redis 中的浏览量数据到数据库
      */
-    @Scheduled(fixedRate = 60 * 1000) // 每分钟执行一次
+    @Scheduled(fixedRate = 60 * 60 * 1000) // 每小时执行一次
     public void syncViewCountToDatabase() {
         // 获取所有浏览量 Key
         String RedisKeys = String.format("%s:*", RedisConstant.NOTE_VIEW_NUM_REDIS_KEY_PREFIX);

@@ -59,14 +59,8 @@ public abstract class PictureUploadTemplate {
             List<CIObject> objectList = processResults.getObjectList();
             if (CollUtil.isNotEmpty(objectList)) {
                 CIObject compressedCiObject = objectList.get(0);
-                // 缩略图默认等于压缩图
-                CIObject thumbnailCiObject = compressedCiObject;
-                // 有生成缩略图，才得到缩略图
-                if (objectList.size() > 1) {
-                    thumbnailCiObject = objectList.get(1);
-                }
                 // 5.封装压缩图返回信息
-                return buildResult(originFilename, uploadPath, compressedCiObject, thumbnailCiObject);
+                return buildResult(originFilename, uploadPath, file, imageInfo, compressedCiObject);
             }
             // 5.封装原图返回信息
             return buildResult(originFilename, file, uploadPath, imageInfo);
@@ -127,23 +121,32 @@ public abstract class PictureUploadTemplate {
         return uploadPictureResult;
     }
 
-    public UploadPictureResult buildResult(String originFilename, String uploadPath, CIObject compressedCiObject, CIObject thumbnailCiObject) {
+    /**
+     * 封装返回结果
+     *
+     * @param originFilename     源图片信息
+     * @param uploadPath         上传路径
+     * @param file               图片
+     * @param imageInfo          原图片信息
+     * @param compressedCiObject 缩略图图片信息
+     * @return 图片信息封装结果
+     */
+    public UploadPictureResult buildResult(String originFilename, String uploadPath, File file, ImageInfo imageInfo, CIObject compressedCiObject) {
         UploadPictureResult uploadPictureResult = new UploadPictureResult();
-        Integer picWidth = compressedCiObject.getWidth();
-        Integer picHeight = compressedCiObject.getHeight();
+        // 获取原图信息
+        int picWidth = imageInfo.getWidth();
+        int picHeight = imageInfo.getHeight();
         double picScale = NumberUtil.round(picWidth * 1.0 / picHeight, 2).doubleValue();
-        uploadPictureResult.setPicName(FileUtil.mainName(originFilename));
-        uploadPictureResult.setPicFormat(compressedCiObject.getFormat());
-        uploadPictureResult.setPicSize(compressedCiObject.getSize().longValue());
+        uploadPictureResult.setPicSize(FileUtil.size(file));
         uploadPictureResult.setPicWidth(picWidth);
         uploadPictureResult.setPicHeight(picHeight);
         uploadPictureResult.setPicScale(picScale);
+        uploadPictureResult.setPicName(FileUtil.mainName(originFilename));
+        uploadPictureResult.setPicFormat(imageInfo.getFormat());
         // 设置原图地址
         uploadPictureResult.setOriginalUrl(cosClientConfig.getHost() + "/" + uploadPath);
         // 设置图片为压缩后的地址
         uploadPictureResult.setUrl(cosClientConfig.getHost() + "/" + compressedCiObject.getKey());
-        // 设置缩略图
-        uploadPictureResult.setThumbnailUrl(cosClientConfig.getHost() + "/" + thumbnailCiObject.getKey());
         return uploadPictureResult;
     }
 

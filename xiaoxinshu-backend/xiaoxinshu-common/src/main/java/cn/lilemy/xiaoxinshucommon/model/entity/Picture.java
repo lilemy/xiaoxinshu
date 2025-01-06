@@ -33,11 +33,6 @@ public class Picture {
     private String originalUrl;
 
     /**
-     * 缩略图图片 url
-     */
-    private String thumbnailUrl;
-
-    /**
      * 图片名称
      */
     private String name;
@@ -86,6 +81,11 @@ public class Picture {
      * 创建用户 id
      */
     private Long userId;
+
+    /**
+     * 空间 id（为空表示公共空间）
+     */
+    private Long spaceId;
 
     /**
      * 审核状态：0-待审核; 1-通过; 2-拒绝
