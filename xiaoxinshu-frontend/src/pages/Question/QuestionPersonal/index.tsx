@@ -3,10 +3,7 @@ import MdViewer from '@/components/Markdown/MdViewer';
 import TagList from '@/components/TagList';
 import { uploadFile } from '@/services/xiaoxinshu/fileController';
 import { getQuestionBankList } from '@/services/xiaoxinshu/questionBankController';
-import {
-  editQuestion,
-  getQuestionPersonalById,
-} from '@/services/xiaoxinshu/questionController';
+import { editQuestion, getQuestionPersonalById } from '@/services/xiaoxinshu/questionController';
 import { useParams } from '@@/exports';
 import { UploadOutlined } from '@ant-design/icons';
 import { ProDescriptions, ProFormSelect, ProFormText } from '@ant-design/pro-components';
@@ -200,7 +197,7 @@ const QuestionPersonalPage: React.FC = () => {
       formRef.current?.resetFields();
       setIsEdit(false);
     } catch (e: any) {
-      message.error('保存失败：', e.message);
+      message.error('保存失败：' + e.message);
     }
     setLoading(false);
   };

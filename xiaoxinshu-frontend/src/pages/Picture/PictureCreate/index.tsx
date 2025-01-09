@@ -9,7 +9,7 @@ import { history, useParams } from '@@/exports';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { ProForm, ProFormInstance } from '@ant-design/pro-form/lib';
-import { Card, GetProp, message, Tabs, Upload, UploadProps } from 'antd';
+import { Card, GetProp, message, Tabs, Typography, Upload, UploadProps } from 'antd';
 import Search from 'antd/es/input/Search';
 import React, { useEffect, useRef, useState } from 'react';
 import './index.css';
@@ -38,7 +38,7 @@ const beforeUpload = (file: FileType) => {
 
 const PictureCreatePage: React.FC = () => {
   const params = useParams();
-  const { pictureId } = params;
+  const { pictureId, spaceId } = params;
   const [imageId, setImageId] = useState<any>(pictureId ?? '');
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<ProFormInstance>();
@@ -52,7 +52,10 @@ const PictureCreatePage: React.FC = () => {
       // 使用 FormData 包装文件数据
       const formData = new FormData();
       formData.append('file', file);
-      const res = await uploadPicture({ pictureUploadRequest: { id: imageId } }, formData);
+      const res = await uploadPicture(
+        { pictureUploadRequest: { id: imageId, spaceId: spaceId as any } },
+        formData,
+      );
       setImage(res.data);
       setImageId(res.data?.id);
       message.success('图片上传成功');
@@ -66,7 +69,11 @@ const PictureCreatePage: React.FC = () => {
   const handleUploadByUrl = async (fileUrl: string) => {
     setLoading(true);
     try {
-      const res = await uploadPictureByUrl({ id: imageId, fileUrl: fileUrl });
+      const res = await uploadPictureByUrl({
+        id: imageId,
+        spaceId: spaceId as any,
+        fileUrl: fileUrl,
+      });
       setImage(res.data);
       setImageId(res.data?.id);
       message.success('图片上传成功');
@@ -128,9 +135,15 @@ const PictureCreatePage: React.FC = () => {
         id: image?.id,
         ...value,
       });
-      message.success('图片上传成功，等待管理员审核');
-      formRef.current?.resetFields();
-      history.push(`/picture/${image?.id}`);
+      if (spaceId) {
+        message.success('图片保存成功');
+        formRef.current?.resetFields();
+        history.push(`/pictures/my/space/${spaceId}`);
+      } else {
+        message.success('图片上传成功，等待管理员审核');
+        formRef.current?.resetFields();
+        history.push(`/picture/${image?.id}`);
+      }
     } catch (e: any) {
       message.error('创建失败，' + e.message);
     }
@@ -182,7 +195,15 @@ const PictureCreatePage: React.FC = () => {
   return (
     <div className="max-width-content">
       <Card title={image ? '更新图片' : '创建图片'}>
-        <Tabs items={tabItems}/>
+        {spaceId && (
+          <Typography.Paragraph type="secondary">
+            保存至空间：
+            <a href={`/pictures/my/space/${spaceId}`} target="_blank" rel="noreferrer">
+              {spaceId}
+            </a>
+          </Typography.Paragraph>
+        )}
+        <Tabs items={tabItems} />
         {image && (
           <ProForm
             size="large"

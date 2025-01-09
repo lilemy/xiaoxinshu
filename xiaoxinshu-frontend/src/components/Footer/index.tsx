@@ -1,5 +1,4 @@
 import { DefaultFooter } from '@ant-design/pro-components';
-import { Image } from 'antd';
 import React from 'react';
 
 const Footer: React.FC = () => {
@@ -25,17 +24,6 @@ const Footer: React.FC = () => {
             key: 'xiaoxinshu-icp',
             title: '渝ICP备2024030252号-1',
             href: 'https://beian.miit.gov.cn/',
-            blankTarget: true,
-          },
-          {
-            key: 'xiaoxinshu-gongan',
-            title: (
-              <>
-                <Image src="/beian.png" alt="备案" width={17} height={17} />
-                渝公网安备50010602504893
-              </>
-            ),
-            href: 'https://beian.mps.gov.cn/#/query/webSearch?code=50010602504893',
             blankTarget: true,
           },
         ]}

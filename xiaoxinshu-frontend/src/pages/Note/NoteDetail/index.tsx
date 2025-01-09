@@ -4,6 +4,7 @@ import { getNoteVoById } from '@/services/xiaoxinshu/noteController';
 import { useParams } from '@@/exports';
 import { Affix, Card, Col, message, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import FloatButtonList from '@/components/FloatButtonList';
 
 const NoteDetailPage: React.FC = () => {
   const params = useParams();
@@ -44,6 +45,7 @@ const NoteDetailPage: React.FC = () => {
           </Affix>
         </Col>
       </Row>
+      <FloatButtonList />
     </div>
   );
 };

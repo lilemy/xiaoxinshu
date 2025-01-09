@@ -118,6 +118,7 @@ const NotePage: React.FC = () => {
           defaultPageSize={12}
           onChange={(page) => setCurrent(page)}
           showTotal={(total) => `发现 ${total} 条笔记`}
+          showSizeChanger={false}
         />
       </Card>
     </div>

@@ -10,11 +10,13 @@ import * as pictureController from './pictureController';
 import * as questionBankController from './questionBankController';
 import * as questionBankQuestionController from './questionBankQuestionController';
 import * as questionController from './questionController';
+import * as spaceController from './spaceController';
 import * as userController from './userController';
 import * as userInterfaceInfoController from './userInterfaceInfoController';
 export default {
   userInterfaceInfoController,
   userController,
+  spaceController,
   questionBankQuestionController,
   questionBankController,
   questionController,

@@ -1,9 +1,12 @@
 import ContentPage from '@/components/Content';
 import MdViewer from '@/components/Markdown/MdViewer';
+import QuestionShareModal from '@/components/QuestionShareModal';
 import TagList from '@/components/TagList';
 import useAddUserSignInRecord from '@/hooks/useAddUserSignInRecord';
+import { ExportOutlined, FireOutlined, HeartOutlined, LikeOutlined } from '@ant-design/icons';
 import { Affix, Card, Col, Row } from 'antd';
 import Title from 'antd/es/typography/Title';
+import { useState } from 'react';
 
 interface Props {
   question: API.QuestionVO;
@@ -16,13 +19,36 @@ interface Props {
  */
 const QuestionCard = (props: Props) => {
   const { question } = props;
-
+  const [shareModalVisible, setShareModalVisible] = useState<boolean>(false);
   // 签到
   useAddUserSignInRecord();
 
   return (
     <div className="question-card">
-      <Card>
+      <Card
+        actions={[
+          <div key="fire">
+            <FireOutlined />
+            {question.viewNum || '浏览'}
+          </div>,
+          <div key="like">
+            <LikeOutlined />
+            {question.thumbNum || '点赞'}
+          </div>,
+          <div key="heart">
+            <HeartOutlined />
+            {question.favourNum || '收藏'}
+          </div>,
+          <div
+            key="share"
+            onClick={() => {
+              setShareModalVisible(true);
+            }}
+          >
+            <ExportOutlined />
+          </div>,
+        ]}
+      >
         <Title level={1} style={{ fontSize: 24 }}>
           {question.title}
         </Title>
@@ -57,6 +83,13 @@ const QuestionCard = (props: Props) => {
           </Affix>
         </Col>
       </Row>
+      <QuestionShareModal
+        question={question}
+        modalVisible={shareModalVisible}
+        onCancel={() => {
+          setShareModalVisible(false);
+        }}
+      />
     </div>
   );
 };

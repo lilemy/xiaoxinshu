@@ -3,6 +3,7 @@ import { getQuestionVoById } from '@/services/xiaoxinshu/questionController';
 import { useParams } from '@@/exports';
 import { message } from 'antd';
 import React, { useEffect, useState } from 'react';
+import FloatButtonList from '@/components/FloatButtonList';
 
 /**
  * 题目题库详情页
@@ -36,6 +37,7 @@ const QuestionDetail: React.FC = () => {
   return (
     <div className="max-width-content">
       <QuestionCard question={question} />
+      <FloatButtonList />
     </div>
   );
 };

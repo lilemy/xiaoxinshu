@@ -52,7 +52,7 @@ const PictureDetailPage: React.FC = () => {
   };
   // 处理下载
   const doDownload = () => {
-    downloadImage(image?.url);
+    downloadImage(image?.originalUrl);
   };
   return (
     <div className="max-width-content">
@@ -99,13 +99,13 @@ const PictureDetailPage: React.FC = () => {
                   </Button>
                 </Popconfirm>
               )}
-              <Button type="primary" onClick={doDownload}>
-                <DownloadOutlined />
-                图片下载
-              </Button>
-              <Button>
+              <Button type="primary">
                 <ExportOutlined />
                 图片分享
+              </Button>
+              <Button type="primary" onClick={doDownload} ghost>
+                <DownloadOutlined />
+                图片下载
               </Button>
             </Space>
           </Card>

@@ -10,6 +10,7 @@ import { Link } from '@@/exports';
 import { Card, Divider, Flex, message } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
+import FloatButtonList from '@/components/FloatButtonList';
 
 /**
  * 主页
@@ -81,18 +82,6 @@ const Welcome: React.FC = () => {
   return (
     <Card loading={loading} className="max-width-content">
       <Flex justify="space-between" align="center">
-        <Title level={3}>开放接口</Title>
-        <Link to={'/interfaces'}>查看更多</Link>
-      </Flex>
-      <InterfaceInfoList interfaceInfoList={interfaceInfoList} />
-      <Divider />
-      <Flex justify="space-between" align="center">
-        <Title level={3}>最新笔记</Title>
-        <Link to={'/notes'}>查看更多</Link>
-      </Flex>
-      <NoteList noteList={noteList} />
-      <Divider />
-      <Flex justify="space-between" align="center">
         <Title level={3}>最新题库</Title>
         <Link to={'/banks'}>查看更多</Link>
       </Flex>
@@ -103,6 +92,19 @@ const Welcome: React.FC = () => {
         <Link to={'/questions'}>查看更多</Link>
       </Flex>
       <QuestionList questionList={questionList} />
+      <Divider />
+      <Flex justify="space-between" align="center">
+        <Title level={3}>最新笔记</Title>
+        <Link to={'/notes'}>查看更多</Link>
+      </Flex>
+      <NoteList noteList={noteList} />
+      <Divider />
+      <Flex justify="space-between" align="center">
+        <Title level={3}>开放接口</Title>
+        <Link to={'/interfaces'}>查看更多</Link>
+      </Flex>
+      <InterfaceInfoList interfaceInfoList={interfaceInfoList} />
+      <FloatButtonList />
     </Card>
   );
 };

@@ -23,14 +23,14 @@ const PictureTableList: React.FC = () => {
   /**
    * @zh-CN 删除图片
    *
-   * @param note
+   * @param picture
    */
-  const handleDelete = async (note: API.Note) => {
+  const handleDelete = async (picture: API.Picture) => {
     const hide = message.loading('正在删除');
-    if (!note) return true;
+    if (!picture) return true;
     try {
       await deletePicture({
-        id: note.id,
+        id: picture.id,
       });
       hide();
       message.success('删除成功');

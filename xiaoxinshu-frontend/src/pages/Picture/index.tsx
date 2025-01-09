@@ -1,16 +1,13 @@
 import FloatButtonList from '@/components/FloatButtonList';
-import TagList from '@/components/TagList';
+import PictureList from '@/components/PictureList';
 import {
   listPictureTagCategory,
   listPictureVoByPage,
 } from '@/services/xiaoxinshu/pictureController';
 import { Link } from '@@/exports';
-import { Avatar, Button, Card, Empty, Flex, Image, message, Pagination, Tabs, Tag } from 'antd';
-import Meta from 'antd/es/card/Meta';
+import { Button, Card, Flex, message, Pagination, Tabs, Tag } from 'antd';
 import Search from 'antd/es/input/Search';
 import React, { useEffect, useState } from 'react';
-import Masonry from 'react-masonry-css';
-import './index.css';
 
 /**
  * 图片大全页面
@@ -35,6 +32,7 @@ const PicturePage: React.FC = () => {
         category: selectedCategory === 'all' ? '' : selectedCategory,
         tags: selectedTags,
         current: currentPage,
+        nullSpaceId: true,
         pageSize: 12,
         sortField: 'createTime',
         sortOrder: 'descend',
@@ -42,7 +40,7 @@ const PicturePage: React.FC = () => {
       setPictureList(res.data?.records ?? []);
       setTotal(res.data?.total ?? 0);
     } catch (e: any) {
-      message.error('获取图片列表失败：', e.message);
+      message.error('获取图片列表失败：' + e.message);
     }
     setLoading(false);
   };
@@ -56,19 +54,6 @@ const PicturePage: React.FC = () => {
       loadData().then(); // 如果当前页已经是 1，直接加载数据
     }
   }, [selectedCategory, selectedTags, searchValue]);
-  const pictureListView = (picture: API.PictureVO) => {
-    return (
-      <Card hoverable cover={<Image src={picture.url} />}>
-        <Link to={`/picture/${picture.id}`}>
-          <Meta
-            avatar={<Avatar src={picture.user?.userAvatar} />}
-            title={picture.name}
-            description={<TagList tagList={picture.tags} />}
-          />
-        </Link>
-      </Card>
-    );
-  };
   // 加载图片分类标签信息
   const loadTagAndCategory = async () => {
     setLoading(true);
@@ -77,7 +62,7 @@ const PicturePage: React.FC = () => {
       setTagList(res.data?.tagList ?? []);
       setCategory(res.data?.categoryList ?? []);
     } catch (e: any) {
-      message.error('获取图片分类标签信息失败：', e.message);
+      message.error('获取图片分类标签信息失败：' + e.message);
     }
     setLoading(false);
   };
@@ -100,7 +85,7 @@ const PicturePage: React.FC = () => {
   }
 
   return (
-    <div className="max-width-content">
+    <div>
       <Card
         title="图片大全"
         loading={loading}
@@ -145,22 +130,7 @@ const PicturePage: React.FC = () => {
           ))}
         </Flex>
         <br />
-        {pictureList.length === 0 && <Empty />}
-        <Masonry
-          breakpointCols={{
-            default: 3, // 默认3列
-            1100: 2, // 屏幕宽度 ≤ 1100px 时显示 2 列
-            700: 1, // 屏幕宽度 ≤ 700px 时显示 1 列
-          }}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column"
-        >
-          {pictureList.map((picture) => (
-            <div key={picture.id} style={{ marginBottom: '16px' }}>
-              {pictureListView(picture)}
-            </div>
-          ))}
-        </Masonry>
+        <PictureList dataList={pictureList} />
         <br />
         <Pagination
           align="end"
@@ -169,6 +139,7 @@ const PicturePage: React.FC = () => {
           current={currentPage}
           pageSize={12}
           onChange={setCurrentPage}
+          showSizeChanger={false}
         />
       </Card>
       <FloatButtonList />

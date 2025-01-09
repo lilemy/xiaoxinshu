@@ -23,7 +23,13 @@ const NoteList = (props: Props) => {
     return (
       <Card
         hoverable
-        cover={<img alt="" src={note.picture || '/xiaoxin.jpg'} />}
+        cover={
+          <img
+            alt=""
+            src={note.picture || '/xiaoxin.jpg'}
+            style={{ height: '160px', objectFit: 'cover' }}
+          />
+        }
         actions={[
           <div key="fire">
             <FireOutlined />

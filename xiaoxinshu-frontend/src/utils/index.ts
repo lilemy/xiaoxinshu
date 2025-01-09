@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { saveAs } from 'file-saver';
 
 /**
@@ -22,3 +23,15 @@ export function downloadImage(url?: string, fileName?: string) {
   }
   saveAs(url, fileName);
 }
+
+// 复制链接
+export const copyToClipboard = (shareURL: string) => {
+  navigator.clipboard
+    .writeText(shareURL)
+    .then(() => {
+      message.success('复制成功！').then();
+    })
+    .catch(() => {
+      message.error('复制失败，请手动复制！').then();
+    });
+};
