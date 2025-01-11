@@ -1,9 +1,9 @@
 import QuestionCard from '@/components/QuestionCard';
 import { getQuestionBankVoById } from '@/services/xiaoxinshu/questionBankController';
-import { getQuestionVoById } from '@/services/xiaoxinshu/questionController';
+import { getQuestionVoById, listQuestionVoByPage } from '@/services/xiaoxinshu/questionController';
 import { useParams } from '@@/exports';
 import { history } from '@umijs/max';
-import { Card, Col, Menu, message, Row, Typography } from 'antd';
+import { Card, Col, Menu, message, Pagination, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 /**
@@ -15,6 +15,9 @@ const BankQuestionDetail: React.FC = () => {
   const { questionBankId, questionId } = params;
   const [questionBank, setQuestionBank] = useState<API.QuestionBankVO>({});
   const [question, setQuestion] = useState<API.QuestionVO>({});
+  const [questionList, setQuestionList] = useState<API.QuestionVO[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [current, setCurrent] = useState<number>(1);
 
   // 获取题库
   const loadBank = async () => {
@@ -25,11 +28,27 @@ const BankQuestionDetail: React.FC = () => {
     try {
       const res = await getQuestionBankVoById({
         id: questionBankId as any,
-        isNeedQueryQuestionList: true,
       });
       setQuestionBank(res.data ?? {});
     } catch (e: any) {
       message.error('获取题库列表失败，' + e.message);
+    }
+  };
+
+  // 获取题目列表
+  const loadQuestionList = async () => {
+    try {
+      const res = await listQuestionVoByPage({
+        current: current,
+        questionBankId: questionBankId as any,
+        pageSize: 10,
+        sortField: 'createTime',
+        sortOrder: 'descend',
+      });
+      setTotal(res?.data?.total ?? 0);
+      setQuestionList(res?.data?.records ?? []);
+    } catch (e: any) {
+      message.error('获取题目列表失败，' + e.message);
     }
   };
 
@@ -50,7 +69,7 @@ const BankQuestionDetail: React.FC = () => {
   };
 
   // 题目菜单列表
-  const questionMenuItemList = (questionBank?.questionPage?.records || []).map((q) => {
+  const questionMenuItemList = questionList.map((q) => {
     return {
       label: q.title ?? '',
       key: q.id ?? 0,
@@ -64,7 +83,11 @@ const BankQuestionDetail: React.FC = () => {
 
   useEffect(() => {
     loadBank().then();
-  }, [questionBankId]);
+  }, []);
+
+  useEffect(() => {
+    loadQuestionList().then();
+  }, [current]);
 
   useEffect(() => {
     loadQuestion().then();
@@ -82,6 +105,14 @@ const BankQuestionDetail: React.FC = () => {
               items={questionMenuItemList}
               onClick={changeMenu}
               defaultSelectedKeys={[questionId ?? '']}
+            />
+            <Pagination
+              align="end"
+              defaultCurrent={1}
+              total={total}
+              defaultPageSize={10}
+              onChange={(page) => setCurrent(page)}
+              showSizeChanger={false}
             />
           </Card>
         </Col>

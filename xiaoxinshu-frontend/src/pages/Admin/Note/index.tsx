@@ -60,6 +60,9 @@ const NoteTableList: React.FC = () => {
       hideInSearch: true,
       width: 640,
       renderFormItem: (_, { value }) => {
+        if (value === null) {
+          return <MdEditor value={''} />;
+        }
         // value 和 onchange 会通过 form 自动注入
         return <MdEditor {...value} />;
       },

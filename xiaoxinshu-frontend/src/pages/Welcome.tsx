@@ -89,7 +89,7 @@ const Welcome: React.FC = () => {
       <Divider />
       <Flex justify="space-between" align="center">
         <Title level={3}>最新题目</Title>
-        <Link to={'/questions'}>查看更多</Link>
+        <Link to={'/do/questions'}>查看更多</Link>
       </Flex>
       <QuestionList questionList={questionList} />
       <Divider />

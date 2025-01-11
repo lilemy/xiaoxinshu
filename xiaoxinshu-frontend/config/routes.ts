@@ -13,7 +13,21 @@ export default [
   },
   { path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome' },
   { path: '/search', name: '搜索', component: './Search', hideInMenu: true },
-  { path: '/banks', name: '题库', icon: 'table', component: './Bank' },
+  {
+    path: '/do',
+    name: '刷题',
+    icon: 'table',
+    routes: [
+      { path: '/do', redirect: '/do/banks' },
+      { path: '/do/banks', name: '题库', icon: 'table', component: './Bank' },
+      {
+        path: '/do/questions',
+        name: '题目',
+        icon: 'bars',
+        component: './Question',
+      },
+    ],
+  },
   {
     path: '/bank/:questionBankId',
     name: '题库详情',
@@ -26,7 +40,6 @@ export default [
     component: './Bank/BankQuestionDetail',
     hideInMenu: true,
   },
-  { path: '/questions', name: '题目', icon: 'bars', component: './Question' },
   {
     path: '/question/:questionId',
     name: '题目详情',

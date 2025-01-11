@@ -326,7 +326,6 @@ declare namespace API {
 
   type getQuestionBankVOByIdParams = {
     id: number;
-    isNeedQueryQuestionList: boolean;
   };
 
   type getQuestionPersonalByIdParams = {
@@ -1102,7 +1101,6 @@ declare namespace API {
     createTime?: string;
     updateTime?: string;
     user?: UserVO;
-    questionPage?: PageQuestionVO;
   };
 
   type QuestionBatchDeleteRequest = {

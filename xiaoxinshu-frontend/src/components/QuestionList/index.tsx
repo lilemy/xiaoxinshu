@@ -16,7 +16,7 @@ interface Props {
 const QuestionList = (props: Props) => {
   const { questionList = [], cardTitle, questionBankId } = props;
   return (
-    <Card title={cardTitle} size="small">
+    <Card title={cardTitle}>
       <List
         dataSource={questionList}
         renderItem={(item) => (

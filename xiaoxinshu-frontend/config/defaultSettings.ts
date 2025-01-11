@@ -14,6 +14,7 @@ const Settings: ProLayoutProps & {
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
+  collapsed: true,
   colorWeak: false,
   title: '小新书',
   pwa: true,

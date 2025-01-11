@@ -148,10 +148,31 @@ const PictureTableList: React.FC = () => {
       },
     },
     {
-      title: '创建用户',
+      title: '图片所属',
       dataIndex: 'userId',
       valueType: 'text',
       hideInForm: true,
+      hideInSearch: true,
+      render: (_, record) => {
+        return (
+          <ProDescriptions column={1}>
+            <ProDescriptions.Item label="创建用户">{record.userId}</ProDescriptions.Item>
+            <ProDescriptions.Item label="所属空间">{record.spaceId}</ProDescriptions.Item>
+          </ProDescriptions>
+        );
+      },
+    },
+    {
+      title: '创建用户',
+      dataIndex: 'userId',
+      hideInForm: true,
+      hideInTable: true,
+    },
+    {
+      title: '所属空间',
+      dataIndex: 'spaceId',
+      hideInForm: true,
+      hideInTable: true,
     },
     {
       title: '审核时间',

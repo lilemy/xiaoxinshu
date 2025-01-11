@@ -7,12 +7,14 @@ import { ProDescriptions } from '@ant-design/pro-components';
 import { history, useModel } from '@umijs/max';
 import { Avatar, Button, Card, Col, Image, message, Popconfirm, Row, Space } from 'antd';
 import React, { useEffect, useState } from 'react';
+import PictureShareModal from '@/components/PictureShareModal';
 
 const PictureDetailPage: React.FC = () => {
   const params = useParams();
   const { pictureId } = params;
   const [loading, setLoading] = useState<boolean>(false);
-  const [image, setImage] = useState<API.PictureVO>();
+  const [image, setImage] = useState<API.PictureVO>({});
+  const [shareModalVisible, setShareModalVisible] = useState<boolean>(false);
   // 当前登录用户
   const { initialState } = useModel('@@initialState');
   const canEdit =
@@ -26,7 +28,7 @@ const PictureDetailPage: React.FC = () => {
     }
     try {
       const res = await getPictureVoById({ id: pictureId as any });
-      setImage(res.data);
+      setImage(res.data ?? {});
     } catch (e: any) {
       message.error('图片获取失败：' + e.message);
     }
@@ -99,7 +101,12 @@ const PictureDetailPage: React.FC = () => {
                   </Button>
                 </Popconfirm>
               )}
-              <Button type="primary">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setShareModalVisible(true);
+                }}
+              >
                 <ExportOutlined />
                 图片分享
               </Button>
@@ -111,6 +118,13 @@ const PictureDetailPage: React.FC = () => {
           </Card>
         </Col>
       </Row>
+      <PictureShareModal
+        picture={image}
+        modalVisible={shareModalVisible}
+        onCancel={() => {
+          setShareModalVisible(false);
+        }}
+      />
     </div>
   );
 };
