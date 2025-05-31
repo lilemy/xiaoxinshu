@@ -1,0 +1,9 @@
+JDK Version: ${java.version}
+Spring Boot Version: ${spring-boot.version}
+
+       .__                        .__                 .__
+___  __|__|____    ____    ___  __|__| ____      _____|  |__  __ __
+\  \/  /  \__  \  /  _ \   \  \/  /  |/    \    /  ___/  |  \|  |  \
+ >    <|  |/ __ \(  <_> )   >    <|  |   |  \   \___ \|   Y  \  |  /       作者：lilemy(https://github.com/lilemy)
+/__/\_ \__(____  /\____/   /__/\_ \__|___|  /  /____  >___|  /____/        个人网址：https://www.lilemy.cn/
+      \/       \/                \/       \/        \/     \/
