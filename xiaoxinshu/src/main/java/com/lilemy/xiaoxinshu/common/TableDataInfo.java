@@ -18,6 +18,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
+@Schema(name = "TableDataInfo", description = "分页数据对象")
 public class TableDataInfo<T> implements Serializable {
 
     @Serial
@@ -42,6 +43,18 @@ public class TableDataInfo<T> implements Serializable {
     private String message;
 
     /**
+     * 当前页数
+     */
+    @Schema(description = "当前页数")
+    private Integer pageNum;
+
+    /**
+     * 分页大小
+     */
+    @Schema(description = "分页大小")
+    private Integer pageSize;
+
+    /**
      * 总记录数
      */
     @Schema(description = "总记录数")
@@ -53,9 +66,11 @@ public class TableDataInfo<T> implements Serializable {
      * @param list  列表数据
      * @param total 总记录数
      */
-    public TableDataInfo(List<T> list, long total) {
+    public TableDataInfo(List<T> list, long total, Integer pageNum, Integer pageSize) {
         this.data = list;
         this.total = total;
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
         this.code = HttpStatus.HTTP_OK;
         this.message = "查询成功";
     }
@@ -69,6 +84,8 @@ public class TableDataInfo<T> implements Serializable {
         rspData.setMessage("查询成功");
         rspData.setData(page.getRecords());
         rspData.setTotal(page.getTotal());
+        rspData.setPageNum((int) page.getCurrent());
+        rspData.setPageSize((int) page.getSize());
         return rspData;
     }
 

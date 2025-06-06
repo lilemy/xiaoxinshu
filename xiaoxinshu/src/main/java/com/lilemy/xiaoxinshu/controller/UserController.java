@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2025/06/03 11:21
  */
 @RestController
-@Tag(name = "用户接口")
+@Tag(name = "UserController", description = "用户接口")
 @RequestMapping("/user")
 public class UserController {
 

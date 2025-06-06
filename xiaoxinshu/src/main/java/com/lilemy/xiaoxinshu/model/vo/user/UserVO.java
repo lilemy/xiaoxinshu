@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @date 2025/06/04 17:01
  */
 @Data
-@Schema(name = "用户视图对象", description = "用户视图对象")
+@Schema(name = "UserVO", description = "用户视图对象")
 public class UserVO implements Serializable {
 
     @Serial

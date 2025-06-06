@@ -24,7 +24,7 @@ import java.util.List;
  * @date 2025/06/03 18:27
  */
 @Data
-@Schema(name = "分页查询实体类", description = "分页查询实体类")
+@Schema(name = "PageQuery", description = "分页查询实体类")
 public class PageQuery implements Serializable {
 
     @Serial

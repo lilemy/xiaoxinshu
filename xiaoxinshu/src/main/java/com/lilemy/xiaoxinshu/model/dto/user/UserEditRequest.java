@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * @date 2025/06/03 11:46
  */
 @Data
-@Schema(name = "用户编辑请求", description = "用户编辑请求")
+@Schema(name = "UserEditRequest", description = "用户编辑请求")
 public class UserEditRequest implements Serializable {
 
     @Serial
