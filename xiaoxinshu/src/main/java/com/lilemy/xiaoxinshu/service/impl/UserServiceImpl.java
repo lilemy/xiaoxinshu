@@ -3,10 +3,13 @@ package com.lilemy.xiaoxinshu.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.PhoneUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lilemy.xiaoxinshu.common.ResultCode;
+import com.lilemy.xiaoxinshu.constant.CommonConstant;
 import com.lilemy.xiaoxinshu.constant.UserConstant;
 import com.lilemy.xiaoxinshu.exception.BusinessException;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
@@ -17,6 +20,7 @@ import com.lilemy.xiaoxinshu.model.enums.UserRoleEnum;
 import com.lilemy.xiaoxinshu.model.vo.user.LoginUserVO;
 import com.lilemy.xiaoxinshu.model.vo.user.UserVO;
 import com.lilemy.xiaoxinshu.service.UserService;
+import com.lilemy.xiaoxinshu.utils.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -333,10 +337,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @return 查询条件
      */
     @Override
-    public LambdaQueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
-        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+    public QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (userQueryRequest == null) {
-            return lqw;
+            return queryWrapper;
         }
         String userAccount = userQueryRequest.getUserAccount();
         String userName = userQueryRequest.getUserName();
@@ -345,16 +349,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         Integer userGender = userQueryRequest.getUserGender();
         LocalDate userBirthday = userQueryRequest.getUserBirthday();
         String userRole = userQueryRequest.getUserRole();
+        String sortField = userQueryRequest.getSortField();
+        String sortOrder = userQueryRequest.getSortOrder();
+        String underlineSortField = StrUtil.toUnderlineCase(sortField);
         // 模糊查询
-        lqw.like(StringUtils.isNotBlank(userName), User::getUserName, userName);
-        lqw.like(StringUtils.isNotBlank(userEmail), User::getUserEmail, userEmail);
+        queryWrapper.like(StringUtils.isNotBlank(userName), "user_name", userName);
+        queryWrapper.like(StringUtils.isNotBlank(userEmail), "user_email", userEmail);
         // 精准查询
-        lqw.eq(StringUtils.isNotBlank(userAccount), User::getUserAccount, userAccount);
-        lqw.eq(StringUtils.isNotBlank(userPhone), User::getUserPhone, userPhone);
-        lqw.eq(userGender != null, User::getUserGender, userGender);
-        lqw.eq(userBirthday != null, User::getUserBirthday, userBirthday);
-        lqw.eq(StringUtils.isNotBlank(userRole), User::getUserRole, userRole);
-        return lqw;
+        queryWrapper.eq(StringUtils.isNotBlank(userAccount), "user_account", userAccount);
+        queryWrapper.eq(StringUtils.isNotBlank(userPhone), "user_phone", userPhone);
+        queryWrapper.eq(userGender != null, "user_gender", userGender);
+        queryWrapper.eq(userBirthday != null, "user_birthday", userBirthday);
+        queryWrapper.eq(StringUtils.isNotBlank(userRole), "user_role", userRole);
+        // 排序
+        queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                underlineSortField);
+        return queryWrapper;
     }
 
     /**

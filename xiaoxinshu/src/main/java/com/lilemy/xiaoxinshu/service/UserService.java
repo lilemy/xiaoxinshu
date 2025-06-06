@@ -1,6 +1,7 @@
 package com.lilemy.xiaoxinshu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lilemy.xiaoxinshu.model.dto.user.*;
 import com.lilemy.xiaoxinshu.model.entity.User;
@@ -129,7 +130,7 @@ public interface UserService extends IService<User> {
      * @param userQueryRequest 用户查询请求体
      * @return 查询条件
      */
-    LambdaQueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+    QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
 
     /**
      * 校验用户信息

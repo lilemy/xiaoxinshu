@@ -2,7 +2,9 @@ package com.lilemy.xiaoxinshu.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lilemy.xiaoxinshu.common.*;
+import com.lilemy.xiaoxinshu.common.BaseResponse;
+import com.lilemy.xiaoxinshu.common.ResultCode;
+import com.lilemy.xiaoxinshu.common.ResultUtils;
 import com.lilemy.xiaoxinshu.constant.UserConstant;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.model.dto.user.*;
@@ -103,9 +105,12 @@ public class UserController {
     @Operation(summary = "分页获取用户信息（仅管理员）")
     @GetMapping("/page")
     @SaCheckRole(UserConstant.ADMIN)
-    public TableDataInfo<User> listUserByPage(UserQueryRequest userQueryRequest, PageQuery pageQuery) {
+    public BaseResponse<Page<User>> listUserByPage(UserQueryRequest userQueryRequest) {
         ThrowUtils.throwIf(userQueryRequest == null, ResultCode.PARAMS_ERROR);
-        Page<User> result = userService.page(pageQuery.build(), userService.getQueryWrapper(userQueryRequest));
-        return TableDataInfo.build(result);
+        long current = userQueryRequest.getCurrent();
+        long size = userQueryRequest.getPageSize();
+        Page<User> result = userService.page(new Page<>(current, size),
+                userService.getQueryWrapper(userQueryRequest));
+        return ResultUtils.success(result);
     }
 }

@@ -1,7 +1,9 @@
 package com.lilemy.xiaoxinshu.model.dto.user;
 
+import com.lilemy.xiaoxinshu.common.PageRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,8 +14,9 @@ import java.time.LocalDate;
  * @date 2025/6/3 19:22
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Schema(name = "UserQueryRequest", description = "用户查询请求")
-public class UserQueryRequest implements Serializable {
+public class UserQueryRequest extends PageRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -5841117757298107476L;
