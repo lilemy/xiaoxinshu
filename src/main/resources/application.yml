@@ -1,1 +1,9 @@
-spring.application.name=xiaoxinshu
+spring:
+  application:
+    name: xiaoxinshu
+  profiles:
+    active: dev
+server:
+  port: 9126
+  servlet:
+    context-path: /api
