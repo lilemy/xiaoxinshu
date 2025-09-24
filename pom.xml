@@ -41,6 +41,52 @@
             <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!--  Sa-Token 权限认证，在线文档：https://sa-token.cc  -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
+            <version>1.44.0</version>
+        </dependency>
+        <!--  Sa-Token 整合 RedisTemplate  -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-template</artifactId>
+            <version>1.44.0</version>
+        </dependency>
+        <!--  提供 Redis 连接池  -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- redisson -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.50.0</version>
+        </dependency>
+        <!-- mybatis plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>3.5.12</version>
+        </dependency>
+        <!-- mybatis plus 分页插件 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>3.5.12</version>
+        </dependency>
+        <!-- SQL分析与打印 -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+        <!-- 接口文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
