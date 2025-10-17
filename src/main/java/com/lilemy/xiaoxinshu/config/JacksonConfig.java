@@ -2,6 +2,8 @@ package com.lilemy.xiaoxinshu.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -33,6 +35,11 @@ public class JacksonConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         // 忽略未知字段（前端有传入某个字段，但是后端未定义接受该字段值，则一律忽略掉）
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        // Long 转字符串，防止 JS 精度丢失
+        SimpleModule longToStringModule = new SimpleModule();
+        longToStringModule.addSerializer(Long.class, ToStringSerializer.instance);
+        longToStringModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        objectMapper.registerModule(longToStringModule);
         // JavaTimeModule 用于指定序列化和反序列化规则
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         // 支持 LocalDateTime、LocalDate、LocalTime

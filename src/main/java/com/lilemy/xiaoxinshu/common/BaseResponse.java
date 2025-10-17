@@ -20,12 +20,21 @@ public class BaseResponse<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 2288345166566483666L;
 
+    /**
+     * 响应状态码
+     */
     @Schema(description = "响应状态码")
     private int code;
 
+    /**
+     * 响应数据
+     */
     @Schema(description = "响应数据")
     private T data;
 
+    /**
+     * 响应信息
+     */
     @Schema(description = "响应信息")
     private String message;
 
