@@ -14,7 +14,6 @@ import java.io.Serializable;
  * @date 2025-07-21 09:45
  */
 @Data
-@Schema(name = "BaseResponse", description = "通用返回")
 public class BaseResponse<T> implements Serializable {
 
     @Serial

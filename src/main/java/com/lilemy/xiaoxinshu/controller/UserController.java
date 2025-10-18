@@ -2,6 +2,7 @@ package com.lilemy.xiaoxinshu.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lilemy.xiaoxinshu.annotation.RepeatSubmit;
 import com.lilemy.xiaoxinshu.common.BaseResponse;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultUtils;
@@ -38,12 +39,14 @@ public class UserController {
     private UserService userService;
 
     @Operation(summary = "用户注册")
+    @RepeatSubmit()
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@Validated @RequestBody UserRegisterRequest req) {
         return ResultUtils.success(userService.userRegister(req));
     }
 
     @Operation(summary = "用户登录")
+    @RepeatSubmit()
     @PostMapping("/login")
     public BaseResponse<LoginUserVo> userLogin(@Validated @RequestBody UserLoginRequest req) {
         return ResultUtils.success(userService.userLogin(req));

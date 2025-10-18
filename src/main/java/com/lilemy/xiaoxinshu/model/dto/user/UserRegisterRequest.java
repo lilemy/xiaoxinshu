@@ -14,6 +14,7 @@ import java.io.Serializable;
  * @date 2025-10-04 23:41
  */
 @Data
+@Schema(name = "UserRegisterRequest", description = "用户注册请求")
 public class UserRegisterRequest implements Serializable {
 
     @Serial

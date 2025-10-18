@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
  * @date 2025-10-06 00:15
  */
 @Data
+@Schema(name = "LoginUserVo", description = "登录用户脱敏视图")
 public class LoginUserVo implements Serializable {
 
     @Serial

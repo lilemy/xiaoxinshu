@@ -14,6 +14,7 @@ import java.time.LocalDate;
  * @date 2025-10-07 21:12
  */
 @Data
+@Schema(name = "UserQueryRequest", description = "用户查询请求")
 public class UserQueryRequest implements Serializable {
 
     @Serial
