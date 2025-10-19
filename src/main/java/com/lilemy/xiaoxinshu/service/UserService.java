@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lilemy.xiaoxinshu.common.PageQuery;
-import com.lilemy.xiaoxinshu.model.dto.user.UserLoginRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserQueryRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserRegisterRequest;
+import com.lilemy.xiaoxinshu.model.dto.user.*;
 import com.lilemy.xiaoxinshu.model.entity.User;
 import com.lilemy.xiaoxinshu.model.vo.user.LoginUserVo;
 import com.lilemy.xiaoxinshu.model.vo.user.UserByAdminVo;
@@ -43,6 +41,30 @@ public interface UserService extends IService<User> {
      * @return 是否注销成功
      */
     Boolean userLogout();
+
+    /**
+     * 创建用户
+     *
+     * @param req 用户创建请求体
+     * @return 新用户id
+     */
+    Long createUser(UserCreateRequest req);
+
+    /**
+     * 更新用户
+     *
+     * @param req 用户更新请求体
+     * @return 是否更新成功
+     */
+    Boolean updateUser(UserUpdateRequest req);
+
+    /**
+     * 删除用户
+     *
+     * @param id 用户id
+     * @return 是否删除成功
+     */
+    Boolean deleteUser(Long id);
 
     /**
      * 获取当前登录用户
@@ -93,7 +115,7 @@ public interface UserService extends IService<User> {
     Page<UserByAdminVo> getUserByAdminVoPage(UserQueryRequest req, PageQuery pageQuery);
 
     /**
-     * 判断当前用户是否为管理员
+     * 判断当前登录用户是否为管理员
      *
      * @return 是否为管理员
      */

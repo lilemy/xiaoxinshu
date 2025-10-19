@@ -13,9 +13,7 @@ import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.constant.UserConstant;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.mapper.UserMapper;
-import com.lilemy.xiaoxinshu.model.dto.user.UserLoginRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserQueryRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserRegisterRequest;
+import com.lilemy.xiaoxinshu.model.dto.user.*;
 import com.lilemy.xiaoxinshu.model.entity.User;
 import com.lilemy.xiaoxinshu.model.enums.UserRoleEnum;
 import com.lilemy.xiaoxinshu.model.vo.user.LoginUserVo;
@@ -47,8 +45,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String userAccount = req.getUserAccount();
         String userPassword = req.getUserPassword();
         String checkPassword = req.getCheckPassword();
-        ThrowUtils.throwIf(userAccount.length() < 4, ResultCode.PARAMS_ERROR, "用户账号过短");
-        ThrowUtils.throwIf(userPassword.length() < 8 || checkPassword.length() < 8, ResultCode.PARAMS_ERROR, "用户密码过短");
         ThrowUtils.throwIf(!userPassword.equals(checkPassword), ResultCode.PARAMS_ERROR, "两次输入的密码不一致");
         // 2.检查是否重复
         Long count = this.lambdaQuery()
@@ -75,8 +71,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 1.参数校验
         String userAccount = req.getUserAccount();
         String userPassword = req.getUserPassword();
-        ThrowUtils.throwIf(userAccount.length() < 4, ResultCode.PARAMS_ERROR, "用户账号错误");
-        ThrowUtils.throwIf(userPassword.length() < 8, ResultCode.PARAMS_ERROR, "用户密码错误");
         // 2.查询用户
         User user = this.lambdaQuery()
                 .eq(User::getUserAccount, userAccount)
@@ -99,6 +93,64 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         StpUtil.checkLogin();
         // 移除登录态
         StpUtil.logout();
+        return true;
+    }
+
+    @Override
+    public Long createUser(UserCreateRequest req) {
+        // 1.将请求体转换为实体
+        User user = new User();
+        BeanUtils.copyProperties(req, user);
+        // 2.参数校验
+        Long count = this.lambdaQuery()
+                .eq(User::getUserAccount, user.getUserAccount())
+                .count();
+        ThrowUtils.throwIf(count > 0, ResultCode.PARAMS_ERROR, "账号重复");
+        // 3.填充默认用户名
+        if (StringUtils.isBlank(user.getUserName())) {
+            String defaultUserName = UserConstant.DEFAULT_NICKNAME + "-" + RandomUtil.randomString("abcdefghijklmnopqrstuvwxyz0123456789", 8);
+            user.setUserName(defaultUserName);
+        }
+        // 4.设置默认密码
+        String encryptPassword = getEncryptPassword(UserConstant.DEFAULT_PASSWORD);
+        user.setUserPassword(encryptPassword);
+        // 5.插入数据
+        boolean save = this.save(user);
+        ThrowUtils.throwIf(!save, ResultCode.SYSTEM_ERROR, "创建用户失败，数据库异常");
+        // 6.返回用户id
+        return user.getId();
+    }
+
+    @Override
+    public Boolean updateUser(UserUpdateRequest req) {
+        // 1.将请求体转换为实体
+        User user = new User();
+        BeanUtils.copyProperties(req, user);
+        // 2.校验数据是否存在
+        User oldUser = this.getById(user.getId());
+        // 3.参数校验
+        String userAccount = req.getUserAccount();
+        if (StringUtils.isNotBlank(userAccount) && !userAccount.equals(oldUser.getUserAccount())) {
+            Long count = this.lambdaQuery()
+                    .eq(User::getUserAccount, userAccount)
+                    .ne(User::getId, user.getId())
+                    .count();
+            ThrowUtils.throwIf(count > 0, ResultCode.PARAMS_ERROR, "账号重复");
+        }
+        // 4.更新数据
+        boolean update = this.updateById(user);
+        ThrowUtils.throwIf(!update, ResultCode.SYSTEM_ERROR, "更新用户失败，数据库异常");
+        return true;
+    }
+
+    @Override
+    public Boolean deleteUser(Long id) {
+        // 1.校验数据是否存在
+        User user = this.getById(id);
+        ThrowUtils.throwIf(user == null, ResultCode.NOT_FOUND_ERROR);
+        // 2.删除数据
+        boolean remove = this.removeById(id);
+        ThrowUtils.throwIf(!remove, ResultCode.SYSTEM_ERROR, "删除用户失败，数据库异常");
         return true;
     }
 

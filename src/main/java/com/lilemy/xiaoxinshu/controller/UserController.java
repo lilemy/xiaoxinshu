@@ -7,9 +7,7 @@ import com.lilemy.xiaoxinshu.common.BaseResponse;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultUtils;
 import com.lilemy.xiaoxinshu.constant.UserConstant;
-import com.lilemy.xiaoxinshu.model.dto.user.UserLoginRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserQueryRequest;
-import com.lilemy.xiaoxinshu.model.dto.user.UserRegisterRequest;
+import com.lilemy.xiaoxinshu.model.dto.user.*;
 import com.lilemy.xiaoxinshu.model.entity.User;
 import com.lilemy.xiaoxinshu.model.vo.user.LoginUserVo;
 import com.lilemy.xiaoxinshu.model.vo.user.UserByAdminVo;
@@ -56,6 +54,30 @@ public class UserController {
     @PostMapping("/logout")
     public BaseResponse<Boolean> userLogout() {
         return ResultUtils.success(userService.userLogout());
+    }
+
+    @Operation(summary = "创建用户信息（仅管理员）")
+    @RepeatSubmit()
+    @PostMapping("/create")
+    @SaCheckRole(UserConstant.ADMIN)
+    public BaseResponse<Long> createUser(@Validated @RequestBody UserCreateRequest req) {
+        return ResultUtils.success(userService.createUser(req));
+    }
+
+    @Operation(summary = "更新用户信息（仅管理员）")
+    @RepeatSubmit()
+    @PutMapping("/update")
+    @SaCheckRole(UserConstant.ADMIN)
+    public BaseResponse<Boolean> updateUser(@Validated @RequestBody UserUpdateRequest req) {
+        return ResultUtils.success(userService.updateUser(req));
+    }
+
+    @Operation(summary = "删除用户信息（仅管理员）")
+    @DeleteMapping("/{id}")
+    @SaCheckRole(UserConstant.ADMIN)
+    public BaseResponse<Boolean> deleteUser(@NotNull(message = "主键不能为空")
+                                            @PathVariable Long id) {
+        return ResultUtils.success(userService.deleteUser(id));
     }
 
     @Operation(summary = "获取当前登录用户")
