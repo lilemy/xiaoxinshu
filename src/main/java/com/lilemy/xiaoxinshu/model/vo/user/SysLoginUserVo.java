@@ -1,31 +1,30 @@
-package com.lilemy.xiaoxinshu.model.dto.user;
+package com.lilemy.xiaoxinshu.model.vo.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
- * 用户更新请求（仅管理员）
+ * 登录用户脱敏视图
  *
  * @author lilemy
- * @date 2025-10-19 13:39
+ * @date 2025-10-06 00:15
  */
 @Data
-@Schema(name = "UserUpdateRequest", description = "用户更新请求（仅管理员）")
-public class UserUpdateRequest implements Serializable {
+@Schema(name = "SysLoginUserVo", description = "登录用户脱敏视图")
+public class SysLoginUserVo implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -9155006498502527159L;
+    private static final long serialVersionUID = 4769001772721265546L;
 
     /**
      * id
      */
     @Schema(description = "id")
-    @NotNull(message = "主键不能为空")
     private Long id;
 
     /**
@@ -83,8 +82,14 @@ public class UserUpdateRequest implements Serializable {
     private Integer userRole;
 
     /**
-     * 备注
+     * 创建时间
      */
-    @Schema(description = "备注")
-    private String remark;
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
 }

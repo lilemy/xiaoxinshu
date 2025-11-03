@@ -9,7 +9,7 @@ import lombok.Getter;
  * @date 2025-10-04 23:38
  */
 @Getter
-public enum UserRoleEnum {
+public enum SysUserRoleEnum {
 
     USER("普通用户", 0),
     ADMIN("管理员", 1),
@@ -19,7 +19,7 @@ public enum UserRoleEnum {
 
     private final Integer value;
 
-    UserRoleEnum(String text, Integer value) {
+    SysUserRoleEnum(String text, Integer value) {
         this.text = text;
         this.value = value;
     }

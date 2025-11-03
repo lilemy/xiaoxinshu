@@ -1,29 +1,31 @@
-package com.lilemy.xiaoxinshu.model.entity;
+package com.lilemy.xiaoxinshu.model.dto.user;
 
-import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
- * 用户
+ * 用户更新请求（仅管理员）
  *
- * @TableName user
+ * @author lilemy
+ * @date 2025-10-19 13:39
  */
-@TableName(value = "user")
 @Data
-@Schema(name = "User", description = "用户")
-public class User implements Serializable {
+@Schema(name = "SysUserUpdateRequest", description = "用户更新请求（仅管理员）")
+public class SysUserUpdateRequest implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -9155006498502527159L;
 
     /**
      * id
      */
     @Schema(description = "id")
-    @TableId(type = IdType.ASSIGN_ID)
+    @NotNull(message = "主键不能为空")
     private Long id;
 
     /**
@@ -31,12 +33,6 @@ public class User implements Serializable {
      */
     @Schema(description = "账号")
     private String userAccount;
-
-    /**
-     * 密码
-     */
-    @Schema(description = "密码")
-    private String userPassword;
 
     /**
      * 用户昵称
@@ -91,33 +87,4 @@ public class User implements Serializable {
      */
     @Schema(description = "备注")
     private String remark;
-
-    /**
-     * 编辑时间
-     */
-    @Schema(description = "编辑时间")
-    private LocalDateTime editTime;
-
-    /**
-     * 创建时间
-     */
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-
-    /**
-     * 是否删除
-     */
-    @TableLogic
-    @Schema(description = "是否删除")
-    private Integer isDelete;
-
-    @Serial
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

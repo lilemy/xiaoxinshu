@@ -16,8 +16,8 @@ import java.time.LocalDate;
  * @date 2025-10-19 13:29
  */
 @Data
-@Schema(name = "UserCreateRequest", description = "用户创建请求（仅管理员）")
-public class UserCreateRequest implements Serializable {
+@Schema(name = "SysUserCreateRequest", description = "用户创建请求（仅管理员）")
+public class SysUserCreateRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 287775354984151068L;

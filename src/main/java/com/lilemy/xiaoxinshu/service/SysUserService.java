@@ -5,19 +5,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.model.dto.user.*;
-import com.lilemy.xiaoxinshu.model.entity.User;
-import com.lilemy.xiaoxinshu.model.vo.user.LoginUserVo;
-import com.lilemy.xiaoxinshu.model.vo.user.UserByAdminVo;
-import com.lilemy.xiaoxinshu.model.vo.user.UserVo;
+import com.lilemy.xiaoxinshu.model.entity.SysUser;
+import com.lilemy.xiaoxinshu.model.vo.user.SysLoginUserVo;
+import com.lilemy.xiaoxinshu.model.vo.user.SysUserByAdminVo;
+import com.lilemy.xiaoxinshu.model.vo.user.SysUserVo;
 
 /**
  * 用户服务
  *
  * @author lilemy
- * @description 针对表【user(用户)】的数据库操作Service
+ * @description 针对表【sys_user(用户)】的数据库操作Service
  * @createDate 2025-08-13 11:34:58
  */
-public interface UserService extends IService<User> {
+public interface SysUserService extends IService<SysUser> {
 
     /**
      * 用户注册
@@ -25,7 +25,7 @@ public interface UserService extends IService<User> {
      * @param req 用户注册请求
      * @return 新用户id
      */
-    Long userRegister(UserRegisterRequest req);
+    Long userRegister(SysUserRegisterRequest req);
 
     /**
      * 用户登录
@@ -33,7 +33,7 @@ public interface UserService extends IService<User> {
      * @param req 用户登录请求
      * @return 脱敏后的用户信息
      */
-    LoginUserVo userLogin(UserLoginRequest req);
+    SysLoginUserVo userLogin(SysUserLoginRequest req);
 
     /**
      * 用户注销
@@ -48,7 +48,7 @@ public interface UserService extends IService<User> {
      * @param req 用户创建请求体
      * @return 新用户id
      */
-    Long createUser(UserCreateRequest req);
+    Long createUser(SysUserCreateRequest req);
 
     /**
      * 更新用户
@@ -56,7 +56,7 @@ public interface UserService extends IService<User> {
      * @param req 用户更新请求体
      * @return 是否更新成功
      */
-    Boolean updateUser(UserUpdateRequest req);
+    Boolean updateUser(SysUserUpdateRequest req);
 
     /**
      * 删除用户
@@ -71,7 +71,7 @@ public interface UserService extends IService<User> {
      *
      * @return 当前登录用户
      */
-    User getLoginUser();
+    SysUser getLoginUser();
 
     /**
      * 获取用户脱敏信息
@@ -79,7 +79,7 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 脱敏后的用户信息
      */
-    UserVo getUserVo(User user);
+    SysUserVo getUserVo(SysUser user);
 
     /**
      * 获取用户脱敏信息
@@ -87,7 +87,7 @@ public interface UserService extends IService<User> {
      * @param userId 用户id
      * @return 脱敏后的用户信息
      */
-    UserVo getUserVo(Long userId);
+    SysUserVo getUserVo(Long userId);
 
     /**
      * 获取登录用户脱敏信息
@@ -95,7 +95,7 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 脱敏后的登录用户信息
      */
-    LoginUserVo getLoginuserVo(User user);
+    SysLoginUserVo getLoginUserVo(SysUser user);
 
     /**
      * 获取用户脱敏信息（仅管理员）
@@ -103,7 +103,7 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 脱敏后的用户信息
      */
-    UserByAdminVo getUserByAdminVo(User user);
+    SysUserByAdminVo getUserByAdminVo(SysUser user);
 
     /**
      * 获取用户脱敏信息（仅管理员）
@@ -112,7 +112,7 @@ public interface UserService extends IService<User> {
      * @param pageQuery 分页查询参数
      * @return 脱敏后的用户信息
      */
-    Page<UserByAdminVo> getUserByAdminVoPage(UserQueryRequest req, PageQuery pageQuery);
+    Page<SysUserByAdminVo> getUserByAdminVoPage(SysUserQueryRequest req, PageQuery pageQuery);
 
     /**
      * 判断当前登录用户是否为管理员
@@ -127,7 +127,7 @@ public interface UserService extends IService<User> {
      * @param user 用户信息
      * @return 是否为管理员
      */
-    Boolean isAdmin(User user);
+    Boolean isAdmin(SysUser user);
 
     /**
      * 获取查询条件
@@ -135,5 +135,5 @@ public interface UserService extends IService<User> {
      * @param req 用户查询请求体
      * @return 查询条件
      */
-    LambdaQueryWrapper<User> getQueryWrapper(UserQueryRequest req);
+    LambdaQueryWrapper<SysUser> getQueryWrapper(SysUserQueryRequest req);
 }

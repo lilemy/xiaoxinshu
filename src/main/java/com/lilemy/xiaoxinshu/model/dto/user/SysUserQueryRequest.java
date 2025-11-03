@@ -14,8 +14,8 @@ import java.time.LocalDate;
  * @date 2025-10-07 21:12
  */
 @Data
-@Schema(name = "UserQueryRequest", description = "用户查询请求")
-public class UserQueryRequest implements Serializable {
+@Schema(name = "SysUserQueryRequest", description = "用户查询请求")
+public class SysUserQueryRequest implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -5841117757298107476L;

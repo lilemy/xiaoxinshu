@@ -1,7 +1,6 @@
-package com.lilemy.xiaoxinshu.model.vo.user;
+package com.lilemy.xiaoxinshu.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,18 +10,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * 用户脱敏信息（仅管理员）
+ * 用户
  *
- * @author lilemy
- * @date 2025-10-07 23:15
+ * @TableName sys_user
  */
+@TableName(value = "sys_user")
 @Data
-@Schema(name = "UserByAdminVo", description = "用户脱敏信息（仅管理员）")
-public class UserByAdminVo implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = -1698698758901719827L;
-
+@Schema(name = "SysUser", description = "用户")
+public class SysUser implements Serializable {
     /**
      * id
      */
@@ -35,6 +30,12 @@ public class UserByAdminVo implements Serializable {
      */
     @Schema(description = "账号")
     private String userAccount;
+
+    /**
+     * 密码
+     */
+    @Schema(description = "密码")
+    private String userPassword;
 
     /**
      * 用户昵称
@@ -107,4 +108,15 @@ public class UserByAdminVo implements Serializable {
      */
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    /**
+     * 是否删除
+     */
+    @TableLogic
+    @Schema(description = "是否删除")
+    private Integer isDelete;
+
+    @Serial
+    @TableField(exist = false)
+    private static final long serialVersionUID = 1L;
 }

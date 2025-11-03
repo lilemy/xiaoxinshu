@@ -4,10 +4,10 @@
 create database if not exists xiaoxinshu;
 
 -- 切换库
-use xiaoxinshu;
+use xiaoxinshu_dev;
 
 -- 用户表
-create table if not exists user
+create table if not exists sys_user
 (
     id            bigint auto_increment comment 'id' primary key,
     user_account  varchar(256)                       not null comment '账号',
@@ -29,3 +29,16 @@ create table if not exists user
     unique key uk_user_phone (user_phone),
     index idx_user_name (user_name)
 ) comment '用户' collate = utf8mb4_unicode_ci;
+
+-- 文章分类表
+create table if not exists art_article_category
+(
+    `id`          bigint auto_increment comment 'id' primary key,
+    `name`        varchar(60)                        not null comment '分类名称',
+    `sort`        int      default 0                 not null comment '排序',
+    `create_time` datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    `update_time` datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    UNIQUE KEY `uk_name` (`name`) USING BTREE,
+    index `idx_create_time` (`create_time`) USING BTREE
+) comment '文章分类' collate = utf8mb4_unicode_ci;
+

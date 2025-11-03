@@ -6,32 +6,25 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
- * 登录用户脱敏视图
+ * 用户脱敏视图
  *
  * @author lilemy
- * @date 2025-10-06 00:15
+ * @date 2025-10-07 21:08
  */
 @Data
-@Schema(name = "LoginUserVo", description = "登录用户脱敏视图")
-public class LoginUserVo implements Serializable {
+@Schema(name = "SysUserVo", description = "用户脱敏视图")
+public class SysUserVo implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 4769001772721265546L;
+    private static final long serialVersionUID = -9078297966239225382L;
 
     /**
      * id
      */
     @Schema(description = "id")
     private Long id;
-
-    /**
-     * 账号
-     */
-    @Schema(description = "账号")
-    private String userAccount;
 
     /**
      * 用户昵称
@@ -80,16 +73,4 @@ public class LoginUserVo implements Serializable {
      */
     @Schema(description = "用户角色(0用户 1管理员)")
     private Integer userRole;
-
-    /**
-     * 创建时间
-     */
-    @Schema(description = "创建时间")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
 }

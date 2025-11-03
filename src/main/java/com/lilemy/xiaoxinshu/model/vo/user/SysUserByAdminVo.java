@@ -1,30 +1,40 @@
 package com.lilemy.xiaoxinshu.model.vo.user;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
- * 用户脱敏视图
+ * 用户脱敏信息（仅管理员）
  *
  * @author lilemy
- * @date 2025-10-07 21:08
+ * @date 2025-10-07 23:15
  */
 @Data
-@Schema(name = "UserVo", description = "用户脱敏视图")
-public class UserVo implements Serializable {
+@Schema(name = "SysUserByAdminVo", description = "用户脱敏信息（仅管理员）")
+public class SysUserByAdminVo implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -9078297966239225382L;
+    private static final long serialVersionUID = -1698698758901719827L;
 
     /**
      * id
      */
     @Schema(description = "id")
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
+
+    /**
+     * 账号
+     */
+    @Schema(description = "账号")
+    private String userAccount;
 
     /**
      * 用户昵称
@@ -73,4 +83,28 @@ public class UserVo implements Serializable {
      */
     @Schema(description = "用户角色(0用户 1管理员)")
     private Integer userRole;
+
+    /**
+     * 备注
+     */
+    @Schema(description = "备注")
+    private String remark;
+
+    /**
+     * 编辑时间
+     */
+    @Schema(description = "编辑时间")
+    private LocalDateTime editTime;
+
+    /**
+     * 创建时间
+     */
+    @Schema(description = "创建时间")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
 }
