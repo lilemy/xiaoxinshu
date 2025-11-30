@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
  * @date 2025-11-03 23:02
  */
 @Data
+@Schema(name = "ArtArticleCategoryVo", description = "文章分类脱敏信息")
 public class ArtArticleCategoryVo implements Serializable {
 
     @Serial

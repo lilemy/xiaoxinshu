@@ -17,6 +17,7 @@ import java.io.Serializable;
  * @date 2025-11-03 22:59
  */
 @Data
+@Schema(name = "ArtArticleCategoryCreateRequest", description = "文章分类创建请求")
 public class ArtArticleCategoryCreateRequest implements Serializable {
 
     @Serial

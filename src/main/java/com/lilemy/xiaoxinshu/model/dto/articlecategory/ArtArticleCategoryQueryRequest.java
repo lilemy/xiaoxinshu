@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @date 2025-11-03 23:00
  */
 @Data
+@Schema(name = "ArtArticleCategoryQueryRequest", description = "文章分类查询请求")
 public class ArtArticleCategoryQueryRequest implements Serializable {
 
     @Serial
