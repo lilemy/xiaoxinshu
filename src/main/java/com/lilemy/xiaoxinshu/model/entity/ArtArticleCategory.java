@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @TableName(value = "art_article_category")
 @Data
-@Schema(name = "art_article_category", description = "文章分类")
+@Schema(name = "ArtArticleCategory", description = "文章分类")
 public class ArtArticleCategory implements Serializable {
     /**
      * id

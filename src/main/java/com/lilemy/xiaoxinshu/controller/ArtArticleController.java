@@ -1,0 +1,70 @@
+package com.lilemy.xiaoxinshu.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lilemy.xiaoxinshu.annotation.RepeatSubmit;
+import com.lilemy.xiaoxinshu.common.BaseResponse;
+import com.lilemy.xiaoxinshu.common.PageQuery;
+import com.lilemy.xiaoxinshu.common.ResultUtils;
+import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleCreateRequest;
+import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleQueryRequest;
+import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleUpdateRequest;
+import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
+import com.lilemy.xiaoxinshu.service.ArtArticleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 文章接口
+ *
+ * @author lilemy
+ * @date 2025-12-12 16:14
+ */
+@Slf4j
+@RestController
+@RequestMapping("/art/article")
+@Tag(name = "ArtArticleController", description = "文章接口")
+public class ArtArticleController {
+
+    @Resource
+    private ArtArticleService articleService;
+
+    @Operation(summary = "创建文章信息")
+    @RepeatSubmit()
+    @PostMapping("/create")
+    public BaseResponse<Long> createArticle(@Validated @RequestBody ArtArticleCreateRequest req) {
+        return ResultUtils.success(articleService.createArticle(req));
+    }
+
+    @Operation(summary = "更新文章信息")
+    @RepeatSubmit()
+    @PutMapping("/update")
+    public BaseResponse<Boolean> updateArticle(@Validated @RequestBody ArtArticleUpdateRequest req) {
+        return ResultUtils.success(articleService.updateArticle(req));
+    }
+
+    @Operation(summary = "删除文章信息")
+    @DeleteMapping("/{id}")
+    public BaseResponse<Boolean> deleteArticle(@NotNull(message = "主键不能为空")
+                                               @PathVariable Long id) {
+        return ResultUtils.success(articleService.deleteArticle(id));
+    }
+
+    @Operation(summary = "获取文章信息")
+    @GetMapping("/{id}")
+    public BaseResponse<ArtArticleVo> getArticle(@NotNull(message = "主键不能为空")
+                                                 @PathVariable Long id) {
+        return ResultUtils.success(articleService.getArticleVo(id));
+    }
+
+    @Operation(summary = "分页获取文章信息")
+    @GetMapping("/page")
+    public BaseResponse<Page<ArtArticleVo>> listArticlePage(ArtArticleQueryRequest req,
+                                                            PageQuery pageQuery) {
+        return ResultUtils.success(articleService.getArticleVoPage(req, pageQuery));
+    }
+}

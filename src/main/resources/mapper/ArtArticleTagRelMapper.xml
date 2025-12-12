@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lilemy.xiaoxinshu.mapper.ArtArticleTagRelMapper">
+
+    <resultMap id="BaseResultMap" type="com.lilemy.xiaoxinshu.model.entity.ArtArticleTagRel">
+        <id property="id" column="id"/>
+        <result property="articleId" column="article_id"/>
+        <result property="tagId" column="tag_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,article_id,tag_id
+    </sql>
+
+    <select id="listArticleTagVoByArticleId"
+            resultType="com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo">
+        SELECT t.id,
+               t.name,
+               t.create_time AS createTime,
+               t.update_time AS updateTime
+        FROM art_article_tag t
+                 INNER JOIN art_article_tag_rel r ON t.id = r.tag_id
+        WHERE r.article_id = #{articleId}
+    </select>
+    <select id="listArticleTagRelByArticleIds"
+            resultType="com.lilemy.xiaoxinshu.model.vo.articletagrel.ArtArticleTagRelVo">
+        SELECT
+        r.id,
+        r.article_id AS articleId,
+        r.tag_id AS tagId,
+        t.name AS tagName
+        FROM art_article_tag_rel r
+        LEFT JOIN art_article_tag t ON r.tag_id = t.id
+        WHERE r.article_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

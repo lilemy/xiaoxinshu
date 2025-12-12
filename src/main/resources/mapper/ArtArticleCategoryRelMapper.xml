@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryRelMapper">
+
+    <resultMap id="BaseResultMap" type="com.lilemy.xiaoxinshu.model.entity.ArtArticleCategoryRel">
+        <id property="id" column="id"/>
+        <result property="articleId" column="article_id"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,article_id,category_id
+    </sql>
+
+    <select id="listArticleCategoryVoByArticleId"
+            resultType="com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo">
+        SELECT t.id,
+               t.name,
+               t.sort,
+               t.create_time AS createTime,
+               t.update_time AS updateTime
+        FROM art_article_category t
+                 INNER JOIN art_article_category_rel r ON t.id = r.category_id
+        WHERE r.article_id = #{articleId}
+        ORDER BY t.sort
+    </select>
+
+    <select id="listArticleCategoryRelVoByArticleIds"
+            resultType="com.lilemy.xiaoxinshu.model.vo.articlecategoryrel.ArtArticleCategoryRelVo">
+        SELECT
+        r.id,
+        r.article_id AS articleId,
+        r.category_id AS categoryId,
+        c.name AS categoryName
+        FROM art_article_category_rel r
+        LEFT JOIN art_article_category c ON r.category_id = c.id
+        WHERE r.article_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY c.sort
+    </select>
+</mapper>

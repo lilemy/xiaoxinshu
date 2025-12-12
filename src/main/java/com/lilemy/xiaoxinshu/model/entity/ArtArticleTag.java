@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 文章标签
@@ -35,13 +35,13 @@ public class ArtArticleTag implements Serializable {
      */
     @Schema(description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
     @Schema(description = "更新时间")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     @Serial
     @TableField(exist = false)
