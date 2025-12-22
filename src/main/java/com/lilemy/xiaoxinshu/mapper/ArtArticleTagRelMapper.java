@@ -27,6 +27,18 @@ public interface ArtArticleTagRelMapper extends BaseMapper<ArtArticleTagRel> {
     List<ArtArticleTagVo> listArticleTagVoByArticleId(Long articleId);
 
     /**
+     * 根据标签 id 获取文章标签关系信息
+     *
+     * @param tagId 标签 id
+     * @return 文章标签关系信息
+     */
+    default List<ArtArticleTagRel> listArticleTagRelByTagId(Long tagId) {
+        LambdaQueryWrapper<ArtArticleTagRel> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ArtArticleTagRel::getTagId, tagId);
+        return this.selectList(lqw);
+    }
+
+    /**
      * 根据文章 id 获取文章标签关系信息
      *
      * @param ids 文章 id 列表

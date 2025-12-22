@@ -8,12 +8,15 @@ import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleTagMapper;
+import com.lilemy.xiaoxinshu.mapper.ArtArticleTagRelMapper;
 import com.lilemy.xiaoxinshu.model.dto.articletag.ArtArticleTagCreateRequest;
 import com.lilemy.xiaoxinshu.model.dto.articletag.ArtArticleTagQueryRequest;
 import com.lilemy.xiaoxinshu.model.dto.articletag.ArtArticleTagUpdateRequest;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleTag;
+import com.lilemy.xiaoxinshu.model.entity.ArtArticleTagRel;
 import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo;
 import com.lilemy.xiaoxinshu.service.ArtArticleTagService;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,9 @@ import java.util.List;
 @Service
 public class ArtArticleTagServiceImpl extends ServiceImpl<ArtArticleTagMapper, ArtArticleTag>
         implements ArtArticleTagService {
+
+    @Resource
+    private ArtArticleTagRelMapper artArticleTagRelMapper;
 
     @Override
     public Long createArticleTag(ArtArticleTagCreateRequest req) {
@@ -75,7 +81,11 @@ public class ArtArticleTagServiceImpl extends ServiceImpl<ArtArticleTagMapper, A
         // 1.校验数据是否存在
         ArtArticleTag articleTag = this.getById(id);
         ThrowUtils.throwIf(articleTag == null, ResultCode.NOT_FOUND_ERROR);
-        // 2.删除数据
+        // 2.校验数据是否被使用
+        Long useCount = artArticleTagRelMapper.selectCount(new LambdaQueryWrapper<ArtArticleTagRel>()
+                .eq(ArtArticleTagRel::getTagId, id));
+        ThrowUtils.throwIf(useCount > 0, ResultCode.PARAMS_ERROR, "文章标签被使用，请先删除关联数据");
+        // 3.删除数据
         boolean remove = this.removeById(id);
         ThrowUtils.throwIf(!remove, ResultCode.SYSTEM_ERROR, "删除文章标签失败，数据库异常");
         return true;

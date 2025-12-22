@@ -12,11 +12,9 @@ import com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryRelMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleContentMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleTagRelMapper;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleCreateRequest;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleQueryRequest;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleUpdateRequest;
+import com.lilemy.xiaoxinshu.model.dto.article.*;
 import com.lilemy.xiaoxinshu.model.entity.*;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
+import com.lilemy.xiaoxinshu.model.vo.article.*;
 import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo;
 import com.lilemy.xiaoxinshu.model.vo.articlecategoryrel.ArtArticleCategoryRelVo;
 import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo;
@@ -33,10 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.time.YearMonth;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -285,6 +281,86 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         }).toList();
         articleVoPage.setRecords(articleVoList);
         return articleVoPage;
+    }
+
+    /**
+     * 获取文章归档信息
+     *
+     * @param req       文章分类查询请求体
+     * @param pageQuery 分页查询参数
+     * @return 脱敏后的文章分类信息
+     */
+    @Override
+    public Page<ArtArticleArchiveVo> getArticleArchiveVoPage(ArtArticleQueryRequest req, PageQuery pageQuery) {
+        LambdaQueryWrapper<ArtArticle> lqw = this.getQueryWrapper(req);
+        // 仅获取当前用户的文章
+        SysUser loginUser = sysUserService.getLoginUser();
+        lqw.eq(ArtArticle::getUserId, loginUser.getId());
+        Page<ArtArticle> articlePage = this.page(pageQuery.build(), lqw);
+        List<ArtArticle> articleList = articlePage.getRecords();
+        Page<ArtArticleArchiveVo> articleArchiveVoPage = new Page<>(
+                articlePage.getCurrent(),
+                articlePage.getSize(),
+                articlePage.getTotal());
+        if (CollUtil.isEmpty(articleList)) {
+            return articleArchiveVoPage;
+        }
+        List<ArtArticleArchiveVo> voList = new ArrayList<>();
+        // 将创建时间转为年月
+        List<ArtArticleArchiveDetailVo> detailVoList = articleList.stream().map(article -> {
+            ArtArticleArchiveDetailVo detailVo = new ArtArticleArchiveDetailVo();
+            BeanUtils.copyProperties(article, detailVo);
+            YearMonth month = YearMonth.from(article.getCreateTime());
+            detailVo.setCreateMonth(month);
+            return detailVo;
+        }).toList();
+        // 按创建的月份进行分组
+        Map<YearMonth, List<ArtArticleArchiveDetailVo>> detailVoMap = detailVoList.stream()
+                .collect(Collectors.groupingBy(ArtArticleArchiveDetailVo::getCreateMonth));
+        // 使用 TreeMap 按月份倒序排列
+        Map<YearMonth, List<ArtArticleArchiveDetailVo>> sortedMap = new TreeMap<>(Collections.reverseOrder());
+        sortedMap.putAll(detailVoMap);
+        // 遍历排序后的 Map，将其转换为归档 VO
+        sortedMap.forEach((k, v) -> {
+            ArtArticleArchiveVo archiveVo = new ArtArticleArchiveVo();
+            archiveVo.setMonth(k);
+            archiveVo.setDetailList(v);
+            voList.add(archiveVo);
+        });
+        articleArchiveVoPage.setRecords(voList);
+        return articleArchiveVoPage;
+    }
+
+    /**
+     * 根据分类获取文章脱敏信息
+     *
+     * @param req       根据分类查询文章请求体
+     * @param pageQuery 分页查询参数
+     * @return 文章脱敏信息
+     */
+    @Override
+    public Page<ArtArticleByCategoryVo> getArticleVoByCategoryPage(ArtArticleByCategoryQueryRequest req, PageQuery pageQuery) {
+        Long categoryId = req.getCategoryId();
+        // 获取当前登录用户
+        SysUser loginUser = sysUserService.getLoginUser();
+        // 根据分类 id 获取文章
+        return baseMapper.getArticleByCategory(pageQuery.build(), categoryId, loginUser.getId());
+    }
+
+    /**
+     * 根据标签获取文章脱敏信息
+     *
+     * @param req       根据标签查询文章请求体
+     * @param pageQuery 分页查询参数
+     * @return 文章脱敏信息
+     */
+    @Override
+    public Page<ArtArticleByTagVo> getArticleVoByTagPage(ArtArticleByTagQueryRequest req, PageQuery pageQuery) {
+        Long tagId = req.getTagId();
+        // 获取当前登录用户
+        SysUser loginUser = sysUserService.getLoginUser();
+        // 根据标签 id 获取文章
+        return baseMapper.getArticleByTag(pageQuery.build(), tagId, loginUser.getId());
     }
 
     /**

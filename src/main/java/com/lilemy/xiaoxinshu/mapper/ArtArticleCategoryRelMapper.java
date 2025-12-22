@@ -21,10 +21,22 @@ public interface ArtArticleCategoryRelMapper extends BaseMapper<ArtArticleCatego
     /**
      * 根据文章 id 获取文章分类信息
      *
-     * @param id 文章 id
+     * @param articleId 文章 id
      * @return 文章分类信息
      */
-    List<ArtArticleCategoryVo> listArticleCategoryVoByArticleId(Long id);
+    List<ArtArticleCategoryVo> listArticleCategoryVoByArticleId(Long articleId);
+
+    /**
+     * 根据分类 id 获取文章分类关系信息
+     *
+     * @param categoryId 分类 id
+     * @return 文章分类关系信息
+     */
+    default List<ArtArticleCategoryRel> listArticleCategoryRelByCategoryId(Long categoryId) {
+        LambdaQueryWrapper<ArtArticleCategoryRel> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(ArtArticleCategoryRel::getCategoryId, categoryId);
+        return this.selectList(lqw);
+    }
 
     /**
      * 根据文章 id 获取文章分类关系信息

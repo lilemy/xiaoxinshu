@@ -15,8 +15,77 @@
         <result property="readNum" column="read_num"/>
     </resultMap>
 
+    <resultMap id="ArticleByCategoryPageResultMap" type="com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByCategoryVo">
+        <id property="id" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="cover" column="cover"/>
+        <result property="summary" column="summary"/>
+        <result property="createTime" column="create_time"/>
+
+        <collection property="tagList" ofType="com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ArticleByTagPageResultMap" type="com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByTagVo">
+        <id property="id" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="cover" column="cover"/>
+        <result property="summary" column="summary"/>
+        <result property="createTime" column="create_time"/>
+
+        <collection property="categoryList"
+                    ofType="com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo">
+            <id property="id" column="category_id"/>
+            <result property="name" column="category_name"/>
+        </collection>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id,title,cover,summary,create_time,update_time,
         is_delete,read_num
     </sql>
+
+    <select id="getArticleByCategory" resultMap="ArticleByCategoryPageResultMap">
+        SELECT a.id   AS article_id,
+               a.title,
+               a.cover,
+               a.summary,
+               a.create_time,
+               t.id   AS tag_id,
+               t.name AS tag_name
+        FROM art_article a
+                 INNER JOIN art_article_category_rel acr
+                            ON a.id = acr.article_id
+                 LEFT JOIN art_article_tag_rel atr
+                           ON a.id = atr.article_id
+                 LEFT JOIN art_article_tag t
+                           ON atr.tag_id = t.id
+        WHERE acr.category_id = #{categoryId}
+          AND a.user_id = #{userId}
+          AND a.is_delete = 0
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="getArticleByTag" resultMap="ArticleByTagPageResultMap">
+        SELECT a.id    AS article_id,
+               a.title,
+               a.cover,
+               a.summary,
+               a.create_time,
+               ac.id   AS category_id,
+               ac.name AS category_name
+        FROM art_article a
+                 INNER JOIN art_article_tag_rel atr
+                            ON a.id = atr.article_id
+                 LEFT JOIN art_article_category_rel acr
+                           ON a.id = acr.article_id
+                 LEFT JOIN art_article_category ac
+                           ON acr.category_id = ac.id
+        WHERE atr.tag_id = #{tagId}
+          AND a.user_id = #{userId}
+          AND a.is_delete = 0
+        ORDER BY a.create_time DESC
+    </select>
 </mapper>

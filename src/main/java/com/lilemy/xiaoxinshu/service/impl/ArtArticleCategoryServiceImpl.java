@@ -8,12 +8,15 @@ import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryMapper;
+import com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryRelMapper;
 import com.lilemy.xiaoxinshu.model.dto.articlecategory.ArtArticleCategoryCreateRequest;
 import com.lilemy.xiaoxinshu.model.dto.articlecategory.ArtArticleCategoryQueryRequest;
 import com.lilemy.xiaoxinshu.model.dto.articlecategory.ArtArticleCategoryUpdateRequest;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleCategory;
+import com.lilemy.xiaoxinshu.model.entity.ArtArticleCategoryRel;
 import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo;
 import com.lilemy.xiaoxinshu.service.ArtArticleCategoryService;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,9 @@ import java.util.List;
 @Service
 public class ArtArticleCategoryServiceImpl extends ServiceImpl<ArtArticleCategoryMapper, ArtArticleCategory>
         implements ArtArticleCategoryService {
+
+    @Resource
+    private ArtArticleCategoryRelMapper artArticleCategoryRelMapper;
 
     @Override
     public Long createArticleCategory(ArtArticleCategoryCreateRequest req) {
@@ -75,7 +81,11 @@ public class ArtArticleCategoryServiceImpl extends ServiceImpl<ArtArticleCategor
         // 1.校验数据是否存在
         ArtArticleCategory articleCategory = this.getById(id);
         ThrowUtils.throwIf(articleCategory == null, ResultCode.NOT_FOUND_ERROR);
-        // 2.删除数据
+        // 2.校验数据是否被使用
+        Long useCount = artArticleCategoryRelMapper.selectCount(new LambdaQueryWrapper<ArtArticleCategoryRel>()
+                .eq(ArtArticleCategoryRel::getCategoryId, id));
+        ThrowUtils.throwIf(useCount > 0, ResultCode.PARAMS_ERROR, "文章分类被使用，请先删除关联数据");
+        // 3.删除数据
         boolean remove = this.removeById(id);
         ThrowUtils.throwIf(!remove, ResultCode.SYSTEM_ERROR, "删除文章分类失败，数据库异常");
         return true;

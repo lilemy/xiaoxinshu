@@ -5,9 +5,10 @@ import com.lilemy.xiaoxinshu.annotation.RepeatSubmit;
 import com.lilemy.xiaoxinshu.common.BaseResponse;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultUtils;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleCreateRequest;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleQueryRequest;
-import com.lilemy.xiaoxinshu.model.dto.article.ArtArticleUpdateRequest;
+import com.lilemy.xiaoxinshu.model.dto.article.*;
+import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleArchiveVo;
+import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByCategoryVo;
+import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByTagVo;
 import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
 import com.lilemy.xiaoxinshu.service.ArtArticleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,5 +67,26 @@ public class ArtArticleController {
     public BaseResponse<Page<ArtArticleVo>> listArticlePage(ArtArticleQueryRequest req,
                                                             PageQuery pageQuery) {
         return ResultUtils.success(articleService.getArticleVoPage(req, pageQuery));
+    }
+
+    @Operation(summary = "分页获取文章归档信息")
+    @GetMapping("/archive/page")
+    public BaseResponse<Page<ArtArticleArchiveVo>> listArticleArchivePage(ArtArticleQueryRequest req,
+                                                                          PageQuery pageQuery) {
+        return ResultUtils.success(articleService.getArticleArchiveVoPage(req, pageQuery));
+    }
+
+    @Operation(summary = "根据文章分类分页获取文章信息")
+    @GetMapping("/byCategory/page")
+    public BaseResponse<Page<ArtArticleByCategoryVo>> listArticleByCategoryPage(ArtArticleByCategoryQueryRequest req,
+                                                                                PageQuery pageQuery) {
+        return ResultUtils.success(articleService.getArticleVoByCategoryPage(req, pageQuery));
+    }
+
+    @Operation(summary = "根据文章标签分页获取文章信息")
+    @GetMapping("/byTag/page")
+    public BaseResponse<Page<ArtArticleByTagVo>> listArticleByTagPage(ArtArticleByTagQueryRequest req,
+                                                                      PageQuery pageQuery) {
+        return ResultUtils.success(articleService.getArticleVoByTagPage(req, pageQuery));
     }
 }
