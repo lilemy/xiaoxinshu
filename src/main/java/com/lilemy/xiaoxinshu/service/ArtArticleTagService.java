@@ -10,6 +10,8 @@ import com.lilemy.xiaoxinshu.model.dto.articletag.ArtArticleTagUpdateRequest;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleTag;
 import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo;
 
+import java.util.List;
+
 /**
  * 文章标签服务
  *
@@ -67,6 +69,14 @@ public interface ArtArticleTagService extends IService<ArtArticleTag> {
      * @return 脱敏后的文章标签信息
      */
     Page<ArtArticleTagVo> getArticleTagVoPage(ArtArticleTagQueryRequest req, PageQuery pageQuery);
+
+    /**
+     * 获取文章标签列表
+     *
+     * @param req 文章标签查询请求体
+     * @return 文章标签列表
+     */
+    List<ArtArticleTagVo> getArticleTagList(ArtArticleTagQueryRequest req);
 
     /**
      * 获取查询条件

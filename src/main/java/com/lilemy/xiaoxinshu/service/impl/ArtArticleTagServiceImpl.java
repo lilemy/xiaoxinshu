@@ -1,5 +1,6 @@
 package com.lilemy.xiaoxinshu.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -129,6 +130,14 @@ public class ArtArticleTagServiceImpl extends ServiceImpl<ArtArticleTagMapper, A
         }).toList();
         articleTagVoPage.setRecords(articleTagVoList);
         return articleTagVoPage;
+    }
+
+    @Override
+    public List<ArtArticleTagVo> getArticleTagList(ArtArticleTagQueryRequest req) {
+        List<ArtArticleTag> articleTagList = this.list(this.getQueryWrapper(req));
+        return articleTagList.stream().map(articleTag ->
+                        BeanUtil.copyProperties(articleTag, ArtArticleTagVo.class))
+                .toList();
     }
 
     @Override

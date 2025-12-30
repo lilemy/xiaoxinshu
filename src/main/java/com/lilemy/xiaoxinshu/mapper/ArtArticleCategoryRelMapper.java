@@ -1,5 +1,6 @@
 package com.lilemy.xiaoxinshu.mapper;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -45,6 +46,21 @@ public interface ArtArticleCategoryRelMapper extends BaseMapper<ArtArticleCatego
      * @return 文章分类关系信息
      */
     List<ArtArticleCategoryRelVo> listArticleCategoryRelVoByArticleIds(@Param("ids") List<Long> ids);
+
+    /**
+     * 根据分类 id 列表获取文章 id 列表
+     *
+     * @param ids 分类 id 列表
+     * @return 文章 id 列表
+     */
+    default List<Long> listArticleIdsByIds(List<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return List.of();
+        }
+        LambdaQueryWrapper<ArtArticleCategoryRel> lqw = new LambdaQueryWrapper<>();
+        lqw.select(ArtArticleCategoryRel::getArticleId).in(ArtArticleCategoryRel::getCategoryId, ids);
+        return this.selectList(lqw).stream().map(ArtArticleCategoryRel::getArticleId).toList();
+    }
 
     /**
      * 根据文章 id 删除文章分类关系信息

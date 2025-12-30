@@ -1,5 +1,6 @@
 package com.lilemy.xiaoxinshu.mapper;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -45,6 +46,21 @@ public interface ArtArticleTagRelMapper extends BaseMapper<ArtArticleTagRel> {
      * @return 文章标签关系信息
      */
     List<ArtArticleTagRelVo> listArticleTagRelByArticleIds(@Param("ids") List<Long> ids);
+
+    /**
+     * 根据标签 id 列表获取文章 id 列表
+     *
+     * @param ids 标签 id 列表
+     * @return 文章 id 列表
+     */
+    default List<Long> listArticleIdsByIds(List<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return List.of();
+        }
+        LambdaQueryWrapper<ArtArticleTagRel> lqw = new LambdaQueryWrapper<>();
+        lqw.select(ArtArticleTagRel::getArticleId).in(ArtArticleTagRel::getTagId, ids);
+        return this.selectList(lqw).stream().map(ArtArticleTagRel::getArticleId).toList();
+    }
 
     /**
      * 根据文章 id 删除文章标签关系

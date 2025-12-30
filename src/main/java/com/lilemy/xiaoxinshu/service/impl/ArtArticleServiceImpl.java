@@ -91,7 +91,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         int saveContent = artArticleContentMapper.insert(articleContent);
         ThrowUtils.throwIf(!SqlHelper.retBool(saveContent), ResultCode.SYSTEM_ERROR, "创建文章内容失败，数据库异常");
         // 校验文章分类是否存在
-        List<Long> categoryIds = req.getCategoryIds();
+        List<Long> categoryIds = req.getCategoryIdList();
         List<ArtArticleCategory> categoryList = artArticleCategoryService.listByIds(categoryIds);
         ThrowUtils.throwIf(categoryList.size() != categoryIds.size(), ResultCode.PARAMS_ERROR, "文章分类不存在");
         // 添加文章分类关联
@@ -104,7 +104,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         List<BatchResult> categoryResult = artArticleCategoryRelMapper.insert(categoryRelList);
         ThrowUtils.throwIf(!SqlHelper.retBool(categoryResult), ResultCode.SYSTEM_ERROR, "创建文章分类关联失败，数据库异常");
         // 添加文章标签关联
-        this.insertTags(id, req.getTags());
+        this.insertTags(id, req.getTagIdList());
         return id;
     }
 
@@ -137,7 +137,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         Boolean contentResult = artArticleContentMapper.updateContentByArticleId(content, id);
         ThrowUtils.throwIf(!contentResult, ResultCode.SYSTEM_ERROR, "更新文章内容失败，数据库异常");
         // 校验文章分类是否存在
-        List<Long> categoryIds = req.getCategoryIds();
+        List<Long> categoryIds = req.getCategoryIdList();
         List<ArtArticleCategory> categoryList = artArticleCategoryService.listByIds(categoryIds);
         ThrowUtils.throwIf(categoryList.size() != categoryIds.size(), ResultCode.PARAMS_ERROR, "文章分类不存在");
         // 先删除该文章关联的分类记录
@@ -155,7 +155,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         // 先删除该文章对应的标签
         Boolean removeTag = artArticleTagRelMapper.deleteByArticleId(id);
         ThrowUtils.throwIf(!removeTag, ResultCode.SYSTEM_ERROR, "删除文章标签关联失败，数据库异常");
-        this.insertTags(id, req.getTags());
+        this.insertTags(id, req.getTagIdList());
         return true;
     }
 
@@ -260,22 +260,26 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
             Long id = article.getId();
             // 获取文章分类
             if (categoryRelMap.containsKey(id)) {
-                articleVo.setCategoryList(categoryRelMap.get(id).stream().map(categoryRel -> {
+                List<ArtArticleCategoryRelVo> relVoList = categoryRelMap.get(id);
+                articleVo.setCategoryList(relVoList.stream().map(categoryRel -> {
                     ArtArticleCategoryVo categoryVo = new ArtArticleCategoryVo();
                     categoryVo.setId(categoryRel.getCategoryId());
                     categoryVo.setName(categoryRel.getCategoryName());
                     BeanUtils.copyProperties(categoryRel, categoryVo);
                     return categoryVo;
                 }).toList());
+                articleVo.setCategoryIdList(relVoList.stream().map(ArtArticleCategoryRelVo::getCategoryId).toList());
             }
             // 获取文章标签
             if (tagRelMap.containsKey(id)) {
-                articleVo.setTagList(tagRelMap.get(id).stream().map(tagRel -> {
+                List<ArtArticleTagRelVo> relVoList = tagRelMap.get(id);
+                articleVo.setTagList(relVoList.stream().map(tagRel -> {
                     ArtArticleTagVo tagVo = new ArtArticleTagVo();
                     tagVo.setId(tagRel.getTagId());
                     tagVo.setName(tagRel.getTagName());
                     return tagVo;
                 }).toList());
+                articleVo.setTagIdList(relVoList.stream().map(ArtArticleTagRelVo::getTagId).toList());
             }
             return articleVo;
         }).toList();
@@ -377,9 +381,30 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         }
         String title = req.getTitle();
         String summary = req.getSummary();
+        List<Long> categoryIdList = req.getCategoryIdList();
+        List<Long> tagIdList = req.getTagIdList();
         lqw.like(StringUtils.isNotBlank(title), ArtArticle::getTitle, title);
         lqw.like(StringUtils.isNotBlank(summary), ArtArticle::getSummary, summary);
+        getQueryRel(lqw, categoryIdList, artArticleCategoryRelMapper.listArticleIdsByIds(categoryIdList));
+        getQueryRel(lqw, tagIdList, artArticleTagRelMapper.listArticleIdsByIds(tagIdList));
         return lqw;
+    }
+
+    /**
+     * 获取查询条件
+     *
+     * @param lqw        查询条件
+     * @param tagIdList  标签 id 列表
+     * @param articleIds 文章 id 列表
+     */
+    private void getQueryRel(LambdaQueryWrapper<ArtArticle> lqw, List<Long> tagIdList, List<Long> articleIds) {
+        if (CollUtil.isNotEmpty(tagIdList)) {
+            if (CollUtil.isNotEmpty(articleIds)) {
+                lqw.in(ArtArticle::getId, articleIds);
+            } else {
+                lqw.eq(ArtArticle::getId, -1);
+            }
+        }
     }
 
     /**

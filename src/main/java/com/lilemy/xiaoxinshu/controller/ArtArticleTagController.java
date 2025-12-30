@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 文章标签接口
  *
@@ -73,5 +75,11 @@ public class ArtArticleTagController {
     public BaseResponse<Page<ArtArticleTagVo>> listArticleTagPage(ArtArticleTagQueryRequest req,
                                                                   PageQuery pageQuery) {
         return ResultUtils.success(articleTagService.getArticleTagVoPage(req, pageQuery));
+    }
+
+    @Operation(summary = "获取文章标签信息列表")
+    @GetMapping("/list")
+    public BaseResponse<List<ArtArticleTagVo>> listArticleTag(ArtArticleTagQueryRequest req) {
+        return ResultUtils.success(articleTagService.getArticleTagList(req));
     }
 }

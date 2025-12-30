@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 文章分类接口
  *
@@ -73,5 +75,11 @@ public class ArtArticleCategoryController {
     public BaseResponse<Page<ArtArticleCategoryVo>> listArticleCategoryPage(ArtArticleCategoryQueryRequest req,
                                                                             PageQuery pageQuery) {
         return ResultUtils.success(articleCategoryService.getArticleCategoryVoPage(req, pageQuery));
+    }
+
+    @Operation(summary = "获取文章分类信息列表")
+    @GetMapping("/list")
+    public BaseResponse<List<ArtArticleCategoryVo>> listArticleCategory(ArtArticleCategoryQueryRequest req) {
+        return ResultUtils.success(articleCategoryService.getArticleCategoryVoList(req));
     }
 }

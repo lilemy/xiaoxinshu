@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 文章查询请求
@@ -30,4 +31,16 @@ public class ArtArticleQueryRequest implements Serializable {
      */
     @Schema(description = "文章摘要")
     private String summary;
+
+    /**
+     * 分类 id 列表
+     */
+    @Schema(description = "分类 id 列表")
+    private List<Long> categoryIdList;
+
+    /**
+     * 标签 id 列表
+     */
+    @Schema(description = "标签 id 列表")
+    private List<Long> tagIdList;
 }

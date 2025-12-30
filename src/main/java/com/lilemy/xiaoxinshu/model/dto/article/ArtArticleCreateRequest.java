@@ -57,7 +57,7 @@ public class ArtArticleCreateRequest implements Serializable {
     @Schema(description = "文章分类 id")
     @NotEmpty(message = "文章分类不能为空")
     @Size(max = 5, message = "文章分类数量不能超过 5 个")
-    private List<Long> categoryIds;
+    private List<Long> categoryIdList;
 
     /**
      * 文章标签
@@ -65,5 +65,5 @@ public class ArtArticleCreateRequest implements Serializable {
     @Schema(description = "文章标签")
     @NotEmpty(message = "文章标签不能为空")
     @Size(max = 10, message = "文章标签数量不能超过 10 个")
-    private List<String> tags;
+    private List<String> tagIdList;
 }

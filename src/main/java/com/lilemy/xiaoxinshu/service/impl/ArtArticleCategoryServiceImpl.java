@@ -1,5 +1,6 @@
 package com.lilemy.xiaoxinshu.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -129,6 +130,13 @@ public class ArtArticleCategoryServiceImpl extends ServiceImpl<ArtArticleCategor
         }).toList();
         articleCategoryVoPage.setRecords(articleCategoryVoList);
         return articleCategoryVoPage;
+    }
+
+    @Override
+    public List<ArtArticleCategoryVo> getArticleCategoryVoList(ArtArticleCategoryQueryRequest req) {
+        List<ArtArticleCategory> articleCategoryList = this.list(this.getQueryWrapper(req));
+        return articleCategoryList.stream().map(articleCategory ->
+                BeanUtil.copyProperties(articleCategory, ArtArticleCategoryVo.class)).toList();
     }
 
     @Override

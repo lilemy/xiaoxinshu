@@ -10,6 +10,8 @@ import com.lilemy.xiaoxinshu.model.dto.articlecategory.ArtArticleCategoryUpdateR
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleCategory;
 import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo;
 
+import java.util.List;
+
 /**
  * 文章分类服务
  *
@@ -69,11 +71,18 @@ public interface ArtArticleCategoryService extends IService<ArtArticleCategory> 
     Page<ArtArticleCategoryVo> getArticleCategoryVoPage(ArtArticleCategoryQueryRequest req, PageQuery pageQuery);
 
     /**
+     * 获取文章分类脱敏信息列表
+     *
+     * @param req 文章分类查询请求体
+     * @return 脱敏后的文章分类信息列表
+     */
+    List<ArtArticleCategoryVo> getArticleCategoryVoList(ArtArticleCategoryQueryRequest req);
+
+    /**
      * 获取查询条件
      *
      * @param req 文章分类查询请求体
      * @return 查询条件
      */
     LambdaQueryWrapper<ArtArticleCategory> getQueryWrapper(ArtArticleCategoryQueryRequest req);
-
 }

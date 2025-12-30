@@ -72,6 +72,12 @@ public class ArtArticleVo implements Serializable {
     private LocalDateTime createTime;
 
     /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
+
+    /**
      * 阅读次数
      */
     @Schema(description = "阅读次数")
@@ -84,8 +90,20 @@ public class ArtArticleVo implements Serializable {
     private List<ArtArticleCategoryVo> categoryList;
 
     /**
+     * 分类 id 列表
+     */
+    @Schema(description = "分类 id 列表")
+    private List<Long> categoryIdList;
+
+    /**
      * 标签列表
      */
     @Schema(description = "标签列表")
     private List<ArtArticleTagVo> tagList;
+
+    /**
+     * 标签 id 列表
+     */
+    @Schema(description = "标签 id 列表")
+    private List<Long> tagIdList;
 }
