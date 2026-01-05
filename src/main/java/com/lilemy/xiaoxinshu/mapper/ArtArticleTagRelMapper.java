@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleTagRel;
-import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo;
+import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagNameVo;
 import com.lilemy.xiaoxinshu.model.vo.articletagrel.ArtArticleTagRelVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,7 +25,7 @@ public interface ArtArticleTagRelMapper extends BaseMapper<ArtArticleTagRel> {
      * @param articleId 文章 id
      * @return 文章标签信息
      */
-    List<ArtArticleTagVo> listArticleTagVoByArticleId(Long articleId);
+    List<ArtArticleTagNameVo> listArticleTagVoByArticleId(Long articleId);
 
     /**
      * 根据标签 id 获取文章标签关系信息

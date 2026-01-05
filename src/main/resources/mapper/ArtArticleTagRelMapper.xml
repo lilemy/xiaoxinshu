@@ -15,11 +15,9 @@
     </sql>
 
     <select id="listArticleTagVoByArticleId"
-            resultType="com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo">
+            resultType="com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagNameVo">
         SELECT t.id,
-               t.name,
-               t.create_time AS createTime,
-               t.update_time AS updateTime
+               t.name
         FROM art_article_tag t
                  INNER JOIN art_article_tag_rel r ON t.id = r.tag_id
         WHERE r.article_id = #{articleId}

@@ -6,10 +6,7 @@ import com.lilemy.xiaoxinshu.common.BaseResponse;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultUtils;
 import com.lilemy.xiaoxinshu.model.dto.article.*;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleArchiveVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByCategoryVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByTagVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
+import com.lilemy.xiaoxinshu.model.vo.article.*;
 import com.lilemy.xiaoxinshu.service.ArtArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,6 +59,13 @@ public class ArtArticleController {
         return ResultUtils.success(articleService.getArticleVo(id));
     }
 
+    @Operation(summary = "获取文章详情信息")
+    @GetMapping("/detail/{id}")
+    public BaseResponse<ArtArticleDetailVo> getArticleDetail(@NotNull(message = "主键不能为空")
+                                                             @PathVariable Long id) {
+        return ResultUtils.success(articleService.getArticleDetailVo(id));
+    }
+
     @Operation(summary = "分页获取文章信息")
     @GetMapping("/page")
     public BaseResponse<Page<ArtArticleVo>> listArticlePage(ArtArticleQueryRequest req,
@@ -77,14 +81,14 @@ public class ArtArticleController {
     }
 
     @Operation(summary = "根据文章分类分页获取文章信息")
-    @GetMapping("/byCategory/page")
+    @GetMapping("/category/page")
     public BaseResponse<Page<ArtArticleByCategoryVo>> listArticleByCategoryPage(ArtArticleByCategoryQueryRequest req,
                                                                                 PageQuery pageQuery) {
         return ResultUtils.success(articleService.getArticleVoByCategoryPage(req, pageQuery));
     }
 
     @Operation(summary = "根据文章标签分页获取文章信息")
-    @GetMapping("/byTag/page")
+    @GetMapping("/tag/page")
     public BaseResponse<Page<ArtArticleByTagVo>> listArticleByTagPage(ArtArticleByTagQueryRequest req,
                                                                       PageQuery pageQuery) {
         return ResultUtils.success(articleService.getArticleVoByTagPage(req, pageQuery));

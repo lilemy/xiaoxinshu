@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
+import com.lilemy.xiaoxinshu.manager.markdown.MarkdownHelper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryRelMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleContentMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleMapper;
@@ -15,10 +16,11 @@ import com.lilemy.xiaoxinshu.mapper.ArtArticleTagRelMapper;
 import com.lilemy.xiaoxinshu.model.dto.article.*;
 import com.lilemy.xiaoxinshu.model.entity.*;
 import com.lilemy.xiaoxinshu.model.vo.article.*;
-import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo;
+import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryNameVo;
 import com.lilemy.xiaoxinshu.model.vo.articlecategoryrel.ArtArticleCategoryRelVo;
-import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagVo;
+import com.lilemy.xiaoxinshu.model.vo.articletag.ArtArticleTagNameVo;
 import com.lilemy.xiaoxinshu.model.vo.articletagrel.ArtArticleTagRelVo;
+import com.lilemy.xiaoxinshu.model.vo.user.SysUserVo;
 import com.lilemy.xiaoxinshu.service.ArtArticleCategoryService;
 import com.lilemy.xiaoxinshu.service.ArtArticleService;
 import com.lilemy.xiaoxinshu.service.ArtArticleTagService;
@@ -65,10 +67,10 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     private SysUserService sysUserService;
 
     /**
-     * 创建文章分类
+     * 创建文章
      *
-     * @param req 文章分类创建请求体
-     * @return 新文章分类 id
+     * @param req 文章创建请求体
+     * @return 新文章 id
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -111,14 +113,14 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     /**
      * 更新文章分类
      *
-     * @param req 文章分类更新请求体
+     * @param req 文章更新请求体
      * @return 是否更新成功
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateArticle(ArtArticleUpdateRequest req) {
         Long id = req.getId();
-        // 判断文章分类是否存在
+        // 判断文章是否存在
         ArtArticle oldArticle = this.getById(id);
         ThrowUtils.throwIf(oldArticle == null, ResultCode.NOT_FOUND_ERROR);
         // 判断是否有更新权限
@@ -160,14 +162,14 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     }
 
     /**
-     * 删除文章分类
+     * 删除文章
      *
-     * @param id 文章分类 id
+     * @param id 文章 id
      * @return 是否删除成功
      */
     @Override
     public Boolean deleteArticle(Long id) {
-        // 判断文章分类是否存在
+        // 判断文章是否存在
         ArtArticle article = this.getById(id);
         ThrowUtils.throwIf(article == null, ResultCode.NOT_FOUND_ERROR);
         // 判断是否有删除权限
@@ -188,10 +190,10 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     }
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章脱敏信息
      *
-     * @param article 文章分类信息
-     * @return 脱敏后的文章分类信息
+     * @param article 文章信息
+     * @return 脱敏后的文章信息
      */
     @Override
     public ArtArticleVo getArticleVo(ArtArticle article) {
@@ -200,21 +202,21 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         BeanUtils.copyProperties(article, articleVo);
         // 获取当前文章的内容
         String content = artArticleContentMapper.selectContentByArticleId(article.getId());
-        articleVo.setContent(content);
+        articleVo.setContent(MarkdownHelper.convertMarkdown2Html(content));
         // 获取当前文章的分类列表
-        List<ArtArticleCategoryVo> articleVoList = artArticleCategoryRelMapper.listArticleCategoryVoByArticleId(article.getId());
+        List<ArtArticleCategoryNameVo> articleVoList = artArticleCategoryRelMapper.listArticleCategoryVoByArticleId(article.getId());
         articleVo.setCategoryList(articleVoList);
         // 获取当前文章的标签列表
-        List<ArtArticleTagVo> tagVoList = artArticleTagRelMapper.listArticleTagVoByArticleId(article.getId());
+        List<ArtArticleTagNameVo> tagVoList = artArticleTagRelMapper.listArticleTagVoByArticleId(article.getId());
         articleVo.setTagList(tagVoList);
         return articleVo;
     }
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章脱敏信息
      *
-     * @param articleId 文章分类 id
-     * @return 脱敏后的文章分类信息
+     * @param articleId 文章 id
+     * @return 脱敏后的文章信息
      */
     @Override
     public ArtArticleVo getArticleVo(Long articleId) {
@@ -226,11 +228,45 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     }
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章详情脱敏信息
      *
-     * @param req       文章分类查询请求体
+     * @param articleId 文章 id
+     * @return 脱敏后的文章详情信息
+     */
+    @Override
+    public ArtArticleDetailVo getArticleDetailVo(Long articleId) {
+        ArtArticleVo articleVo = this.getArticleVo(articleId);
+        ArtArticleDetailVo detailVo = new ArtArticleDetailVo();
+        BeanUtils.copyProperties(articleVo, detailVo);
+        // 获取当前文章发布用户
+        Long userId = articleVo.getUserId();
+        if (userId != null && userId > 0) {
+            SysUserVo userVo = sysUserService.getUserVo(userId);
+            detailVo.setUser(userVo);
+        }
+        // 获取上一个文章
+        ArtArticle preArticle = this.lambdaQuery()
+                .orderByAsc(ArtArticle::getId)
+                .gt(ArtArticle::getId, articleId)
+                .last("limit 1")
+                .one();
+        detailVo.setPreArticle(ArtArticleNameVo.buildVo(preArticle));
+        // 获取下一个文章
+        ArtArticle nextArticle = this.lambdaQuery()
+                .orderByDesc(ArtArticle::getId)
+                .lt(ArtArticle::getId, articleId)
+                .last("limit 1")
+                .one();
+        detailVo.setNextArticle(ArtArticleNameVo.buildVo(nextArticle));
+        return detailVo;
+    }
+
+    /**
+     * 获取文章脱敏信息
+     *
+     * @param req       文章查询请求体
      * @param pageQuery 分页查询参数
-     * @return 脱敏后的文章分类信息
+     * @return 脱敏后的文章信息
      */
     @Override
     public Page<ArtArticleVo> getArticleVoPage(ArtArticleQueryRequest req, PageQuery pageQuery) {
@@ -262,7 +298,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
             if (categoryRelMap.containsKey(id)) {
                 List<ArtArticleCategoryRelVo> relVoList = categoryRelMap.get(id);
                 articleVo.setCategoryList(relVoList.stream().map(categoryRel -> {
-                    ArtArticleCategoryVo categoryVo = new ArtArticleCategoryVo();
+                    ArtArticleCategoryNameVo categoryVo = new ArtArticleCategoryNameVo();
                     categoryVo.setId(categoryRel.getCategoryId());
                     categoryVo.setName(categoryRel.getCategoryName());
                     BeanUtils.copyProperties(categoryRel, categoryVo);
@@ -274,7 +310,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
             if (tagRelMap.containsKey(id)) {
                 List<ArtArticleTagRelVo> relVoList = tagRelMap.get(id);
                 articleVo.setTagList(relVoList.stream().map(tagRel -> {
-                    ArtArticleTagVo tagVo = new ArtArticleTagVo();
+                    ArtArticleTagNameVo tagVo = new ArtArticleTagNameVo();
                     tagVo.setId(tagRel.getTagId());
                     tagVo.setName(tagRel.getTagName());
                     return tagVo;
@@ -290,9 +326,9 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     /**
      * 获取文章归档信息
      *
-     * @param req       文章分类查询请求体
+     * @param req       文章查询请求体
      * @param pageQuery 分页查询参数
-     * @return 脱敏后的文章分类信息
+     * @return 脱敏后的文章信息
      */
     @Override
     public Page<ArtArticleArchiveVo> getArticleArchiveVoPage(ArtArticleQueryRequest req, PageQuery pageQuery) {
@@ -370,7 +406,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     /**
      * 获取查询条件
      *
-     * @param req 文章分类查询请求体
+     * @param req 文章查询请求体
      * @return 查询条件
      */
     @Override

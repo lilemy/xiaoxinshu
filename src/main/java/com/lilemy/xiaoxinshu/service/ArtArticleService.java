@@ -6,10 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.model.dto.article.*;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticle;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleArchiveVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByCategoryVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleByTagVo;
-import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
+import com.lilemy.xiaoxinshu.model.vo.article.*;
 
 /**
  * 文章服务
@@ -21,60 +18,68 @@ import com.lilemy.xiaoxinshu.model.vo.article.ArtArticleVo;
 public interface ArtArticleService extends IService<ArtArticle> {
 
     /**
-     * 创建文章分类
+     * 创建文章
      *
-     * @param req 文章分类创建请求体
-     * @return 新文章分类 id
+     * @param req 文章创建请求体
+     * @return 新文章 id
      */
     Long createArticle(ArtArticleCreateRequest req);
 
     /**
-     * 更新文章分类
+     * 更新文章
      *
-     * @param req 文章分类更新请求体
+     * @param req 文章更新请求体
      * @return 是否更新成功
      */
     Boolean updateArticle(ArtArticleUpdateRequest req);
 
     /**
-     * 删除文章分类
+     * 删除文章
      *
-     * @param id 文章分类 id
+     * @param id 文章 id
      * @return 是否删除成功
      */
     Boolean deleteArticle(Long id);
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章脱敏信息
      *
-     * @param article 文章分类信息
-     * @return 脱敏后的文章分类信息
+     * @param article 文章信息
+     * @return 脱敏后的文章信息
      */
     ArtArticleVo getArticleVo(ArtArticle article);
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章脱敏信息
      *
-     * @param articleId 文章分类 id
-     * @return 脱敏后的文章分类信息
+     * @param articleId 文章 id
+     * @return 脱敏后的文章信息
      */
     ArtArticleVo getArticleVo(Long articleId);
 
     /**
-     * 获取文章分类脱敏信息
+     * 获取文章详情脱敏信息
      *
-     * @param req       文章分类查询请求体
+     * @param articleId 文章 id
+     * @return 脱敏后的文章详情信息
+     */
+    ArtArticleDetailVo getArticleDetailVo(Long articleId);
+
+    /**
+     * 获取文章脱敏信息
+     *
+     * @param req       文章查询请求体
      * @param pageQuery 分页查询参数
-     * @return 脱敏后的文章分类信息
+     * @return 脱敏后的文章信息
      */
     Page<ArtArticleVo> getArticleVoPage(ArtArticleQueryRequest req, PageQuery pageQuery);
 
     /**
      * 获取文章归档信息
      *
-     * @param req       文章分类查询请求体
+     * @param req       文章查询请求体
      * @param pageQuery 分页查询参数
-     * @return 脱敏后的文章分类信息
+     * @return 脱敏后的文章信息
      */
     Page<ArtArticleArchiveVo> getArticleArchiveVoPage(ArtArticleQueryRequest req, PageQuery pageQuery);
 

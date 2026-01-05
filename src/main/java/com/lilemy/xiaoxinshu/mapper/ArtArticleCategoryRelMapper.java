@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lilemy.xiaoxinshu.model.entity.ArtArticleCategoryRel;
-import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo;
+import com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryNameVo;
 import com.lilemy.xiaoxinshu.model.vo.articlecategoryrel.ArtArticleCategoryRelVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,7 +25,7 @@ public interface ArtArticleCategoryRelMapper extends BaseMapper<ArtArticleCatego
      * @param articleId 文章 id
      * @return 文章分类信息
      */
-    List<ArtArticleCategoryVo> listArticleCategoryVoByArticleId(Long articleId);
+    List<ArtArticleCategoryNameVo> listArticleCategoryVoByArticleId(Long articleId);
 
     /**
      * 根据分类 id 获取文章分类关系信息

@@ -15,12 +15,10 @@
     </sql>
 
     <select id="listArticleCategoryVoByArticleId"
-            resultType="com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryVo">
+            resultType="com.lilemy.xiaoxinshu.model.vo.articlecategory.ArtArticleCategoryNameVo">
         SELECT t.id,
                t.name,
-               t.sort,
-               t.create_time AS createTime,
-               t.update_time AS updateTime
+               t.sort
         FROM art_article_category t
                  INNER JOIN art_article_category_rel r ON t.id = r.category_id
         WHERE r.article_id = #{articleId}

@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/art/article/tag")
+@RequestMapping("/art/articleTag")
 @Tag(name = "ArtArticleTagController", description = "文章标签接口")
 public class ArtArticleTagController {
 
