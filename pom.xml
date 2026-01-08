@@ -19,6 +19,11 @@
     <properties>
         <java.version>21</java.version>
         <revision>0.0.1-SNAPSHOT</revision>
+        <!-- Sa-Token 权限认证 -->
+        <satoken.version>1.44.0</satoken.version>
+        <!-- mybatis plus -->
+        <mybatis-plus.version>3.5.12</mybatis-plus.version>
+        <!-- MarkDown 转成 Html 工具 -->
         <commonmark.version>0.27.0</commonmark.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -46,13 +51,13 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot3-starter</artifactId>
-            <version>1.44.0</version>
+            <version>${satoken.version}</version>
         </dependency>
         <!--  Sa-Token 整合 RedisTemplate  -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-template</artifactId>
-            <version>1.44.0</version>
+            <version>${satoken.version}</version>
         </dependency>
         <!--  提供 Redis 连接池  -->
         <dependency>
@@ -73,13 +78,13 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.12</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- mybatis plus 分页插件 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-jsqlparser</artifactId>
-            <version>3.5.12</version>
+            <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- SQL分析与打印 -->
         <dependency>
@@ -107,6 +112,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.18.0</version>
+        </dependency>
+        <!-- 对象存储 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.41.2</version>
+            <scope>compile</scope>
         </dependency>
         <!-- MarkDown 转 HTML 工具 -->
         <dependency>

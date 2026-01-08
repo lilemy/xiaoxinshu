@@ -27,4 +27,9 @@ public interface UserConstant {
      * 管理员权限字符
      */
     String ADMIN = "1";
+
+    /**
+     * 普通用户权限字符
+     */
+    String USER = "0";
 }
