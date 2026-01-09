@@ -12,6 +12,7 @@ import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.constant.UserConstant;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
+import com.lilemy.xiaoxinshu.manager.rustfs.OssHelper;
 import com.lilemy.xiaoxinshu.mapper.SysUserMapper;
 import com.lilemy.xiaoxinshu.model.dto.user.*;
 import com.lilemy.xiaoxinshu.model.entity.SysUser;
@@ -20,6 +21,7 @@ import com.lilemy.xiaoxinshu.model.vo.user.SysLoginUserVo;
 import com.lilemy.xiaoxinshu.model.vo.user.SysUserByAdminVo;
 import com.lilemy.xiaoxinshu.model.vo.user.SysUserVo;
 import com.lilemy.xiaoxinshu.service.SysUserService;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,9 @@ import java.util.List;
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
         implements SysUserService {
+
+    @Resource
+    private OssHelper ossHelper;
 
     @Override
     public Long userRegister(SysUserRegisterRequest req) {
@@ -136,6 +141,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
                     .ne(SysUser::getId, user.getId())
                     .count();
             ThrowUtils.throwIf(count > 0, ResultCode.PARAMS_ERROR, "账号重复");
+        }
+        // 校验图片，如果图片改变，删除旧图片
+        if (StringUtils.isNotBlank(req.getUserAvatar())&& !req.getUserAvatar().equals(oldUser.getUserAvatar())) {
+            ossHelper.deleteFileByUrl(oldUser.getUserAvatar());
         }
         // 4.更新数据
         boolean update = this.updateById(user);

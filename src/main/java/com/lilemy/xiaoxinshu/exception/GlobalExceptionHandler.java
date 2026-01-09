@@ -63,18 +63,30 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotRoleException.class)
-    public BaseResponse<?> notRoleExceptionHandler(RuntimeException e) {
+    public BaseResponse<?> notRoleExceptionHandler(RuntimeException e, HttpServletRequest request) {
+        // 获取请求地址
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+        String url = method + " " + path;
+        String remoteHost = request.getRemoteHost();
         // 过滤并格式化堆栈信息
         String stackTrace = getStackTrace(e);
-        log.error("无权限异常 :{}\n   {}", e.getMessage(), stackTrace);
+        log.error("无权限异常 => URL[{}], IP:[{}], 错误信息:[{}]\n   {}",
+                url, remoteHost, e.getMessage(), stackTrace);
         return ResultUtils.error(ResultCode.NO_AUTH_ERROR, "无权限");
     }
 
     @ExceptionHandler(NotLoginException.class)
-    public BaseResponse<?> notLoginExceptionHandler(RuntimeException e) {
+    public BaseResponse<?> notLoginExceptionHandler(RuntimeException e, HttpServletRequest request) {
+        // 获取请求地址
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+        String url = method + " " + path;
+        String remoteHost = request.getRemoteHost();
         // 过滤并格式化堆栈信息
         String stackTrace = getStackTrace(e);
-        log.error("未登录异常 :{}\n   {}", e.getMessage(), stackTrace);
+        log.error("未登录异常 => URL[{}], IP:[{}], 错误信息:[{}]\n   {}",
+                url, remoteHost, e.getMessage(), stackTrace);
         return ResultUtils.error(ResultCode.NOT_LOGIN_ERROR, "未登录");
     }
 

@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -36,7 +33,7 @@ public class SysOssController {
     @RepeatSubmit()
     @PostMapping("/upload")
     @SaCheckRole(value = {UserConstant.ADMIN, UserConstant.USER}, mode = SaMode.OR)
-    public BaseResponse<String> uploadFile(@RequestParam("file") MultipartFile file, String prefix) {
+    public BaseResponse<String> uploadFile(@RequestPart("file") MultipartFile file, String prefix) {
         return ResultUtils.success(ossHelper.uploadFile(prefix, file));
     }
 }
