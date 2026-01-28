@@ -11,8 +11,11 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Markdown 转换工具
@@ -21,6 +24,9 @@ import java.util.List;
  * @date 2025-12-26 14:56
  */
 public class MarkdownHelper {
+
+    // 正则表达式：匹配 Markdown 图片格式 ![alt](url) 和 HTML img 标签 src="url"
+    private static final Pattern IMG_PATTERN = Pattern.compile("!\\[.*?\\]\\((.*?)\\)|<img.*?src=\"(.*?)\".*?>");
 
     /**
      * Markdown 解析器
@@ -62,5 +68,28 @@ public class MarkdownHelper {
     public static String convertMarkdown2Html(String markdown) {
         Node document = PARSER.parse(markdown);
         return HTML_RENDERER.render(document);
+    }
+
+    /**
+     * 从 Markdown 文本中提取所有图片 URL
+     *
+     * @param content markdown 文本
+     * @return 图片 URL 列表
+     */
+    public static List<String> extractImageUrls(String content) {
+        List<String> urls = new ArrayList<>();
+        if (content == null || content.isEmpty()) {
+            return urls;
+        }
+
+        Matcher matcher = IMG_PATTERN.matcher(content);
+        while (matcher.find()) {
+            // group(1) 对应 MD 格式，group(2) 对应 HTML 格式
+            String url = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+            if (url != null && !url.isEmpty()) {
+                urls.add(url);
+            }
+        }
+        return urls;
     }
 }

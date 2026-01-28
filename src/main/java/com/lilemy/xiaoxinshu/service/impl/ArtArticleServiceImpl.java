@@ -9,6 +9,7 @@ import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.manager.markdown.MarkdownHelper;
+import com.lilemy.xiaoxinshu.manager.rustfs.OssHelper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleCategoryRelMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleContentMapper;
 import com.lilemy.xiaoxinshu.mapper.ArtArticleMapper;
@@ -65,6 +66,9 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
 
     @Resource
     private SysUserService sysUserService;
+
+    @Resource
+    private OssHelper ossHelper;
 
     /**
      * 创建文章
@@ -177,7 +181,17 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         // 删除文章
         boolean result = this.removeById(id);
         ThrowUtils.throwIf(!result, ResultCode.SYSTEM_ERROR, "删除文章失败，数据库异常");
+        // 删除文章封面
+        String cover = article.getCover();
+        if (StringUtils.isNotBlank(cover)) {
+            ossHelper.deleteFileByUrl(cover);
+        }
         // 删除文章内容
+        String content = artArticleContentMapper.selectContentByArticleId(id);
+        if (StringUtils.isNotBlank(content)) {
+            List<String> imageUrls = MarkdownHelper.extractImageUrls(content);
+            imageUrls.forEach(url -> ossHelper.deleteFileByUrl(url));
+        }
         Boolean contentResult = artArticleContentMapper.deleteByArticleId(id);
         ThrowUtils.throwIf(!contentResult, ResultCode.SYSTEM_ERROR, "删除文章内容失败，数据库异常");
         // 删除文章分类关联

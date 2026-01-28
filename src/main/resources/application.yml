@@ -3,6 +3,13 @@ spring:
     name: xiaoxinshu
   profiles:
     active: dev
+  servlet:
+    # 文件上传
+    multipart:
+      # 单个文件大小
+      max-file-size: 20MB
+      # 设置总上传的文件大小
+      max-request-size: 50MB
 server:
   port: 9126
   servlet:

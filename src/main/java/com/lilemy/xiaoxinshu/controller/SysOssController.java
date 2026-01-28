@@ -36,4 +36,12 @@ public class SysOssController {
     public BaseResponse<String> uploadFile(@RequestPart("file") MultipartFile file, String prefix) {
         return ResultUtils.success(ossHelper.uploadFile(prefix, file));
     }
+
+    @Operation(summary = "文件删除")
+    @DeleteMapping()
+    @SaCheckRole(value = {UserConstant.ADMIN, UserConstant.USER}, mode = SaMode.OR)
+    public BaseResponse<Void> deleteFile(String url) {
+        ossHelper.deleteFileByUrl(url);
+        return ResultUtils.success();
+    }
 }
