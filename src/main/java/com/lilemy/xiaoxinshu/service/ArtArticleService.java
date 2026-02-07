@@ -34,6 +34,13 @@ public interface ArtArticleService extends IService<ArtArticle> {
     Boolean updateArticle(ArtArticleUpdateRequest req);
 
     /**
+     * 增加文章阅读数
+     *
+     * @param id 文章 id
+     */
+    void increaseReadNum(Long id);
+
+    /**
      * 删除文章
      *
      * @param id 文章 id

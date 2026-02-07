@@ -77,7 +77,7 @@ public class ImageNodeRenderer implements NodeRenderer {
 
         if (StringUtils.isNotBlank(imgTitle)) {
             // 图文下方文字
-            sb.append(String.format("<span>%s</span>", imgTitle));
+            sb.append(String.format("<span class=\"image-caption\">%s</span>", imgTitle));
         }
 
         // 设置 HTML 内容

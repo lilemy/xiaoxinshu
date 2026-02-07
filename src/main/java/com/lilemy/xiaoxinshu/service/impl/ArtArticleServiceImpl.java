@@ -2,11 +2,13 @@ package com.lilemy.xiaoxinshu.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.lilemy.xiaoxinshu.common.PageQuery;
 import com.lilemy.xiaoxinshu.common.ResultCode;
+import com.lilemy.xiaoxinshu.event.ReadArticleEvent;
 import com.lilemy.xiaoxinshu.exception.ThrowUtils;
 import com.lilemy.xiaoxinshu.manager.markdown.MarkdownHelper;
 import com.lilemy.xiaoxinshu.manager.rustfs.OssHelper;
@@ -30,6 +32,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.BatchResult;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +72,9 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
 
     @Resource
     private OssHelper ossHelper;
+
+    @Resource
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * 创建文章
@@ -163,6 +169,14 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         ThrowUtils.throwIf(!removeTag, ResultCode.SYSTEM_ERROR, "删除文章标签关联失败，数据库异常");
         this.insertTags(id, req.getTagIdList());
         return true;
+    }
+
+    @Override
+    public void increaseReadNum(Long id) {
+        LambdaUpdateWrapper<ArtArticle> luw = new LambdaUpdateWrapper<>();
+        luw.eq(ArtArticle::getId, id);
+        luw.setSql("read_num = read_num + 1");
+        this.update(luw);
     }
 
     /**
@@ -260,18 +274,20 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         }
         // 获取上一个文章
         ArtArticle preArticle = this.lambdaQuery()
-                .orderByAsc(ArtArticle::getId)
-                .gt(ArtArticle::getId, articleId)
+                .lt(ArtArticle::getId, articleId)
+                .orderByDesc(ArtArticle::getId)
                 .last("limit 1")
                 .one();
         detailVo.setPreArticle(ArtArticleNameVo.buildVo(preArticle));
         // 获取下一个文章
         ArtArticle nextArticle = this.lambdaQuery()
-                .orderByDesc(ArtArticle::getId)
-                .lt(ArtArticle::getId, articleId)
+                .gt(ArtArticle::getId, articleId)
+                .orderByAsc(ArtArticle::getId)
                 .last("limit 1")
                 .one();
         detailVo.setNextArticle(ArtArticleNameVo.buildVo(nextArticle));
+        // 发布文章阅读事件
+        eventPublisher.publishEvent(new ReadArticleEvent(this, articleId));
         return detailVo;
     }
 
