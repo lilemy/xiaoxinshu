@@ -82,6 +82,15 @@ public interface ArtArticleService extends IService<ArtArticle> {
     Page<ArtArticleVo> getArticleVoPage(ArtArticleQueryRequest req, PageQuery pageQuery);
 
     /**
+     * 获取个人文章脱敏信息
+     *
+     * @param req       文章查询请求体
+     * @param pageQuery 分页查询参数
+     * @return 脱敏后的文章信息
+     */
+    Page<ArtArticleVo> getArticleVoPageByUser(ArtArticleQueryRequest req, PageQuery pageQuery);
+
+    /**
      * 获取文章归档信息
      *
      * @param req       文章查询请求体

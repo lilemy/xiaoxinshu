@@ -301,6 +301,32 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     @Override
     public Page<ArtArticleVo> getArticleVoPage(ArtArticleQueryRequest req, PageQuery pageQuery) {
         Page<ArtArticle> articlePage = this.page(pageQuery.build(), this.getQueryWrapper(req));
+        return getArticleVoPage(articlePage);
+    }
+
+    /**
+     * 获取个人文章脱敏信息
+     *
+     * @param req       文章查询请求体
+     * @param pageQuery 分页查询参数
+     * @return 脱敏后的文章信息
+     */
+    @Override
+    public Page<ArtArticleVo> getArticleVoPageByUser(ArtArticleQueryRequest req, PageQuery pageQuery) {
+        Long userId = sysUserService.getLoginUser().getId();
+        LambdaQueryWrapper<ArtArticle> lqw = this.getQueryWrapper(req);
+        lqw.eq(ArtArticle::getUserId, userId);
+        Page<ArtArticle> articlePage = this.page(pageQuery.build(), lqw);
+        return getArticleVoPage(articlePage);
+    }
+
+    /**
+     * 获取文章分页脱敏信息
+     *
+     * @param articlePage 文章分页信息
+     * @return 文章分页脱敏信息
+     */
+    private Page<ArtArticleVo> getArticleVoPage(Page<ArtArticle> articlePage) {
         List<ArtArticle> articleList = articlePage.getRecords();
         Page<ArtArticleVo> articleVoPage = new Page<>(
                 articlePage.getCurrent(),

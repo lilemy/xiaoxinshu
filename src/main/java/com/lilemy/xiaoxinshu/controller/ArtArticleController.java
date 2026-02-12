@@ -73,6 +73,13 @@ public class ArtArticleController {
         return ResultUtils.success(articleService.getArticleVoPage(req, pageQuery));
     }
 
+    @Operation(summary = "分页获取个人文章信息")
+    @GetMapping("/account/page")
+    public BaseResponse<Page<ArtArticleVo>> listArticlePageByUser(ArtArticleQueryRequest req,
+                                                                  PageQuery pageQuery) {
+        return ResultUtils.success(articleService.getArticleVoPageByUser(req, pageQuery));
+    }
+
     @Operation(summary = "分页获取文章归档信息")
     @GetMapping("/archive/page")
     public BaseResponse<Page<ArtArticleArchiveVo>> listArticleArchivePage(ArtArticleQueryRequest req,
