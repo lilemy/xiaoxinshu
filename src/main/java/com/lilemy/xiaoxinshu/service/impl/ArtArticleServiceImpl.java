@@ -220,17 +220,21 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     /**
      * 获取文章脱敏信息
      *
-     * @param article 文章信息
+     * @param article           文章信息
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章信息
      */
     @Override
-    public ArtArticleVo getArticleVo(ArtArticle article) {
+    public ArtArticleVo getArticleVo(ArtArticle article, Integer contentResultType) {
         ThrowUtils.throwIf(article == null, ResultCode.NOT_FOUND_ERROR);
         ArtArticleVo articleVo = new ArtArticleVo();
         BeanUtils.copyProperties(article, articleVo);
         // 获取当前文章的内容
         String content = artArticleContentMapper.selectContentByArticleId(article.getId());
-        articleVo.setContent(MarkdownHelper.convertMarkdown2Html(content));
+        if (contentResultType == null || contentResultType == 1) {
+            content = MarkdownHelper.convertMarkdown2Html(content);
+        }
+        articleVo.setContent(content);
         // 获取当前文章的分类列表
         List<ArtArticleCategoryNameVo> articleVoList = artArticleCategoryRelMapper.listArticleCategoryVoByArticleId(article.getId());
         articleVo.setCategoryList(articleVoList);
@@ -243,27 +247,29 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
     /**
      * 获取文章脱敏信息
      *
-     * @param articleId 文章 id
+     * @param articleId         文章 id
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章信息
      */
     @Override
-    public ArtArticleVo getArticleVo(Long articleId) {
+    public ArtArticleVo getArticleVo(Long articleId, Integer contentResultType) {
         ArtArticle artArticle = null;
         if (articleId != null && articleId > 0) {
             artArticle = this.getById(articleId);
         }
-        return this.getArticleVo(artArticle);
+        return this.getArticleVo(artArticle, contentResultType);
     }
 
     /**
      * 获取文章详情脱敏信息
      *
-     * @param articleId 文章 id
+     * @param articleId         文章 id
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章详情信息
      */
     @Override
-    public ArtArticleDetailVo getArticleDetailVo(Long articleId) {
-        ArtArticleVo articleVo = this.getArticleVo(articleId);
+    public ArtArticleDetailVo getArticleDetailVo(Long articleId, Integer contentResultType) {
+        ArtArticleVo articleVo = this.getArticleVo(articleId, contentResultType);
         ArtArticleDetailVo detailVo = new ArtArticleDetailVo();
         BeanUtils.copyProperties(articleVo, detailVo);
         // 获取当前文章发布用户
@@ -316,6 +322,7 @@ public class ArtArticleServiceImpl extends ServiceImpl<ArtArticleMapper, ArtArti
         Long userId = sysUserService.getLoginUser().getId();
         LambdaQueryWrapper<ArtArticle> lqw = this.getQueryWrapper(req);
         lqw.eq(ArtArticle::getUserId, userId);
+        lqw.orderByDesc(ArtArticle::getEditTime);
         Page<ArtArticle> articlePage = this.page(pageQuery.build(), lqw);
         return getArticleVoPage(articlePage);
     }

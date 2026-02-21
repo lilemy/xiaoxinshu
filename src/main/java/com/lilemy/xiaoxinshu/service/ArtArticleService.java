@@ -51,26 +51,29 @@ public interface ArtArticleService extends IService<ArtArticle> {
     /**
      * 获取文章脱敏信息
      *
-     * @param article 文章信息
+     * @param article           文章信息
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章信息
      */
-    ArtArticleVo getArticleVo(ArtArticle article);
+    ArtArticleVo getArticleVo(ArtArticle article, Integer contentResultType);
 
     /**
      * 获取文章脱敏信息
      *
-     * @param articleId 文章 id
+     * @param articleId         文章 id
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章信息
      */
-    ArtArticleVo getArticleVo(Long articleId);
+    ArtArticleVo getArticleVo(Long articleId, Integer contentResultType);
 
     /**
      * 获取文章详情脱敏信息
      *
-     * @param articleId 文章 id
+     * @param articleId         文章 id
+     * @param contentResultType 文章内容返回类型（1HTML 2MarkDown）
      * @return 脱敏后的文章详情信息
      */
-    ArtArticleDetailVo getArticleDetailVo(Long articleId);
+    ArtArticleDetailVo getArticleDetailVo(Long articleId, Integer contentResultType);
 
     /**
      * 获取文章脱敏信息

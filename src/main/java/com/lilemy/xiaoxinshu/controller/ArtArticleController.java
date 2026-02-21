@@ -54,16 +54,16 @@ public class ArtArticleController {
 
     @Operation(summary = "获取文章信息")
     @GetMapping("/{id}")
-    public BaseResponse<ArtArticleVo> getArticle(@NotNull(message = "主键不能为空")
-                                                 @PathVariable Long id) {
-        return ResultUtils.success(articleService.getArticleVo(id));
+    public BaseResponse<ArtArticleVo> getArticle(@NotNull(message = "主键不能为空") @PathVariable Long id,
+                                                 Integer contentResultType) {
+        return ResultUtils.success(articleService.getArticleVo(id, contentResultType));
     }
 
     @Operation(summary = "获取文章详情信息")
     @GetMapping("/detail/{id}")
-    public BaseResponse<ArtArticleDetailVo> getArticleDetail(@NotNull(message = "主键不能为空")
-                                                             @PathVariable Long id) {
-        return ResultUtils.success(articleService.getArticleDetailVo(id));
+    public BaseResponse<ArtArticleDetailVo> getArticleDetail(@NotNull(message = "主键不能为空") @PathVariable Long id,
+                                                             Integer contentResultType) {
+        return ResultUtils.success(articleService.getArticleDetailVo(id, contentResultType));
     }
 
     @Operation(summary = "分页获取文章信息")
